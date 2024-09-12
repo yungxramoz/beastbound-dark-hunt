@@ -1,0 +1,9 @@
+const PLAYER_STATE = {
+  IDLE: 'IDLE',
+  MOVING: 'MOVING',
+  JUMPING: 'JUMPING',
+  ATTACKING: 'ATTACKING',
+  HURTING: 'HURTING',
+}
+
+export default PLAYER_STATE
