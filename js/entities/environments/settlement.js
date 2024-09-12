@@ -1,69 +1,58 @@
 import { Environment } from '../../components/environment.js'
-
-const assetPath = '../../../assets/images/environments/settlement/'
-
-const getAsset = (asset) => `${assetPath}${asset}`
-
-const groundTileA = {
-  image: new Image(),
-  src: getAsset('ground-1.png'),
-  width: 25,
-  height: 100,
-}
-const groundTileB = {
-  image: new Image(),
-  src: getAsset('ground-2.png'),
-  width: 25,
-  height: 100,
-}
-
-const houseTileA = {
-  image: new Image(),
-  src: getAsset('house-1.png'),
-  width: 350,
-  height: 400,
-}
-const houseTileB = {
-  image: new Image(),
-  src: getAsset('house-2.png'),
-  width: 400,
-  height: 500,
-}
-const houseTileC = {
-  image: new Image(),
-  src: getAsset('house-3.png'),
-  width: 500,
-  height: 400,
-}
-
-const wagonTile = {
-  image: new Image(),
-  src: getAsset('wagon.png'),
-  width: 200,
-  height: 160,
-}
-
-const crateStackTile = {
-  image: new Image(),
-  src: getAsset('crate-stack.png'),
-  width: 110,
-  height: 100,
-}
-
-const groundTiles = () => {
-  const tiles = []
-  for (let i = 0; i < 48; i++) {
-    tiles.push(i % 2 === 0 ? groundTileA : groundTileB)
-  }
-  return tiles
-}
+import { ASSETS } from '../../constants/assets.js'
 
 export class Settlement extends Environment {
   constructor(game) {
+    const tiles = {
+      groundTileA: {
+        image: game[ASSETS.SETTLEMENT_GROUND_TILE_A],
+        width: 25,
+        height: 100,
+      },
+      groundTileB: {
+        image: game[ASSETS.SETTLEMENT_GROUND_TILE_B],
+        width: 25,
+        height: 100,
+      },
+      houseTileA: {
+        image: game[ASSETS.SETTLEMENT_HOUSE_TILE_A],
+        width: 350,
+        height: 400,
+      },
+      houseTileB: {
+        image: game[ASSETS.SETTLEMENT_HOUSE_TILE_B],
+        width: 400,
+        height: 500,
+      },
+      houseTileC: {
+        image: game[ASSETS.SETTLEMENT_HOUSE_TILE_C],
+        width: 500,
+        height: 400,
+      },
+      wagonTile: {
+        image: game[ASSETS.SETTLEMENT_WAGON_TILE],
+        width: 200,
+        height: 160,
+      },
+      crateStackTile: {
+        image: game[ASSETS.SETTLEMENT_CRATE_STACK_TILE],
+        width: 110,
+        height: 100,
+      },
+    }
+
+    const getGroundTiles = () => {
+      const groundTiles = []
+      for (let i = 0; i < 48; i++) {
+        groundTiles.push(i % 2 === 0 ? tiles.groundTileA : tiles.groundTileB)
+      }
+      return groundTiles
+    }
+
     const options = {
       canvas: game.canvas,
-      backgroundImage: getAsset('background.png'),
-      middlegroundImage: getAsset('middleground.png'),
+      backgroundImage: game[ASSETS.SETTLEMENT_BACKGROUND],
+      middlegroundImage: game[ASSETS.SETTLEMENT_MIDDLEGROUND],
       tileSize: 100,
 
       // prettier-ignore
@@ -73,29 +62,17 @@ export class Settlement extends Environment {
         [],
         [],
         [],
-        groundTiles(),
+        getGroundTiles(),
       ],
 
       props: [
-        { x: 280, y: 0, ...houseTileB },
-        { x: -10, y: 100, ...houseTileA },
-        { x: 720, y: 100, ...houseTileC },
-        { x: 580, y: 405, ...crateStackTile },
-        { x: 700, y: 345, ...wagonTile },
+        { x: 280, y: 0, ...tiles.houseTileB },
+        { x: -10, y: 100, ...tiles.houseTileA },
+        { x: 720, y: 100, ...tiles.houseTileC },
+        { x: 580, y: 405, ...tiles.crateStackTile },
+        { x: 700, y: 345, ...tiles.wagonTile },
       ],
     }
-
-    options.foregroundTiles.forEach((row) => {
-      row.forEach((tile) => {
-        if (tile && tile.src) {
-          tile.image.src = tile.src
-        }
-      })
-    })
-
-    options.props.forEach((prop) => {
-      prop.image.src = prop.src
-    })
 
     super(options)
   }

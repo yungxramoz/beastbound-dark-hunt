@@ -5,11 +5,8 @@ export class Environment {
 
     this.ctx.imageSmoothingEnabled = false
 
-    this.backgroundImage = new Image()
-    this.backgroundImage.src = options.backgroundImage
-
-    this.middlegroundImage = new Image()
-    this.middlegroundImage.src = options.middlegroundImage
+    this.backgroundImage = options.backgroundImage
+    this.middlegroundImage = options.middlegroundImage
 
     this.foregroundTiles = options.foregroundTiles || []
     this.tileSize = options.tileSize || 100

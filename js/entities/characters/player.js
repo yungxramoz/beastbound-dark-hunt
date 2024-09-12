@@ -126,29 +126,30 @@ export class Player {
       enter = keyboard('Enter'),
       space = keyboard(' ')
 
-    leftArrow.press = () => {
+    leftArrow.press = a.press = () => {
       this.flipX = true
       this.moveLeft()
     }
-    leftArrow.release = () => this.stopMoving()
-    a.press = () => {
-      this.flipX = true
-      this.moveLeft()
+    leftArrow.release = a.release = () => {
+      if (!rightArrow.isDown && !d.isDown) {
+        this.stopMoving()
+      }
     }
-    a.release = () => this.stopMoving()
 
-    rightArrow.press = () => {
+    rightArrow.press = d.press = () => {
       this.flipX = false
       this.moveRight()
     }
-    rightArrow.release = () => this.stopMoving()
-    d.press = () => {
-      this.flipX = false
-      this.moveRight()
+    rightArrow.release = d.release = () => {
+      if (!leftArrow.isDown && !a.isDown) {
+        this.stopMoving()
+      }
     }
-    d.release = () => this.stopMoving()
 
-    enter.press = () => this.attack()
+    enter.press = () => {
+      this.stopMoving()
+      this.attack()
+    }
 
     space.press = () => this.jump()
   }
