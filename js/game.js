@@ -43,16 +43,12 @@ class Game {
   gameLoop(currentTime) {
     if (!this.gameRunning) return
 
-    const deltaTime = currentTime - this.lastTime
+    const deltaTime = (currentTime - this.lastTime) / 1000
     this.lastTime = currentTime
-    this.accumulatedTime += deltaTime
 
-    this.currentFPS = 1000 / deltaTime
+    this.currentFPS = 1 / deltaTime
 
-    while (this.accumulatedTime >= this.frameDuration) {
-      this.update(this.frameDuration / 1000)
-      this.accumulatedTime -= this.frameDuration
-    }
+    this.update(deltaTime)
 
     this.render()
     requestAnimationFrame(this.gameLoop.bind(this))
