@@ -5,6 +5,7 @@ import { assets } from './library/utilities.js'
 import { BOUNDERIES } from './constants/positions.js'
 import { SETTINGS } from './constants/settings.js'
 import { SettlementScene } from './scenes/settlement-scene.js'
+import GAME_STATE from './constants/game-state.js'
 
 class Game {
   constructor(canvasId) {
@@ -18,7 +19,7 @@ class Game {
     this.lastTime = 0
     this.accumulatedTime = 0
     this.gameRunning = false
-    this.gameState = 'loading'
+    this.gameState = GAME_STATE.LOADING
     this.currentFPS = 0
 
     Object.assign(this, assets)
@@ -31,7 +32,7 @@ class Game {
   }
 
   startGame() {
-    this.gameState = 'playing'
+    this.gameState = GAME_STATE.PLAYING
     this.gameRunning = true
 
     this.scene = new SettlementScene(this)
@@ -58,7 +59,7 @@ class Game {
   }
 
   update(deltaTime) {
-    if (this.gameState === 'playing') {
+    if (this.gameState === GAME_STATE.PLAYING) {
       this.scene.update(deltaTime)
     }
   }
@@ -66,9 +67,9 @@ class Game {
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    if (this.gameState === 'playing') {
+    if (this.gameState === GAME_STATE.PLAYING) {
       this.renderPlaying()
-    } else if (this.gameState === 'loading') {
+    } else if (this.gameState === GAME_STATE.LOADING) {
       this.renderLoading()
     }
 
