@@ -20,7 +20,6 @@ class Game {
     this.accumulatedTime = 0
     this.gameRunning = false
     this.gameState = GAME_STATE.LOADING
-    this.currentFPS = 0
 
     Object.assign(this, assets)
 
@@ -43,14 +42,16 @@ class Game {
   gameLoop(currentTime) {
     if (!this.gameRunning) return
 
-    const deltaTime = (currentTime - this.lastTime) / 1000
+    const deltaTime = currentTime - this.lastTime
     this.lastTime = currentTime
+    this.accumulatedTime += deltaTime
 
-    this.currentFPS = 1 / deltaTime
+    while (this.accumulatedTime >= this.frameDuration) {
+      this.update(this.frameDuration / 1000)
+      this.render()
+      this.accumulatedTime -= this.frameDuration
+    }
 
-    this.update(deltaTime)
-
-    this.render()
     requestAnimationFrame(this.gameLoop.bind(this))
   }
 
@@ -68,10 +69,6 @@ class Game {
     } else if (this.gameState === GAME_STATE.LOADING) {
       this.renderLoading()
     }
-
-    if (SETTINGS.DEBUG) {
-      this.renderDebugInfo()
-    }
   }
 
   renderPlaying() {
@@ -85,16 +82,6 @@ class Game {
       'Loading...',
       this.canvas.width / 2 - 75,
       this.canvas.height / 2,
-    )
-  }
-
-  renderDebugInfo() {
-    this.ctx.font = '20px Arial'
-    this.ctx.fillStyle = 'white'
-    this.ctx.fillText(
-      `FPS: ${Math.round(this.currentFPS)}`,
-      this.canvas.width - 100,
-      this.canvas.height - 20,
     )
   }
 }
