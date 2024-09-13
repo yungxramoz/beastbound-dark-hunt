@@ -178,7 +178,7 @@ export class Player {
 
   update(deltaTime) {
     this.stateMachine.update(deltaTime)
-    this.updateMovement(deltaTime)
+    this.updateMovement()
     this.updateSpriteState(this.stateMachine.currentState)
     this.updateSprite(deltaTime)
   }
