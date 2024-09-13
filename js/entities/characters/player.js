@@ -13,7 +13,11 @@ export class Player {
     const frameWidth = 124
     const frameHeight = 71
     const spriteScale = 1.7
+
     const attackDuration = 0.6
+    const attackDamage = 10
+    const hitRangeWidth = 70
+    const hitRangeHeight = 50
 
     this.width = 85
     this.height = 95
@@ -63,7 +67,16 @@ export class Player {
       Positionable(),
       Spriteable(animations, spriteScale, PLAYER_STATE.IDLE),
       Movable(this.width, this.height, this.offsetX),
-      Attackable(attackDuration, 10),
+      Attackable(
+        attackDuration,
+        attackDamage,
+        this.width,
+        this.height,
+        this.offsetX,
+        this.offsetY,
+        hitRangeWidth,
+        hitRangeHeight,
+      ),
     )
 
     this.setPosition(x, this.groundY)
@@ -202,6 +215,7 @@ export class Player {
     this.drawSprite(ctx)
     if (SETTINGS.DEBUG) {
       this.drawDebugInfo(ctx)
+      this.drawDebugHitBox(ctx)
     }
   }
 
