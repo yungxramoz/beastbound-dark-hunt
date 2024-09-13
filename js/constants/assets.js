@@ -1,54 +1,37 @@
-const PLAYER_IDLE_SPRITE = 'assets/images/player/player.idle.png'
-const PLAYER_MOVE_SPRITE = 'assets/images/player/player.move.png'
-const PLAYER_JUMP_SPRITE = 'assets/images/player/player.jump.png'
-const PLAYER_ATTACK_SPRITE = 'assets/images/player/player.attack.png'
-
-const SETTLEMENT_GROUND_TILE_A =
-  'assets/images/environments/settlement/ground-1.png'
-const SETTLEMENT_GROUND_TILE_B =
-  'assets/images/environments/settlement/ground-2.png'
-const SETTLEMENT_HOUSE_TILE_A =
-  'assets/images/environments/settlement/house-1.png'
-const SETTLEMENT_HOUSE_TILE_B =
-  'assets/images/environments/settlement/house-2.png'
-const SETTLEMENT_HOUSE_TILE_C =
-  'assets/images/environments/settlement/house-3.png'
-const SETTLEMENT_WAGON_TILE = 'assets/images/environments/settlement/wagon.png'
-const SETTLEMENT_CRATE_STACK_TILE =
-  'assets/images/environments/settlement/crate-stack.png'
-const SETTLEMENT_BACKGROUND =
-  'assets/images/environments/settlement/background.png'
-const SETTLEMENT_MIDDLEGROUND =
-  'assets/images/environments/settlement/middleground.png'
+export const ASSETS = {
+  PLAYER_IDLE_SPRITE: 'assets/images/player/player.idle.png',
+  PLAYER_MOVE_SPRITE: 'assets/images/player/player.move.png',
+  PLAYER_JUMP_SPRITE: 'assets/images/player/player.jump.png',
+  PLAYER_FALL_SPRITE: 'assets/images/player/player.fall.png',
+  PLAYER_ATTACK_SPRITE: 'assets/images/player/player.attack.png',
+  SETTLEMENT_GROUND_TILE_A:
+    'assets/images/environments/settlement/ground-1.png',
+  SETTLEMENT_GROUND_TILE_B:
+    'assets/images/environments/settlement/ground-2.png',
+  SETTLEMENT_HOUSE_TILE_A: 'assets/images/environments/settlement/house-1.png',
+  SETTLEMENT_HOUSE_TILE_B: 'assets/images/environments/settlement/house-2.png',
+  SETTLEMENT_HOUSE_TILE_C: 'assets/images/environments/settlement/house-3.png',
+  SETTLEMENT_WAGON_TILE: 'assets/images/environments/settlement/wagon.png',
+  SETTLEMENT_CRATE_STACK_TILE:
+    'assets/images/environments/settlement/crate-stack.png',
+  SETTLEMENT_BACKGROUND: 'assets/images/environments/settlement/background.png',
+  SETTLEMENT_MIDDLEGROUND:
+    'assets/images/environments/settlement/middleground.png',
+}
 
 export const ASSETS_SRC = [
-  PLAYER_IDLE_SPRITE,
-  PLAYER_MOVE_SPRITE,
-  PLAYER_JUMP_SPRITE,
-  PLAYER_ATTACK_SPRITE,
-  SETTLEMENT_GROUND_TILE_A,
-  SETTLEMENT_GROUND_TILE_B,
-  SETTLEMENT_HOUSE_TILE_A,
-  SETTLEMENT_HOUSE_TILE_B,
-  SETTLEMENT_HOUSE_TILE_C,
-  SETTLEMENT_WAGON_TILE,
-  SETTLEMENT_CRATE_STACK_TILE,
-  SETTLEMENT_BACKGROUND,
-  SETTLEMENT_MIDDLEGROUND,
+  ASSETS.PLAYER_IDLE_SPRITE,
+  ASSETS.PLAYER_MOVE_SPRITE,
+  ASSETS.PLAYER_JUMP_SPRITE,
+  ASSETS.PLAYER_FALL_SPRITE,
+  ASSETS.PLAYER_ATTACK_SPRITE,
+  ASSETS.SETTLEMENT_GROUND_TILE_A,
+  ASSETS.SETTLEMENT_GROUND_TILE_B,
+  ASSETS.SETTLEMENT_HOUSE_TILE_A,
+  ASSETS.SETTLEMENT_HOUSE_TILE_B,
+  ASSETS.SETTLEMENT_HOUSE_TILE_C,
+  ASSETS.SETTLEMENT_WAGON_TILE,
+  ASSETS.SETTLEMENT_CRATE_STACK_TILE,
+  ASSETS.SETTLEMENT_BACKGROUND,
+  ASSETS.SETTLEMENT_MIDDLEGROUND,
 ]
-
-export const ASSETS = {
-  PLAYER_IDLE_SPRITE,
-  PLAYER_MOVE_SPRITE,
-  PLAYER_JUMP_SPRITE,
-  PLAYER_ATTACK_SPRITE,
-  SETTLEMENT_GROUND_TILE_A,
-  SETTLEMENT_GROUND_TILE_B,
-  SETTLEMENT_HOUSE_TILE_A,
-  SETTLEMENT_HOUSE_TILE_B,
-  SETTLEMENT_HOUSE_TILE_C,
-  SETTLEMENT_WAGON_TILE,
-  SETTLEMENT_CRATE_STACK_TILE,
-  SETTLEMENT_BACKGROUND,
-  SETTLEMENT_MIDDLEGROUND,
-}

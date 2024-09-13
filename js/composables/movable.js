@@ -14,23 +14,21 @@ export const Movable = (width, height, offsetX) => ({
   groundY: 390,
   isGrounded: getGroundY(height),
   isMoving: false,
+  isFalling: false,
 
   moveLeft() {
     this.speedX = -this.maxSpeed
     this.isMoving = true
-    console.log('Moving left')
   },
 
   moveRight() {
     this.speedX = this.maxSpeed
     this.isMoving = true
-    console.log('Moving right')
   },
 
   stopMoving() {
     this.speedX = 0
     this.isMoving = false
-    console.log('Stopped moving')
   },
 
   jump() {
@@ -38,13 +36,15 @@ export const Movable = (width, height, offsetX) => ({
       this.speedY = -this.jumpSpeed
       this.isGrounded = false
       this.isMoving = false
-      console.log('Jumped')
     }
   },
 
   updateMovement() {
     if (!this.isGrounded) {
       this.speedY += this.gravity
+      if (this.speedY >= 0) {
+        this.isFalling = true
+      }
     }
 
     if (isOutOfBoundsLeft(this.x + offsetX) && this.speedX < 0) {
@@ -63,6 +63,7 @@ export const Movable = (width, height, offsetX) => ({
     if (this.y >= this.groundY) {
       this.y = this.groundY
       this.speedY = 0
+      this.isFalling = false
       this.isGrounded = true
       this.isMoving = this.speedX !== 0
     }

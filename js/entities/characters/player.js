@@ -6,11 +6,6 @@ import { ASSETS } from '../../constants/assets.js'
 import PLAYER_STATE from '../../constants/player-state.js'
 import { SETTINGS } from '../../constants/settings.js'
 import { keyboard } from '../../library/interactive.js'
-import {
-  getGroundY,
-  isOutOfBoundsLeft,
-  isOutOfBoundsRight,
-} from '../../utils/bounderies.js'
 import StateMachine from '../../utils/state-machine.js'
 
 export class Player {
@@ -42,6 +37,13 @@ export class Player {
       },
       [PLAYER_STATE.JUMPING]: {
         spriteSheet: game[ASSETS.PLAYER_JUMP_SPRITE],
+        frameWidth,
+        frameHeight,
+        numFrames: 2,
+        frameTime: 0.1,
+      },
+      [PLAYER_STATE.FALLING]: {
+        spriteSheet: game[ASSETS.PLAYER_FALL_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 2,
@@ -102,6 +104,16 @@ export class Player {
     this.stateMachine.addState(PLAYER_STATE.JUMPING, {
       enter: () => console.log('Entering JUMPING state'),
       update: () => {
+        if (this.isFalling) {
+          this.stateMachine.setState(PLAYER_STATE.FALLING)
+        }
+      },
+      exit: () => console.log('Exiting JUMPING state'),
+    })
+
+    this.stateMachine.addState(PLAYER_STATE.FALLING, {
+      enter: () => console.log('Entering FALLING state'),
+      update: () => {
         if (this.isGrounded) {
           if (this.isMoving) {
             this.stateMachine.setState(PLAYER_STATE.MOVING)
@@ -110,7 +122,7 @@ export class Player {
           }
         }
       },
-      exit: () => console.log('Exiting JUMPING state'),
+      exit: () => console.log('Exiting FALLING state'),
     })
 
     this.stateMachine.addState(PLAYER_STATE.ATTACKING, {
@@ -145,10 +157,9 @@ export class Player {
       space = keyboard(' ')
 
     leftArrow.press = a.press = () => {
+      if (this.isAttacking) return
       this.flipX = true
-      if (!isOutOfBoundsLeft(this.x)) {
-        this.moveLeft()
-      }
+      this.moveLeft()
     }
     leftArrow.release = a.release = () => {
       if (!rightArrow.isDown && !d.isDown) {
@@ -157,10 +168,9 @@ export class Player {
     }
 
     rightArrow.press = d.press = () => {
+      if (this.isAttacking) return
       this.flipX = false
-      if (!isOutOfBoundsRight(this.x, this.width)) {
-        this.moveRight()
-      }
+      this.moveRight()
     }
     rightArrow.release = d.release = () => {
       if (!leftArrow.isDown && !a.isDown) {
@@ -169,11 +179,16 @@ export class Player {
     }
 
     enter.press = () => {
+      if (!this.isGrounded) return
       this.stopMoving()
       this.attack()
     }
 
-    space.press = () => this.jump()
+    space.press = () => {
+      if (!this.isGrounded) return
+      if (this.isAttacking) return
+      this.jump()
+    }
   }
 
   update(deltaTime) {
