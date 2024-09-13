@@ -1,11 +1,18 @@
-export const Movable = () => ({
+import {
+  getGroundY,
+  isOutOfBoundsLeft,
+  isOutOfBoundsRight,
+} from '../utils/bounderies.js'
+
+export const Movable = (width, height, offsetX) => ({
+  offsetX: offsetX || 0,
   speedX: 0,
   speedY: 0,
-  maxSpeed: 5,
+  maxSpeed: 7,
   jumpSpeed: 15,
   gravity: 0.8,
   groundY: 390,
-  isGrounded: true,
+  isGrounded: getGroundY(height),
   isMoving: false,
 
   moveLeft() {
@@ -40,7 +47,17 @@ export const Movable = () => ({
       this.speedY += this.gravity
     }
 
-    this.x += this.isGrounded ? this.speedX : this.speedX * 0.9
+    if (isOutOfBoundsLeft(this.x + offsetX) && this.speedX < 0) {
+      this.stopMoving()
+    } else if (
+      isOutOfBoundsRight(this.x + offsetX, this.width) &&
+      this.speedX > 0
+    ) {
+      this.stopMoving()
+    } else {
+      this.x += this.isGrounded ? this.speedX : this.speedX * 0.9
+    }
+
     this.y += this.speedY
 
     if (this.y >= this.groundY) {

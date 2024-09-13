@@ -1,6 +1,6 @@
-export const Attackable = () => ({
-  attackDuration: 0.5,
-  attackDamage: 10,
+export const Attackable = (attackDuration, attackDamage) => ({
+  attackDuration: attackDuration || 1,
+  attackDamage: attackDamage || 10,
   isAttacking: false,
 
   attack() {

@@ -1,10 +1,10 @@
-export const Spriteable = () => ({
-  currentState: 'idle',
+export const Spriteable = (animations, spriteScale, initialState) => ({
+  currentState: initialState || 'idle',
   currentFrame: 0,
   elapsedTime: 0,
-  animations: {},
   flipX: false,
-  spriteScale: 1,
+  spriteScale: spriteScale || 1,
+  animations: animations || {},
 
   drawSprite(context) {
     const animation = this.animations[this.currentState]
@@ -45,9 +45,6 @@ export const Spriteable = () => ({
           scaledHeight,
         )
       }
-
-      context.strokeStyle = 'red'
-      context.strokeRect(this.x, this.y, scaledWidth, scaledHeight)
     }
   },
 

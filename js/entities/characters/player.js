@@ -4,49 +4,67 @@ import { Positionable } from '../../composables/positionable.js'
 import { Spriteable } from '../../composables/spriteable.js'
 import { ASSETS } from '../../constants/assets.js'
 import PLAYER_STATE from '../../constants/player-state.js'
+import { SETTINGS } from '../../constants/settings.js'
 import { keyboard } from '../../library/interactive.js'
+import {
+  getGroundY,
+  isOutOfBoundsLeft,
+  isOutOfBoundsRight,
+} from '../../utils/bounderies.js'
 import StateMachine from '../../utils/state-machine.js'
 
 export class Player {
   constructor(game, x, y) {
-    Object.assign(this, Positionable(), Spriteable(), Movable(), Attackable())
+    const frameWidth = 124
+    const frameHeight = 71
+    const spriteScale = 1.7
+    const attackDuration = 0.6
 
-    this.setPosition(x, y)
+    this.width = 85
+    this.height = 95
+    this.offsetX = 55
+    this.offsetY = 30
 
-    this.spriteScale = 1.7
-    this.animations = {
+    const animations = {
       [PLAYER_STATE.IDLE]: {
         spriteSheet: game[ASSETS.PLAYER_IDLE_SPRITE],
-        frameWidth: 124,
-        frameHeight: 71,
+        frameWidth,
+        frameHeight,
         numFrames: 6,
         frameTime: 0.1,
       },
       [PLAYER_STATE.MOVING]: {
         spriteSheet: game[ASSETS.PLAYER_MOVE_SPRITE],
-        frameWidth: 124,
-        frameHeight: 71,
+        frameWidth,
+        frameHeight,
         numFrames: 6,
         frameTime: 0.1,
       },
       [PLAYER_STATE.JUMPING]: {
         spriteSheet: game[ASSETS.PLAYER_JUMP_SPRITE],
-        frameWidth: 124,
-        frameHeight: 71,
+        frameWidth,
+        frameHeight,
         numFrames: 2,
         frameTime: 0.1,
       },
       [PLAYER_STATE.ATTACKING]: {
         spriteSheet: game[ASSETS.PLAYER_ATTACK_SPRITE],
-        frameWidth: 124,
-        frameHeight: 71,
+        frameWidth,
+        frameHeight,
         numFrames: 6,
         frameTime: 0.1,
       },
     }
 
-    this.attackDuration = 0.6
+    Object.assign(
+      this,
+      Positionable(),
+      Spriteable(animations, spriteScale, PLAYER_STATE.IDLE),
+      Movable(this.width, this.height, this.offsetX),
+      Attackable(attackDuration, 10),
+    )
 
+    this.setPosition(x, this.groundY)
     this.setupStates()
     this.setupKeyboard()
   }
@@ -128,7 +146,9 @@ export class Player {
 
     leftArrow.press = a.press = () => {
       this.flipX = true
-      this.moveLeft()
+      if (!isOutOfBoundsLeft(this.x)) {
+        this.moveLeft()
+      }
     }
     leftArrow.release = a.release = () => {
       if (!rightArrow.isDown && !d.isDown) {
@@ -138,7 +158,9 @@ export class Player {
 
     rightArrow.press = d.press = () => {
       this.flipX = false
-      this.moveRight()
+      if (!isOutOfBoundsRight(this.x, this.width)) {
+        this.moveRight()
+      }
     }
     rightArrow.release = d.release = () => {
       if (!leftArrow.isDown && !a.isDown) {
@@ -163,5 +185,38 @@ export class Player {
 
   draw(ctx) {
     this.drawSprite(ctx)
+    if (SETTINGS.DEBUG) {
+      this.drawDebugInfo(ctx)
+    }
+  }
+
+  drawDebugInfo(ctx) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+    ctx.fillRect(0, 0, 200, 140)
+
+    ctx.font = '15px Arial'
+    ctx.fillStyle = 'white'
+    ctx.fillText(`Player SpeedX: ${this.speedX.toFixed(2)}`, 10, 20)
+    ctx.fillText(`Player SpeedY: ${this.speedY.toFixed(2)}`, 10, 40)
+    ctx.fillText(`Player isGrounded: ${this.isGrounded}`, 10, 60)
+    ctx.fillText(`Player isMoving: ${this.isMoving}`, 10, 80)
+    ctx.fillText(`Player isAttacking: ${this.isAttacking}`, 10, 100)
+    ctx.fillText(`Player state: ${this.stateMachine.currentState}`, 10, 120)
+
+    ctx.strokeStyle = 'red'
+    ctx.strokeRect(
+      this.x + this.offsetX,
+      this.y + this.offsetY,
+      this.width,
+      this.height,
+    )
+    //add label for player
+    ctx.font = '12px Arial'
+    ctx.fillStyle = 'white'
+    ctx.fillText(
+      `Player X: ${this.x.toFixed(2)} Y: ${this.y.toFixed(2)}`,
+      this.x + 20,
+      this.y + 20,
+    )
   }
 }

@@ -56,7 +56,7 @@ export class Settlement extends Environment {
       tileSize: 100,
 
       // prettier-ignore
-      foregroundTiles: [
+      groundTiles: [
         [],
         [],
         [],

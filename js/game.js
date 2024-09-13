@@ -2,13 +2,16 @@ import { Player } from './entities/characters/player.js'
 import { Settlement } from './entities/environments/settlement.js'
 import { ASSETS_SRC } from './constants/assets.js'
 import { assets } from './library/utilities.js'
+import { BOUNDERIES } from './constants/positions.js'
+import { SETTINGS } from './constants/settings.js'
+import { SettlementScene } from './scenes/settlement-scene.js'
 
 class Game {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId)
     this.ctx = this.canvas.getContext('2d')
-    this.canvas.width = 1200
-    this.canvas.height = 600
+    this.canvas.width = BOUNDERIES.GAME_WIDTH
+    this.canvas.height = BOUNDERIES.GAME_HEIGHT
 
     this.fps = 60
     this.frameDuration = 1000 / this.fps
@@ -16,8 +19,7 @@ class Game {
     this.accumulatedTime = 0
     this.gameRunning = false
     this.gameState = 'loading'
-
-    this.debug = true
+    this.currentFPS = 0
 
     Object.assign(this, assets)
 
@@ -32,8 +34,7 @@ class Game {
     this.gameState = 'playing'
     this.gameRunning = true
 
-    this.player = new Player(this, 100, 400)
-    this.settlement = new Settlement(this)
+    this.scene = new SettlementScene(this)
 
     requestAnimationFrame(this.gameLoop.bind(this))
   }
@@ -44,6 +45,8 @@ class Game {
     const deltaTime = currentTime - this.lastTime
     this.lastTime = currentTime
     this.accumulatedTime += deltaTime
+
+    this.currentFPS = 1000 / deltaTime
 
     while (this.accumulatedTime >= this.frameDuration) {
       this.update(this.frameDuration / 1000)
@@ -56,7 +59,7 @@ class Game {
 
   update(deltaTime) {
     if (this.gameState === 'playing') {
-      this.player.update(deltaTime)
+      this.scene.update(deltaTime)
     }
   }
 
@@ -69,14 +72,13 @@ class Game {
       this.renderLoading()
     }
 
-    if (this.debug) {
+    if (SETTINGS.DEBUG) {
       this.renderDebugInfo()
     }
   }
 
   renderPlaying() {
-    this.settlement.draw()
-    this.player.draw(this.ctx)
+    this.scene.draw(this.ctx)
   }
 
   renderLoading() {
@@ -90,33 +92,12 @@ class Game {
   }
 
   renderDebugInfo() {
-    //add transparent box
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
-    this.ctx.fillRect(0, 0, 200, 180)
-
-    this.ctx.font = '15px Arial'
+    this.ctx.font = '20px Arial'
     this.ctx.fillStyle = 'white'
     this.ctx.fillText(
-      `Player X: ${this.player.x.toFixed(2)} Y: ${this.player.y.toFixed(2)}`,
-      10,
-      20,
-    )
-    this.ctx.fillText(`Player SpeedX: ${this.player.speedX.toFixed(2)}`, 10, 40)
-    this.ctx.fillText(`Player SpeedY: ${this.player.speedY.toFixed(2)}`, 10, 60)
-    this.ctx.fillText(`Player isGrounded: ${this.player.isGrounded}`, 10, 80)
-    this.ctx.fillText(`Player isMoving: ${this.player.isMoving}`, 10, 100)
-    this.ctx.fillText(`Player isAttacking: ${this.player.isAttacking}`, 10, 120)
-    this.ctx.fillText(
-      `Player state: ${this.player.stateMachine.currentState}`,
-      10,
-      140,
-    )
-
-    //current fps game is running at
-    this.ctx.fillText(
-      `FPS: ${Math.round(1 / (this.frameDuration / 1000))}`,
-      10,
-      160,
+      `FPS: ${Math.round(this.currentFPS)}`,
+      this.canvas.width - 100,
+      this.canvas.height - 20,
     )
   }
 }
