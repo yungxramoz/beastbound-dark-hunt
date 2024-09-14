@@ -1,5 +1,3 @@
-import { SETTINGS } from '../constants/settings.js'
-
 export const Attackable = (
   attackDuration,
   attackDamage,
