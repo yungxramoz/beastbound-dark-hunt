@@ -24,34 +24,41 @@ export class Player {
     this.offsetX = 55
     this.offsetY = 30
 
+    this.leftArrow = keyboard('ArrowLeft')
+    this.a = keyboard('a')
+    this.rightArrow = keyboard('ArrowRight')
+    this.d = keyboard('d')
+    this.enter = keyboard('Enter')
+    this.space = keyboard(' ')
+
     const animations = {
       [PLAYER_STATE.IDLE]: {
         spriteSheet: game[ASSETS.PLAYER_IDLE_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 6,
-        frameTime: 0.1,
+        frameTime: 0.12,
       },
       [PLAYER_STATE.MOVING]: {
         spriteSheet: game[ASSETS.PLAYER_MOVE_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 6,
-        frameTime: 0.1,
+        frameTime: 0.12,
       },
       [PLAYER_STATE.JUMPING]: {
         spriteSheet: game[ASSETS.PLAYER_JUMP_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 2,
-        frameTime: 0.1,
+        frameTime: 0.12,
       },
       [PLAYER_STATE.FALLING]: {
         spriteSheet: game[ASSETS.PLAYER_FALL_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 2,
-        frameTime: 0.1,
+        frameTime: 0.12,
       },
       [PLAYER_STATE.ATTACKING]: {
         spriteSheet: game[ASSETS.PLAYER_ATTACK_SPRITE],
@@ -145,59 +152,50 @@ export class Player {
           this.stateMachine.setState(PLAYER_STATE.IDLE)
         }
       },
-      exit: () => console.log('Exiting ATTACKING state'),
-    })
+      exit: () => {
+        console.log('Exiting ATTACKING state')
 
-    this.stateMachine.addState(PLAYER_STATE.HURTING, {
-      enter: () => console.log('Entering HURTING state'),
-      update: () => {
-        if (this.isMoving) {
-          this.stateMachine.setState(PLAYER_STATE.MOVING)
-        } else if (this.isGrounded) {
-          this.stateMachine.setState(PLAYER_STATE.IDLE)
+        if (this.leftArrow.isDown || this.a.isDown) {
+          this.flipX = true
+          this.moveLeft()
+        } else if (this.rightArrow.isDown || this.d.isDown) {
+          this.flipX = false
+          this.moveRight()
         }
       },
-      exit: () => console.log('Exiting HURTING state'),
     })
   }
 
   setupKeyboard() {
-    let leftArrow = keyboard('ArrowLeft'),
-      a = keyboard('a'),
-      rightArrow = keyboard('ArrowRight'),
-      d = keyboard('d'),
-      enter = keyboard('Enter'),
-      space = keyboard(' ')
-
-    leftArrow.press = a.press = () => {
+    this.leftArrow.press = this.a.press = () => {
       if (this.isAttacking) return
       this.flipX = true
       this.moveLeft()
     }
-    leftArrow.release = a.release = () => {
-      if (!rightArrow.isDown && !d.isDown) {
+    this.leftArrow.release = this.a.release = () => {
+      if (!this.rightArrow.isDown && !this.d.isDown) {
         this.stopMoving()
       }
     }
 
-    rightArrow.press = d.press = () => {
+    this.rightArrow.press = this.d.press = () => {
       if (this.isAttacking) return
       this.flipX = false
       this.moveRight()
     }
-    rightArrow.release = d.release = () => {
-      if (!leftArrow.isDown && !a.isDown) {
+    this.rightArrow.release = this.d.release = () => {
+      if (!this.leftArrow.isDown && !this.a.isDown) {
         this.stopMoving()
       }
     }
 
-    enter.press = () => {
+    this.enter.press = () => {
       if (!this.isGrounded) return
       this.stopMoving()
       this.attack()
     }
 
-    space.press = () => {
+    this.space.press = () => {
       if (!this.isGrounded) return
       if (this.isAttacking) return
       this.jump()
