@@ -1,15 +1,13 @@
+import { Character } from '../../components/character.js'
 import { Attackable } from '../../composables/attackable.js'
-import { Movable } from '../../composables/movable.js'
-import { Positionable } from '../../composables/positionable.js'
-import { Spriteable } from '../../composables/spriteable.js'
 import { ASSETS } from '../../constants/assets.js'
 import PLAYER_STATE from '../../constants/player-state.js'
 import { SETTINGS } from '../../constants/settings.js'
 import { keyboard } from '../../library/interactive.js'
 import StateMachine from '../../utils/state-machine.js'
 
-export class Player {
-  constructor(game, x, y) {
+export class Player extends Character {
+  constructor(game, x) {
     const frameWidth = 124
     const frameHeight = 71
     const spriteScale = 1.7
@@ -19,17 +17,10 @@ export class Player {
     const hitRangeWidth = 70
     const hitRangeHeight = 50
 
-    this.width = 85
-    this.height = 95
-    this.offsetX = 55
-    this.offsetY = 30
-
-    this.leftArrow = keyboard('ArrowLeft')
-    this.a = keyboard('a')
-    this.rightArrow = keyboard('ArrowRight')
-    this.d = keyboard('d')
-    this.enter = keyboard('Enter')
-    this.space = keyboard(' ')
+    const width = 85
+    const height = 95
+    const offsetX = 55
+    const offsetY = 30
 
     const animations = {
       [PLAYER_STATE.IDLE]: {
@@ -69,11 +60,19 @@ export class Player {
       },
     }
 
+    super(
+      x,
+      animations,
+      spriteScale,
+      PLAYER_STATE.IDLE,
+      width,
+      height,
+      offsetX,
+      offsetY,
+    )
+
     Object.assign(
       this,
-      Positionable(),
-      Spriteable(animations, spriteScale, PLAYER_STATE.IDLE),
-      Movable(this.width, this.height, this.offsetX),
       Attackable(
         attackDuration,
         attackDamage,
@@ -86,8 +85,14 @@ export class Player {
       ),
     )
 
-    this.setPosition(x, this.groundY)
     this.setupStates()
+
+    this.leftArrow = keyboard('ArrowLeft')
+    this.a = keyboard('a')
+    this.rightArrow = keyboard('ArrowRight')
+    this.d = keyboard('d')
+    this.enter = keyboard('Enter')
+    this.space = keyboard(' ')
     this.setupKeyboard()
   }
 
@@ -204,13 +209,12 @@ export class Player {
 
   update(deltaTime) {
     this.stateMachine.update(deltaTime)
-    this.updateMovement()
     this.updateSpriteState(this.stateMachine.currentState)
-    this.updateSprite(deltaTime)
+    super.update(deltaTime)
   }
 
   draw(ctx) {
-    this.drawSprite(ctx)
+    super.draw(ctx)
     if (SETTINGS.DEBUG) {
       this.drawDebugInfo(ctx)
       this.drawDebugHitBox(ctx)
@@ -237,7 +241,6 @@ export class Player {
       this.width,
       this.height,
     )
-    //add label for player
     ctx.font = '12px Arial'
     ctx.fillStyle = 'white'
     ctx.fillText(
