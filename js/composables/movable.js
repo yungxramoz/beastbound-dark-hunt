@@ -12,6 +12,7 @@ export const Movable = (width, height, offsetX) => ({
   jumpSpeed: 15,
   gravity: 0.8,
   groundY: getGroundY(height),
+  width: width || 0,
   isGrounded: true,
   isMoving: false,
   isFalling: false,

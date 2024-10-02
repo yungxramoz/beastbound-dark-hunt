@@ -13,11 +13,19 @@ export class Character {
     height,
     offsetX,
     offsetY,
+    spriteOffsetX = 0,
+    spriteOffsetY = 0,
   ) {
     Object.assign(
       this,
       Positionable(),
-      Spriteable(animations, spriteScale, initialState),
+      Spriteable(
+        animations,
+        spriteScale,
+        spriteOffsetX,
+        spriteOffsetY,
+        initialState,
+      ),
       Movable(width, height, offsetX),
     )
 

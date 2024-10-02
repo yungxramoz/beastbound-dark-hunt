@@ -1,9 +1,15 @@
 export const ASSETS = {
-  PLAYER_IDLE_SPRITE: 'assets/images/player/player.idle.png',
-  PLAYER_MOVE_SPRITE: 'assets/images/player/player.move.png',
-  PLAYER_JUMP_SPRITE: 'assets/images/player/player.jump.png',
-  PLAYER_FALL_SPRITE: 'assets/images/player/player.fall.png',
-  PLAYER_ATTACK_SPRITE: 'assets/images/player/player.attack.png',
+  // Characters
+  PLAYER_IDLE_SPRITE: 'assets/images/characters/player.idle.png',
+  PLAYER_MOVE_SPRITE: 'assets/images/characters/player.move.png',
+  PLAYER_JUMP_SPRITE: 'assets/images/characters/player.jump.png',
+  PLAYER_FALL_SPRITE: 'assets/images/characters/player.fall.png',
+  PLAYER_ATTACK_SPRITE: 'assets/images/characters/player.attack.png',
+
+  CHIEF_IDLE_SPRITE: 'assets/images/characters/chief.idle.png',
+  CHIEF_MOVE_SPRITE: 'assets/images/characters/chief.move.png',
+
+  // Settlements
   SETTLEMENT_GROUND_TILE_A:
     'assets/images/environments/settlement/ground-1.png',
   SETTLEMENT_GROUND_TILE_B:
@@ -25,6 +31,8 @@ export const ASSETS_SRC = [
   ASSETS.PLAYER_JUMP_SPRITE,
   ASSETS.PLAYER_FALL_SPRITE,
   ASSETS.PLAYER_ATTACK_SPRITE,
+  ASSETS.CHIEF_IDLE_SPRITE,
+  ASSETS.CHIEF_MOVE_SPRITE,
   ASSETS.SETTLEMENT_GROUND_TILE_A,
   ASSETS.SETTLEMENT_GROUND_TILE_B,
   ASSETS.SETTLEMENT_HOUSE_TILE_A,

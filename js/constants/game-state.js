@@ -1,6 +1,7 @@
 const GAME_STATE = {
   PLAYING: 'PLAYING',
   LOADING: 'LOADING',
+  PAUSED: 'PAUSED',
 }
 
 export default GAME_STATE

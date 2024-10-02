@@ -1,9 +1,17 @@
-export const Spriteable = (animations, spriteScale, initialState) => ({
+export const Spriteable = (
+  animations,
+  spriteScale,
+  spriteOffsetX,
+  spriteOffsetY,
+  initialState,
+) => ({
   currentState: initialState || 'idle',
   currentFrame: 0,
   elapsedTime: 0,
   flipX: false,
   spriteScale: spriteScale || 1,
+  spriteOffsetX: spriteOffsetX || 0,
+  spriteOffsetY: spriteOffsetY || 0,
   animations: animations || {},
 
   drawSprite(context) {
@@ -25,8 +33,8 @@ export const Spriteable = (animations, spriteScale, initialState) => ({
           frameY,
           animation.frameWidth,
           animation.frameHeight,
-          -this.x - scaledWidth,
-          this.y,
+          -this.x - scaledWidth - this.spriteOffsetX,
+          this.y + this.spriteOffsetY,
           scaledWidth,
           scaledHeight,
         )
@@ -39,8 +47,8 @@ export const Spriteable = (animations, spriteScale, initialState) => ({
           frameY,
           animation.frameWidth,
           animation.frameHeight,
-          this.x,
-          this.y,
+          this.x + this.spriteOffsetX,
+          this.y + this.spriteOffsetY,
           scaledWidth,
           scaledHeight,
         )
