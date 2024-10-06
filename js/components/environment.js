@@ -1,17 +1,29 @@
+import { drawImage } from '../utils/ui.js'
+
 export class Environment {
-  constructor(options) {
-    this.game = options.game
+  constructor(
+    game,
+    {
+      backgroundImage,
+      middlegroundImage,
+      groundTiles,
+      props,
+      tileSize,
+      backgroundSpeed,
+    } = {},
+  ) {
+    this.game = game
     this.game.ctx.imageSmoothingEnabled = false
 
-    this.backgroundImage = options.backgroundImage
-    this.middlegroundImage = options.middlegroundImage
+    this.backgroundImage = backgroundImage
+    this.middlegroundImage = middlegroundImage
 
-    this.groundTiles = options.groundTiles || []
-    this.tileSize = options.tileSize || 100
+    this.groundTiles = groundTiles || []
+    this.tileSize = tileSize || 100
 
-    this.props = options.props || []
+    this.props = props || []
 
-    this.backgroundSpeed = options.backgroundSpeed || 0.5
+    this.backgroundSpeed = backgroundSpeed || 0.5
     this.backgroundX = 0
     this.time = 0
   }
@@ -40,7 +52,7 @@ export class Environment {
 
       let x = this.backgroundX
       for (let i = 0; i < 4; i++) {
-        this.game.ctx.drawImage(this.backgroundImage, x, 0, width, height)
+        drawImage(this.game.ctx, this.backgroundImage, x, 0, width, height)
         x += width
       }
     }
@@ -54,7 +66,7 @@ export class Environment {
 
       let x = 0
       while (x < this.game.canvas.width) {
-        this.game.ctx.drawImage(this.middlegroundImage, x, 0, width, height)
+        drawImage(this.game.ctx, this.middlegroundImage, x, 0, width, height)
         x += width
       }
     }
@@ -82,7 +94,7 @@ export class Environment {
   drawTile(tile, x, y) {
     const tileWidth = tile.width || this.tileSize
     const tileHeight = tile.height || this.tileSize
-    this.game.ctx.drawImage(tile.image, x, y, tileWidth, tileHeight)
+    drawImage(this.game.ctx, tile.image, x, y, tileWidth, tileHeight)
   }
 
   draw() {

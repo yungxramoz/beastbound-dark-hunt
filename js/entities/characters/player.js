@@ -120,7 +120,7 @@ export class Player extends Character {
       update: () => {
         if (!this.isGrounded) {
           this.stateMachine.setState(PLAYER_STATE.JUMPING)
-        } else if (!this.isMoving || this.game.isInteracting) {
+        } else if (!this.isMoving || this.game.interaction.isInteracting) {
           this.stateMachine.setState(PLAYER_STATE.IDLE)
         } else if (this.isAttacking) {
           this.stateMachine.setState(PLAYER_STATE.ATTACKING)
@@ -176,7 +176,7 @@ export class Player extends Character {
 
   setupKeyboard() {
     this.leftArrow.press = this.a.press = () => {
-      if (this.game.isInteracting) return
+      if (this.game.interaction.isInteracting) return
       if (this.isAttacking) return
       this.flipX = true
       this.moveLeft()
@@ -188,7 +188,7 @@ export class Player extends Character {
     }
 
     this.rightArrow.press = this.d.press = () => {
-      if (this.game.isInteracting) return
+      if (this.game.interaction.isInteracting) return
       if (this.isAttacking) return
       this.flipX = false
       this.moveRight()
@@ -200,7 +200,7 @@ export class Player extends Character {
     }
 
     this.enter.press = () => {
-      if (this.game.isInteracting) return
+      if (this.game.interaction.isInteracting) return
       if (!this.isGrounded) return
       if (this.checkForInteraction()) return
       this.stopMoving()
@@ -208,7 +208,7 @@ export class Player extends Character {
     }
 
     this.space.press = () => {
-      if (this.game.isInteracting) return
+      if (this.game.interaction.isInteracting) return
       if (!this.isGrounded) return
       if (this.isAttacking) return
       this.jump()

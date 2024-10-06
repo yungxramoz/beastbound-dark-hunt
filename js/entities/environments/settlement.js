@@ -50,7 +50,6 @@ export class Settlement extends Environment {
     }
 
     const options = {
-      game: game,
       backgroundImage: game.assets[ASSETS.SETTLEMENT_BACKGROUND],
       middlegroundImage: game.assets[ASSETS.SETTLEMENT_MIDDLEGROUND],
       tileSize: 100,
@@ -74,6 +73,6 @@ export class Settlement extends Environment {
       ],
     }
 
-    super(options)
+    super(game, options)
   }
 }
