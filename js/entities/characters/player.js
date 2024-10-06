@@ -4,6 +4,7 @@ import { ASSETS } from '../../constants/assets.js'
 import PLAYER_STATE from '../../constants/player-state.js'
 import { SETTINGS } from '../../constants/settings.js'
 import { keyboard } from '../../library/interactive.js'
+import { getDistance, isFacingTowards } from '../../utils/collision.js'
 import StateMachine from '../../utils/state-machine.js'
 
 export class Player extends Character {
@@ -24,35 +25,35 @@ export class Player extends Character {
 
     const animations = {
       [PLAYER_STATE.IDLE]: {
-        spriteSheet: game[ASSETS.PLAYER_IDLE_SPRITE],
+        spriteSheet: game.assets[ASSETS.PLAYER_IDLE_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 6,
         frameTime: 0.12,
       },
       [PLAYER_STATE.MOVING]: {
-        spriteSheet: game[ASSETS.PLAYER_MOVE_SPRITE],
+        spriteSheet: game.assets[ASSETS.PLAYER_MOVE_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 6,
         frameTime: 0.12,
       },
       [PLAYER_STATE.JUMPING]: {
-        spriteSheet: game[ASSETS.PLAYER_JUMP_SPRITE],
+        spriteSheet: game.assets[ASSETS.PLAYER_JUMP_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 2,
         frameTime: 0.12,
       },
       [PLAYER_STATE.FALLING]: {
-        spriteSheet: game[ASSETS.PLAYER_FALL_SPRITE],
+        spriteSheet: game.assets[ASSETS.PLAYER_FALL_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 2,
         frameTime: 0.12,
       },
       [PLAYER_STATE.ATTACKING]: {
-        spriteSheet: game[ASSETS.PLAYER_ATTACK_SPRITE],
+        spriteSheet: game.assets[ASSETS.PLAYER_ATTACK_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 6,
@@ -85,7 +86,7 @@ export class Player extends Character {
       ),
     )
 
-    this.setupStates()
+    this.game = game
 
     this.leftArrow = keyboard('ArrowLeft')
     this.a = keyboard('a')
@@ -93,6 +94,8 @@ export class Player extends Character {
     this.d = keyboard('d')
     this.enter = keyboard('Enter')
     this.space = keyboard(' ')
+
+    this.setupStates()
     this.setupKeyboard()
   }
 
@@ -117,7 +120,7 @@ export class Player extends Character {
       update: () => {
         if (!this.isGrounded) {
           this.stateMachine.setState(PLAYER_STATE.JUMPING)
-        } else if (!this.isMoving) {
+        } else if (!this.isMoving || this.game.isInteracting) {
           this.stateMachine.setState(PLAYER_STATE.IDLE)
         } else if (this.isAttacking) {
           this.stateMachine.setState(PLAYER_STATE.ATTACKING)
@@ -173,6 +176,7 @@ export class Player extends Character {
 
   setupKeyboard() {
     this.leftArrow.press = this.a.press = () => {
+      if (this.game.isInteracting) return
       if (this.isAttacking) return
       this.flipX = true
       this.moveLeft()
@@ -184,6 +188,7 @@ export class Player extends Character {
     }
 
     this.rightArrow.press = this.d.press = () => {
+      if (this.game.isInteracting) return
       if (this.isAttacking) return
       this.flipX = false
       this.moveRight()
@@ -195,16 +200,62 @@ export class Player extends Character {
     }
 
     this.enter.press = () => {
+      if (this.game.isInteracting) return
       if (!this.isGrounded) return
+      if (this.checkForInteraction()) return
       this.stopMoving()
       this.attack()
     }
 
     this.space.press = () => {
+      if (this.game.isInteracting) return
       if (!this.isGrounded) return
       if (this.isAttacking) return
       this.jump()
     }
+  }
+
+  checkForInteraction() {
+    const interactables = this.game.interactables || []
+    let closestEntity = null
+    let closestDistance = Infinity
+
+    for (const entity of interactables) {
+      if (entity.isInteractable) {
+        const distance = this.getDistanceTo(entity)
+
+        const withinRadius = distance <= (entity.interactionRadius || 100)
+
+        const facingTowards = isFacingTowards(this, entity)
+
+        if (withinRadius && facingTowards && distance < closestDistance) {
+          closestDistance = distance
+          closestEntity = entity
+        }
+      }
+    }
+
+    if (closestEntity) {
+      closestEntity.startInteraction(this)
+      return true
+    }
+
+    return false
+  }
+
+  getDistanceTo(entity) {
+    const playerCenterX = this.x + this.offsetX + this.width / 2
+    const playerCenterY = this.y + this.offsetY + this.height / 2
+
+    const entityCenterX = entity.x + entity.offsetX + entity.width / 2
+    const entityCenterY = entity.y + entity.offsetY + entity.height / 2
+
+    return getDistance(
+      playerCenterX,
+      playerCenterY,
+      entityCenterX,
+      entityCenterY,
+    )
   }
 
   update(deltaTime) {

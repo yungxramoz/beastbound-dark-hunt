@@ -1,11 +1,11 @@
-import { Player } from './entities/characters/player.js'
-import { Settlement } from './entities/environments/settlement.js'
+// game.js
+
 import { ASSETS_SRC } from './constants/assets.js'
 import { assets } from './library/utilities.js'
 import { BOUNDERIES } from './constants/positions.js'
-import { SETTINGS } from './constants/settings.js'
 import { SettlementScene } from './scenes/settlement-scene.js'
 import GAME_STATE from './constants/game-state.js'
+import { DialogManager } from './utils/dialog-manager.js'
 
 class Game {
   constructor(canvasId) {
@@ -18,29 +18,65 @@ class Game {
     this.frameDuration = 1000 / this.fps
     this.lastTime = 0
     this.accumulatedTime = 0
-    this.gameRunning = false
     this.gameState = GAME_STATE.LOADING
 
-    Object.assign(this, assets)
+    this.assets = assets
+
+    // Initialize mouse input
+    this.mouse = {
+      x: 0,
+      y: 0,
+      isPressed: false,
+    }
+
+    this.uiElements = [] // For UI elements like buttons
+
+    // Initialize dialog manager
+    this.dialogManager = new DialogManager(this)
+    this.interaction = {
+      isInteracting: false,
+      entity: null,
+    }
+
+    this.setupMouseListeners()
 
     this.renderLoading()
-    this.load(ASSETS_SRC).then(() => {
+    this.assets.load(ASSETS_SRC).then(() => {
       console.log('All assets loaded successfully')
       this.startGame()
     })
   }
 
+  setupMouseListeners() {
+    this.canvas.addEventListener('mousemove', (event) => {
+      const rect = this.canvas.getBoundingClientRect()
+
+      // handle scaling
+      const scaleX = this.canvas.width / rect.width
+      const scaleY = this.canvas.height / rect.height
+
+      this.mouse.x = (event.clientX - rect.left) * scaleX
+      this.mouse.y = (event.clientY - rect.top) * scaleY
+    })
+
+    this.canvas.addEventListener('mousedown', () => {
+      this.mouse.isPressed = true
+    })
+
+    this.canvas.addEventListener('mouseup', () => {
+      this.mouse.isPressed = false
+    })
+  }
+
   startGame() {
     this.gameState = GAME_STATE.PLAYING
-    this.gameRunning = true
-
     this.scene = new SettlementScene(this)
 
     requestAnimationFrame(this.gameLoop.bind(this))
   }
 
   gameLoop(currentTime) {
-    if (!this.gameRunning) return
+    if (this.gameState !== GAME_STATE.PLAYING) return
 
     const deltaTime = currentTime - this.lastTime
     this.lastTime = currentTime
@@ -48,9 +84,10 @@ class Game {
 
     while (this.accumulatedTime >= this.frameDuration) {
       this.update(this.frameDuration / 1000)
-      this.render()
       this.accumulatedTime -= this.frameDuration
     }
+
+    this.render()
 
     requestAnimationFrame(this.gameLoop.bind(this))
   }
@@ -58,6 +95,14 @@ class Game {
   update(deltaTime) {
     if (this.gameState === GAME_STATE.PLAYING) {
       this.scene.update(deltaTime)
+    }
+
+    // Update dialog manager
+    this.dialogManager.update(deltaTime)
+
+    // Update UI elements
+    for (const uiElement of this.uiElements) {
+      uiElement.update(deltaTime)
     }
   }
 
@@ -69,6 +114,9 @@ class Game {
     } else if (this.gameState === GAME_STATE.LOADING) {
       this.renderLoading()
     }
+
+    // Draw dialog manager (on top of other elements)
+    this.dialogManager.draw(this.ctx)
   }
 
   renderPlaying() {
@@ -77,7 +125,7 @@ class Game {
 
   renderLoading() {
     this.ctx.font = '30px Arial'
-    this.ctx.fillStyle = 'black'
+    this.ctx.fillStyle = 'white'
     this.ctx.fillText(
       'Loading...',
       this.canvas.width / 2 - 75,

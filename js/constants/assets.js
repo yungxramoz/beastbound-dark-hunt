@@ -1,4 +1,7 @@
 export const ASSETS = {
+  // Font
+  FONT: 'assets/fonts/PressStart2P-Regular.ttf',
+
   // Characters
   PLAYER_IDLE_SPRITE: 'assets/images/characters/player.idle.png',
   PLAYER_MOVE_SPRITE: 'assets/images/characters/player.move.png',
@@ -8,6 +11,7 @@ export const ASSETS = {
 
   CHIEF_IDLE_SPRITE: 'assets/images/characters/chief.idle.png',
   CHIEF_MOVE_SPRITE: 'assets/images/characters/chief.move.png',
+  CHIEF_AVATAR: 'assets/images/characters/chief.avatar.png',
 
   // Settlements
   SETTLEMENT_GROUND_TILE_A:
@@ -33,6 +37,7 @@ export const ASSETS_SRC = [
   ASSETS.PLAYER_ATTACK_SPRITE,
   ASSETS.CHIEF_IDLE_SPRITE,
   ASSETS.CHIEF_MOVE_SPRITE,
+  ASSETS.CHIEF_AVATAR,
   ASSETS.SETTLEMENT_GROUND_TILE_A,
   ASSETS.SETTLEMENT_GROUND_TILE_B,
   ASSETS.SETTLEMENT_HOUSE_TILE_A,

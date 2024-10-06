@@ -5,37 +5,37 @@ export class Settlement extends Environment {
   constructor(game) {
     const tiles = {
       groundTileA: {
-        image: game[ASSETS.SETTLEMENT_GROUND_TILE_A],
+        image: game.assets[ASSETS.SETTLEMENT_GROUND_TILE_A],
         width: 25,
         height: 100,
       },
       groundTileB: {
-        image: game[ASSETS.SETTLEMENT_GROUND_TILE_B],
+        image: game.assets[ASSETS.SETTLEMENT_GROUND_TILE_B],
         width: 25,
         height: 100,
       },
       houseTileA: {
-        image: game[ASSETS.SETTLEMENT_HOUSE_TILE_A],
+        image: game.assets[ASSETS.SETTLEMENT_HOUSE_TILE_A],
         width: 350,
         height: 400,
       },
       houseTileB: {
-        image: game[ASSETS.SETTLEMENT_HOUSE_TILE_B],
+        image: game.assets[ASSETS.SETTLEMENT_HOUSE_TILE_B],
         width: 400,
         height: 500,
       },
       houseTileC: {
-        image: game[ASSETS.SETTLEMENT_HOUSE_TILE_C],
+        image: game.assets[ASSETS.SETTLEMENT_HOUSE_TILE_C],
         width: 500,
         height: 400,
       },
       wagonTile: {
-        image: game[ASSETS.SETTLEMENT_WAGON_TILE],
+        image: game.assets[ASSETS.SETTLEMENT_WAGON_TILE],
         width: 200,
         height: 160,
       },
       crateStackTile: {
-        image: game[ASSETS.SETTLEMENT_CRATE_STACK_TILE],
+        image: game.assets[ASSETS.SETTLEMENT_CRATE_STACK_TILE],
         width: 110,
         height: 100,
       },
@@ -50,9 +50,9 @@ export class Settlement extends Environment {
     }
 
     const options = {
-      canvas: game.canvas,
-      backgroundImage: game[ASSETS.SETTLEMENT_BACKGROUND],
-      middlegroundImage: game[ASSETS.SETTLEMENT_MIDDLEGROUND],
+      game: game,
+      backgroundImage: game.assets[ASSETS.SETTLEMENT_BACKGROUND],
+      middlegroundImage: game.assets[ASSETS.SETTLEMENT_MIDDLEGROUND],
       tileSize: 100,
 
       // prettier-ignore

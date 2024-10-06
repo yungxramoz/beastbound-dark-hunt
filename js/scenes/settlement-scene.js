@@ -4,9 +4,10 @@ import { ChiefNpc } from '../entities/characters/chief-npc.js'
 
 export class SettlementScene {
   constructor(game) {
+    this.game = game
     this.environment = new Settlement(game)
     this.player = new Player(game, 100)
-    this.chief = new ChiefNpc(game, 900, 'St. Johan')
+    this.chief = new ChiefNpc(game, 200, 'Village Chief St. Johan')
   }
 
   update(deltaTime) {

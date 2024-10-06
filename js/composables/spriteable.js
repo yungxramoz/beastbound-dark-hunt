@@ -14,7 +14,7 @@ export const Spriteable = (
   spriteOffsetY: spriteOffsetY || 0,
   animations: animations || {},
 
-  drawSprite(context) {
+  drawSprite(ctx) {
     const animation = this.animations[this.currentState]
 
     if (animation) {
@@ -24,10 +24,10 @@ export const Spriteable = (
       const scaledHeight = animation.frameHeight * this.spriteScale
 
       if (this.flipX) {
-        context.save()
+        ctx.save()
 
-        context.scale(-1, 1)
-        context.drawImage(
+        ctx.scale(-1, 1)
+        ctx.drawImage(
           animation.spriteSheet,
           frameX,
           frameY,
@@ -39,9 +39,9 @@ export const Spriteable = (
           scaledHeight,
         )
 
-        context.restore()
+        ctx.restore()
       } else {
-        context.drawImage(
+        ctx.drawImage(
           animation.spriteSheet,
           frameX,
           frameY,

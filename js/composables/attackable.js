@@ -50,18 +50,18 @@ export const Attackable = (
     }
   },
 
-  drawDebugHitBox(context) {
+  drawDebugHitBox(ctx) {
     if (!this.hitBox) return
-    context.strokeStyle = 'blue'
-    context.lineWidth = 2
-    context.strokeRect(
+    ctx.strokeStyle = 'blue'
+    ctx.lineWidth = 2
+    ctx.strokeRect(
       this.hitBox.x,
       this.hitBox.y,
       this.hitBox.width,
       this.hitBox.height,
     )
-    context.font = '12px Arial'
-    context.fillStyle = 'white'
-    context.fillText('Hit', this.hitBox.x, this.hitBox.y - 10)
+    ctx.font = '12px Arial'
+    ctx.fillStyle = 'white'
+    ctx.fillText('Hit', this.hitBox.x, this.hitBox.y - 10)
   },
 })

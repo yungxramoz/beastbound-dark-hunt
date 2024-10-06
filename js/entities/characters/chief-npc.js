@@ -3,6 +3,7 @@ import { Interactable } from '../../composables/interactable.js'
 import { ASSETS } from '../../constants/assets.js'
 import CHARACTER_STATE from '../../constants/character-state.js'
 import { SETTINGS } from '../../constants/settings.js'
+import { Dialog } from '../../ui/dialog.js'
 import { Behavior, BehaviorManager } from '../../utils/behavior-manager.js'
 import StateMachine from '../../utils/state-machine.js'
 
@@ -21,14 +22,14 @@ export class ChiefNpc extends Character {
 
     const animations = {
       [CHARACTER_STATE.IDLE]: {
-        spriteSheet: game[ASSETS.CHIEF_IDLE_SPRITE],
+        spriteSheet: game.assets[ASSETS.CHIEF_IDLE_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 4,
-        frameTime: 0.16,
+        frameTime: 0.24,
       },
       [CHARACTER_STATE.MOVING]: {
-        spriteSheet: game[ASSETS.CHIEF_MOVE_SPRITE],
+        spriteSheet: game.assets[ASSETS.CHIEF_MOVE_SPRITE],
         frameWidth,
         frameHeight,
         numFrames: 6,
@@ -49,14 +50,18 @@ export class ChiefNpc extends Character {
       spriteOffsetY,
     )
 
+    Object.assign(this, Interactable(game))
+
+    this.game = game
+
     this.flipX = true
-
-    Object.assign(this, Interactable())
-
     this.maxSpeed = 1
+    this.name = name
+    this.avatar = game.assets[ASSETS.CHIEF_AVATAR]
 
     this.setupStates()
     this.setupBehaviors()
+    this.setupInteractable()
   }
 
   setupStates() {
@@ -88,18 +93,25 @@ export class ChiefNpc extends Character {
         'idle',
         (done) => {
           this.stopMoving()
-          const duration = Math.random() * 2000 + 1000 // 1s to 3s
+          const duration = Math.random() * 2000 + 1000
           this.behaviorManager.currentTimeout = setTimeout(done, duration)
         },
-        2,
+        4,
       ), // Higher weight for idling
 
       new Behavior(
         'walkLeft',
         (done) => {
+          if (
+            this.game.interaction.isInteracting &&
+            this === this.game.interaction.entity
+          ) {
+            done()
+            return
+          }
           this.flipX = true
           this.moveLeft()
-          const duration = Math.random() * 2000 + 1000 // 1s to 3s
+          const duration = Math.random() * 2000 + 1000
           this.behaviorManager.currentTimeout = setTimeout(() => {
             this.stopMoving()
             done()
@@ -111,9 +123,16 @@ export class ChiefNpc extends Character {
       new Behavior(
         'walkRight',
         (done) => {
+          if (
+            this.game.interaction.isInteracting &&
+            this === this.game.interaction.entity
+          ) {
+            done()
+            return
+          }
           this.flipX = false
           this.moveRight()
-          const duration = Math.random() * 2000 + 1000 // 1s to 3s
+          const duration = Math.random() * 2000 + 1000
           this.behaviorManager.currentTimeout = setTimeout(() => {
             this.stopMoving()
             done()
@@ -124,6 +143,37 @@ export class ChiefNpc extends Character {
     ])
 
     this.behaviorManager.start()
+  }
+
+  createDialog(player) {
+    // Create the dialog specific to the ChiefNpc
+    const dialog = new Dialog(this.game, {
+      npc: this,
+      text: `Hunter, dark times are upon us. A beast lurks beyond the village, spreading fear and chaos. We need your strength to end this threat.`,
+      buttons: [
+        {
+          width: 150,
+          height: 40,
+          text: 'Accept',
+          onClick: () => {
+            dialog.close()
+          },
+        },
+        {
+          width: 150,
+          height: 40,
+          text: 'Decline',
+          onClick: () => {
+            dialog.close()
+          },
+        },
+      ],
+      onClose: () => {
+        this.endInteraction()
+      },
+    })
+
+    this.game.dialogManager.openDialog(dialog)
   }
 
   update(deltaTime) {

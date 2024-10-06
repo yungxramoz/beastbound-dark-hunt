@@ -1,9 +1,7 @@
 export class Environment {
   constructor(options) {
-    this.canvas = options.canvas
-    this.ctx = this.canvas.getContext('2d')
-
-    this.ctx.imageSmoothingEnabled = false
+    this.game = options.game
+    this.game.ctx.imageSmoothingEnabled = false
 
     this.backgroundImage = options.backgroundImage
     this.middlegroundImage = options.middlegroundImage
@@ -19,7 +17,7 @@ export class Environment {
   }
 
   getCalculatedImageSize(image) {
-    const height = this.canvas.height
+    const height = this.game.canvas.height
     const aspectRatio = image.width / image.height
     const width = height * aspectRatio
 
@@ -42,7 +40,7 @@ export class Environment {
 
       let x = this.backgroundX
       for (let i = 0; i < 4; i++) {
-        this.ctx.drawImage(this.backgroundImage, x, 0, width, height)
+        this.game.ctx.drawImage(this.backgroundImage, x, 0, width, height)
         x += width
       }
     }
@@ -55,8 +53,8 @@ export class Environment {
       )
 
       let x = 0
-      while (x < this.canvas.width) {
-        this.ctx.drawImage(this.middlegroundImage, x, 0, width, height)
+      while (x < this.game.canvas.width) {
+        this.game.ctx.drawImage(this.middlegroundImage, x, 0, width, height)
         x += width
       }
     }
@@ -84,7 +82,7 @@ export class Environment {
   drawTile(tile, x, y) {
     const tileWidth = tile.width || this.tileSize
     const tileHeight = tile.height || this.tileSize
-    this.ctx.drawImage(tile.image, x, y, tileWidth, tileHeight)
+    this.game.ctx.drawImage(tile.image, x, y, tileWidth, tileHeight)
   }
 
   draw() {

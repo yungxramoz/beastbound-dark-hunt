@@ -1,4 +1,3 @@
-//https://github.com/Apress/adv-game-design-w-html5-javascript/blob/e2e64d61305154b2572d91d417b4a7857145b427/library/sound.js
 //Create the audio context
 let actx = new AudioContext()
 

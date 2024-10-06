@@ -1,7 +1,6 @@
 /* 
 utilities.js
 ==============
-https://github.com/Apress/adv-game-design-w-html5-javascript/blob/e2e64d61305154b2572d91d417b4a7857145b427/library/utilities.js
 
 This JavaScript file contains useful functions for
 adding interactivity to sprites. See the sprites.js file for
@@ -617,4 +616,32 @@ export function move(...sprites) {
       s.y += s.vy
     }
   }
+}
+
+//Tween functions
+
+export let slide = (sprite, x, y, time) => {
+  let tween = new TWEEN.Tween({ x: sprite.x, y: sprite.y }).to(
+    { x: x, y: y },
+    time,
+  )
+  tween.easing(TWEEN.Easing.Circular.Out)
+  tween.onUpdate(function () {
+    sprite.x = this.x
+    sprite.y = this.y
+  })
+  tween.start()
+  return tween
+}
+
+export let fade = (sprite, alpha, time) => {
+  let tween = new TWEEN.Tween({ alpha: sprite.alpha }).to(
+    { alpha: alpha },
+    time,
+  )
+  tween.easing(TWEEN.Easing.Linear.None)
+  tween.onUpdate(function () {
+    sprite.alpha = this.alpha
+  })
+  tween.start()
 }
