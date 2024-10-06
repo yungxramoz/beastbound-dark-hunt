@@ -16,18 +16,18 @@ export class Settlement extends Environment {
       },
       houseTileA: {
         image: game.assets[ASSETS.SETTLEMENT_HOUSE_TILE_A],
-        width: 350,
-        height: 400,
+        width: 310,
+        height: 340,
       },
       houseTileB: {
         image: game.assets[ASSETS.SETTLEMENT_HOUSE_TILE_B],
-        width: 400,
-        height: 500,
+        width: 380,
+        height: 470,
       },
       houseTileC: {
         image: game.assets[ASSETS.SETTLEMENT_HOUSE_TILE_C],
-        width: 500,
-        height: 400,
+        width: 480,
+        height: 380,
       },
       wagonTile: {
         image: game.assets[ASSETS.SETTLEMENT_WAGON_TILE],
@@ -36,8 +36,8 @@ export class Settlement extends Environment {
       },
       crateStackTile: {
         image: game.assets[ASSETS.SETTLEMENT_CRATE_STACK_TILE],
-        width: 110,
-        height: 100,
+        width: 100,
+        height: 90,
       },
     }
 
@@ -66,10 +66,10 @@ export class Settlement extends Environment {
       ],
 
       props: [
-        { x: 280, y: 0, ...tiles.houseTileB },
-        { x: -10, y: 100, ...tiles.houseTileA },
-        { x: 720, y: 100, ...tiles.houseTileC },
-        { x: 580, y: 405, ...tiles.crateStackTile },
+        { x: 260, y: 30, ...tiles.houseTileB },
+        { x: -10, y: 160, ...tiles.houseTileA },
+        { x: 740, y: 120, ...tiles.houseTileC },
+        { x: 550, y: 415, ...tiles.crateStackTile },
         { x: 700, y: 345, ...tiles.wagonTile },
       ],
     }
