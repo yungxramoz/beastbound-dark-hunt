@@ -1,11 +1,18 @@
 import { STYLE } from '../constants/style.js'
 
-export const addBorder = (ctx, x, y, width, height, colorOptions = {}) => {
-  let highlight = colorOptions.highlight || STYLE.COLORS.PRIMARY_LIGHTER_1
-  let shadow = colorOptions.shadow || STYLE.COLORS.PRIMARY_DARKER_1
-  let border = colorOptions.border || STYLE.COLORS.PRIMARY_DARKER_3
+export const addBorder = (
+  ctx,
+  x,
+  y,
+  width,
+  height,
+  { highlight, shadow, border } = {},
+) => {
+  highlight = highlight || STYLE.COLORS.PRIMARY_LIGHTER_1
+  shadow = shadow || STYLE.COLORS.PRIMARY_DARKER_1
+  border = border || STYLE.COLORS.PRIMARY_DARKER_3
 
-  // Dialog border
+  // Border
   ctx.strokeStyle = border
   ctx.lineWidth = STYLE.BORDER.WIDTH
   const borderOffset = STYLE.BORDER.WIDTH / 2
@@ -44,15 +51,23 @@ export const addBorder = (ctx, x, y, width, height, colorOptions = {}) => {
   ctx.shadowOffsetX = 0
   ctx.shadowOffsetY = 0
   ctx.lineWidth = 1
+
+  resetStyles(ctx)
 }
 
-export const drawText = (ctx, text, x, y, options = {}) => {
-  const color = options.color || STYLE.COLORS.TEXT_LIGHT
-  const size = options.size || STYLE.FONT_SIZE.MEDIUM
-  const font = options.font || STYLE.FONT
-  const align = options.align || 'left'
-  const shadow = options.shadow || true
-  const baseline = options.baseline || 'top'
+export const drawText = (
+  ctx,
+  text,
+  x,
+  y,
+  { color, size, font, align, shadow, baseline } = {},
+) => {
+  color = color || STYLE.COLORS.TEXT_LIGHT
+  size = size || STYLE.FONT_SIZE.MEDIUM
+  font = font || STYLE.FONT
+  align = align || 'left'
+  shadow = shadow || true
+  baseline = baseline || 'top'
 
   ctx.fillStyle = color
   ctx.font = `${size}px ${font}`
@@ -67,12 +82,7 @@ export const drawText = (ctx, text, x, y, options = {}) => {
 
   ctx.fillText(text, x, y)
 
-  // Reset styles
-  ctx.shadowColor = 'transparent'
-  ctx.shadowOffsetX = 0
-  ctx.shadowOffsetY = 0
-  ctx.shadowBlur = 0
-  ctx.lineWidth = 1
+  resetStyles(ctx)
 }
 
 export const drawWrappedText = (
@@ -82,7 +92,7 @@ export const drawWrappedText = (
   y,
   maxWidth,
   lineHeight,
-  options = {},
+  { color, size, font, align, shadow, baseline } = {},
 ) => {
   const words = text.split(' ')
   let line = ''
@@ -98,16 +108,18 @@ export const drawWrappedText = (
       line = testLine
     }
   }
-  drawText(ctx, line, x, y, options)
+  drawText(ctx, line, x, y, { color, size, font, align, shadow, baseline })
 }
 
 export const drawRect = (ctx, x, y, width, height, color) => {
   ctx.fillStyle = color
   ctx.fillRect(x, y, width, height)
+  resetStyles(ctx)
 }
 
 export const drawImage = (ctx, image, x, y, width, height) => {
   ctx.drawImage(image, x, y, width, height)
+  resetStyles(ctx)
 }
 
 export const resetStyles = (ctx) => {

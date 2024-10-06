@@ -3,7 +3,7 @@ import { Interactable } from '../../composables/interactable.js'
 import { ASSETS } from '../../constants/assets.js'
 import CHARACTER_STATE from '../../constants/character-state.js'
 import { SETTINGS } from '../../constants/settings.js'
-import { Dialog } from '../../ui/dialog.js'
+import { SpeechDialog } from '../../ui/speech-dialog.js'
 import { Behavior, BehaviorManager } from '../../utils/behavior-manager.js'
 import StateMachine from '../../utils/state-machine.js'
 
@@ -147,7 +147,7 @@ export class ChiefNpc extends Character {
 
   createDialog(player) {
     // Create the dialog specific to the ChiefNpc
-    const dialog = new Dialog(this.game, {
+    const dialog = new SpeechDialog(this.game, {
       npc: this,
       text: `Hunter, dark times are upon us. A beast lurks beyond the village, spreading fear and chaos. We need your strength to end this threat.`,
       buttons: [

@@ -1,11 +1,12 @@
 // game.js
 
 import { ASSETS_SRC } from './constants/assets.js'
-import { assets } from './library/utilities.js'
-import { BOUNDERIES } from './constants/positions.js'
-import { SettlementScene } from './scenes/settlement-scene.js'
 import GAME_STATE from './constants/game-state.js'
+import { BOUNDERIES } from './constants/positions.js'
+import { assets } from './library/utilities.js'
+import { SettlementScene } from './scenes/settlement-scene.js'
 import { DialogManager } from './utils/dialog-manager.js'
+import { drawText } from './utils/ui.js'
 
 class Game {
   constructor(canvasId) {
@@ -124,12 +125,15 @@ class Game {
   }
 
   renderLoading() {
-    this.ctx.font = '30px Arial'
-    this.ctx.fillStyle = 'white'
-    this.ctx.fillText(
+    drawText(
+      this.ctx,
       'Loading...',
       this.canvas.width / 2 - 75,
       this.canvas.height / 2,
+      {
+        size: 30,
+        font: 'Arial',
+      },
     )
   }
 }

@@ -7,7 +7,7 @@ export class SettlementScene {
     this.game = game
     this.environment = new Settlement(game)
     this.player = new Player(game, 100)
-    this.chief = new ChiefNpc(game, 200, 'Village Chief St. Johan')
+    this.chief = new ChiefNpc(game, 550, 'Village Chief St. Johan')
   }
 
   update(deltaTime) {

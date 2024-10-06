@@ -1,16 +1,15 @@
 import { STYLE } from '../constants/style.js'
-import { addBorder, drawRect, drawText, resetStyles } from '../utils/ui.js'
+import { addBorder, drawRect, drawText } from '../utils/ui.js'
 
-// button.js
 export class Button {
-  constructor(game, options) {
+  constructor(game, { x, y, width, height, text, onClick } = {}) {
     this.game = game
-    this.x = options.x || 0
-    this.y = options.y || 0
-    this.width = options.width || 150
-    this.height = options.height || 40
-    this.text = options.text || 'Button'
-    this.onClick = options.onClick || function () {}
+    this.x = x || 0
+    this.y = y || 0
+    this.width = width || 150
+    this.height = height || 40
+    this.text = text || 'Button'
+    this.onClick = onClick || function () {}
     this.isHovered = false
     this.isPressed = false
   }
@@ -28,11 +27,6 @@ export class Button {
     if (overButton) {
       this.isHovered = true
 
-      // Change cursor style to pointer when hovering over the button
-      if (this.game.canvas.style.cursor !== STYLE.CURSOR.POINTER) {
-        this.game.canvas.style.cursor = STYLE.CURSOR.POINTER
-      }
-
       if (pointer.isPressed) {
         if (!this.isPressed) {
           this.isPressed = true
@@ -40,25 +34,15 @@ export class Button {
       } else {
         if (this.isPressed) {
           this.isPressed = false
-          // Trigger the click event
           this.onClick()
-          this.game.canvas.style.cursor = STYLE.CURSOR.DEFAULT
         }
       }
     } else {
       this.isHovered = false
     }
-
-    if (
-      !this.isHovered &&
-      this.game.canvas.style.cursor === STYLE.CURSOR.POINTER
-    ) {
-      this.game.canvas.style.cursor = STYLE.CURSOR.DEFAULT
-    }
   }
 
   draw(ctx) {
-    // Draw button background
     let fillStyle = STYLE.COLORS.SECONDARY
     if (this.isPressed) {
       fillStyle = STYLE.COLORS.SECONDARY_DARKER_2
@@ -83,8 +67,5 @@ export class Button {
         baseline: 'middle',
       },
     )
-
-    // Reset styles
-    resetStyles(ctx)
   }
 }
