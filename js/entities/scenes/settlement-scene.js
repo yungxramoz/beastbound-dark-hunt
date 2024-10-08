@@ -9,8 +9,8 @@ class SettlementScene extends Scene {
     this.game = game
 
     this.addObject(new Settlement(game))
-    this.addObject(new Player(game, 100, 0))
     this.addObject(new ChiefNpc(game, 550, 0, 'Village Chief St. Johan'))
+    this.addObject(new Player(game, 100, 0))
   }
 }
 
