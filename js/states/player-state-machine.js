@@ -64,8 +64,6 @@ class PlayerStateMachine extends StateMachine {
           this.player.position.isOutOfBoundsLeft()
         ) {
           this.player.stateMachine.setState(PLAYER_STATE.IDLE)
-        } else if (this.player.d.isDown || this.player.rightArrow.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.MOVING_RIGHT)
         } else if (this.player.j.isDown) {
           this.player.stateMachine.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
@@ -90,8 +88,6 @@ class PlayerStateMachine extends StateMachine {
           this.player.position.isOutOfBoundsRight()
         ) {
           this.player.stateMachine.setState(PLAYER_STATE.IDLE)
-        } else if (this.player.a.isDown || this.player.leftArrow.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.MOVING_LEFT)
         } else if (this.player.j.isDown) {
           this.player.stateMachine.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
