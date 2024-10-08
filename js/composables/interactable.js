@@ -15,6 +15,7 @@ class Interactable {
     this.isInteractable = true
     this.radius = 100
     this.isInteracting = false
+    this.interactingEntity = null
 
     if (!this.game.interactables) {
       this.game.interactables = []
@@ -28,10 +29,17 @@ class Interactable {
       this.entity.move.faceTowards(source)
     }
     this.isInteracting = true
+
+    this.interactingEntity = source
   }
 
   end() {
     this.isInteracting = false
+
+    if (this.interactingEntity && this.interactingEntity.onInteractionEnd) {
+      this.interactingEntity.onInteractionEnd()
+    }
+    this.interactingEntity = null
   }
 }
 

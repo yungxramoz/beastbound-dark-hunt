@@ -23,6 +23,7 @@ class Player extends Character {
 
     this.game = game
     this.isInteracting = false
+    this.currentInteractable = null
 
     this.attack = new Attackable(game, this, {
       attackDuration: 0.6,
@@ -45,6 +46,9 @@ class Player extends Character {
 
   checkForInteraction() {
     const interactables = this.game.interactables || []
+    let nearestInteractable = null
+    let minDistance = Infinity
+
     for (const interactable of interactables) {
       const distance = getDistance(
         this.position.x,
@@ -55,17 +59,28 @@ class Player extends Character {
 
       if (
         distance <= interactable.interaction.radius &&
-        isFacingTowards(this, interactable)
+        isFacingTowards(this, interactable) &&
+        distance < minDistance
       ) {
-        if (!interactable.interaction.isInteracting) {
-          interactable.interaction.start(this)
-          this.isInteracting = true
-        }
-        return true
+        minDistance = distance
+        nearestInteractable = interactable
       }
     }
 
-    return false
+    if (nearestInteractable) {
+      const interactable = nearestInteractable.interaction
+
+      if (!interactable.isInteracting) {
+        interactable.start(this)
+        this.isInteracting = true
+        this.currentInteractable = interactable
+      }
+    }
+  }
+
+  onInteractionEnd() {
+    this.isInteracting = false
+    this.currentInteractable = null
   }
 
   update(deltaTime) {

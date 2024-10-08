@@ -4,4 +4,4 @@ const BOUNDERIES = {
   GAME_HEIGHT: 600,
 }
 
-export default BOUNDERIES
+export { BOUNDERIES }

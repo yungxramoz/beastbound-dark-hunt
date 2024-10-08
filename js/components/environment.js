@@ -98,12 +98,14 @@ class Environment {
   }
 
   draw() {
-    this.updateBackground()
-
     this.drawBackground()
     this.drawMiddleground()
     this.drawGround()
     this.drawProps()
+  }
+
+  update() {
+    this.updateBackground()
   }
 }
 

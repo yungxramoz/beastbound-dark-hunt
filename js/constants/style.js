@@ -52,4 +52,4 @@ const STYLE = {
   COLORS,
 }
 
-export default STYLE
+export { STYLE }

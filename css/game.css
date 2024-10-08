@@ -21,41 +21,10 @@ body {
   justify-content: center;
   align-items: center;
   background-color: black;
-  margin-bottom: 20px;
 }
 
 #gameCanvas {
   width: 100vw;
   height: auto;
   image-rendering: pixelated;
-}
-
-#hud {
-  display: flex;
-  justify-content: space-around;
-  width: 80%;
-  margin-bottom: 20px;
-}
-
-#hud h2 {
-  margin: 0;
-  padding: 10px 0;
-}
-
-#hud p {
-  margin: 5px 0;
-}
-
-#controls {
-  width: 80%;
-  text-align: center;
-}
-
-#controls h3 {
-  margin: 0;
-  padding: 10px 0;
-}
-
-#controls p {
-  margin: 5px 0;
 }

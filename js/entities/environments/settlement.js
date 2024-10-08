@@ -1,5 +1,5 @@
 import Environment from '../../components/environment.js'
-import ASSETS from '../../constants/assets.js'
+import { ASSETS } from '../../constants/assets.js'
 
 class Settlement extends Environment {
   constructor(game) {

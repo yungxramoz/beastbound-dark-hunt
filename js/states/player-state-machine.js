@@ -34,18 +34,18 @@ class PlayerStateMachine extends StateMachine {
           (this.player.a.isDown || this.player.leftArrow.isDown) &&
           !this.player.position.isOutOfBoundsLeft()
         ) {
-          this.player.stateMachine.setState(PLAYER_STATE.MOVING_LEFT)
+          this.setState(PLAYER_STATE.MOVING_LEFT)
         } else if (
           (this.player.d.isDown || this.player.rightArrow.isDown) &&
           !this.player.position.isOutOfBoundsRight()
         ) {
-          this.player.stateMachine.setState(PLAYER_STATE.MOVING_RIGHT)
+          this.setState(PLAYER_STATE.MOVING_RIGHT)
         } else if (this.player.j.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.ATTACKING)
+          this.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.JUMPING)
+          this.setState(PLAYER_STATE.JUMPING)
         } else if (this.player.e.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.INTERACTING)
+          this.setState(PLAYER_STATE.INTERACTING)
         }
       },
       exit: () => console.log('PLAYER: Exiting IDLE state'),
@@ -63,13 +63,13 @@ class PlayerStateMachine extends StateMachine {
           (this.player.a.isUp && this.player.leftArrow.isUp) ||
           this.player.position.isOutOfBoundsLeft()
         ) {
-          this.player.stateMachine.setState(PLAYER_STATE.IDLE)
+          this.setState(PLAYER_STATE.IDLE)
         } else if (this.player.j.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.ATTACKING)
+          this.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.JUMPING)
+          this.setState(PLAYER_STATE.JUMPING)
         } else if (this.player.e.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.INTERACTING)
+          this.setState(PLAYER_STATE.INTERACTING)
         }
       },
       exit: () => console.log('PLAYER: Exiting MOVING_LEFT state'),
@@ -87,13 +87,13 @@ class PlayerStateMachine extends StateMachine {
           (this.player.d.isUp && this.player.rightArrow.isUp) ||
           this.player.position.isOutOfBoundsRight()
         ) {
-          this.player.stateMachine.setState(PLAYER_STATE.IDLE)
+          this.setState(PLAYER_STATE.IDLE)
         } else if (this.player.j.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.ATTACKING)
+          this.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.JUMPING)
+          this.setState(PLAYER_STATE.JUMPING)
         } else if (this.player.e.isDown) {
-          this.player.stateMachine.setState(PLAYER_STATE.INTERACTING)
+          this.setState(PLAYER_STATE.INTERACTING)
         }
       },
       exit: () => console.log('PLAYER: Exiting MOVING_RIGHT state'),
@@ -107,7 +107,7 @@ class PlayerStateMachine extends StateMachine {
       },
       update: () => {
         if (this.player.move.isFalling()) {
-          this.player.stateMachine.setState(PLAYER_STATE.FALLING)
+          this.setState(PLAYER_STATE.FALLING)
         }
       },
       exit: () => console.log('PLAYER: Exiting JUMPING state'),
@@ -120,7 +120,7 @@ class PlayerStateMachine extends StateMachine {
       },
       update: () => {
         if (this.player.position.isGrounded()) {
-          this.player.stateMachine.setState(PLAYER_STATE.IDLE)
+          this.setState(PLAYER_STATE.IDLE)
         }
       },
       exit: () => console.log('PLAYER: Exiting FALLING state'),
@@ -135,7 +135,7 @@ class PlayerStateMachine extends StateMachine {
       },
       update: () => {
         if (!this.player.attack.isAttacking) {
-          this.player.stateMachine.setState(PLAYER_STATE.IDLE)
+          this.setState(PLAYER_STATE.IDLE)
         }
       },
       exit: () => console.log('PLAYER: Exiting ATTACKING state'),
@@ -150,7 +150,7 @@ class PlayerStateMachine extends StateMachine {
       },
       update: () => {
         if (!this.player.isInteracting) {
-          this.player.stateMachine.setState(PLAYER_STATE.IDLE)
+          this.setState(PLAYER_STATE.IDLE)
         }
       },
       exit: () => console.log('PLAYER: Exiting INTERACTING state'),
