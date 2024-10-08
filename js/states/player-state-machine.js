@@ -145,14 +145,15 @@ class PlayerStateMachine extends StateMachine {
       exit: () => console.log('PLAYER: Exiting ATTACKING state'),
     })
 
-    // HURTING
+    // INTERACTING
     this.addState(PLAYER_STATE.INTERACTING, {
       enter: () => {
         this.player.move.stop()
         this.player.sprite.setSprite(PLAYER_SPRITE.IDLE)
+        this.player.checkForInteraction();
       },
       update: () => {
-        if (!this.player.checkForInteraction()) {
+        if (!this.player.isInteracting) {
           this.player.stateMachine.setState(PLAYER_STATE.IDLE)
         }
       },

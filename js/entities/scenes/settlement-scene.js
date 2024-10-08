@@ -1,8 +1,8 @@
-import { Settlement } from '../environments/settlement.js'
-import { Player } from '../characters/player.js'
-import { ChiefNpc } from '../characters/chief-npc.js'
+import Settlement from '../environments/settlement.js'
+import Player from '../characters/player.js'
+import ChiefNpc from '../characters/chief-npc.js'
 
-export class SettlementScene {
+class SettlementScene {
   constructor(game) {
     this.game = game
     this.environment = new Settlement(game)
@@ -21,3 +21,5 @@ export class SettlementScene {
     this.player.draw(ctx)
   }
 }
+
+export default SettlementScene

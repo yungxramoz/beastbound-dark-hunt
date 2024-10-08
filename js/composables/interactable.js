@@ -4,7 +4,7 @@ class Interactable {
     if (!entity) throw new Error('Entity is required')
     if (!entity.position)
       throw new Error('Entity must have a Positionable component')
-    if (!entity.flipX === undefined)
+    if (entity.flipX === undefined)
       throw new Error('Entity must have a flipX property')
     if (!entity.createDialog)
       throw new Error('Entity must have a createDialog method')
@@ -13,40 +13,25 @@ class Interactable {
     this.entity = entity
 
     this.isInteractable = true
-    this.interactionRadius = 100
-    this.setupInteractable()
-  }
+    this.radius = 100
+    this.isInteracting = false
 
-  setupInteractable() {
     if (!this.game.interactables) {
       this.game.interactables = []
     }
-    this.game.interactables.push(this)
+
+    this.game.interactables.push(entity)
   }
 
-  start(player) {
-    if (this.game.interaction.isInteracting) return
-
-    this.game.interaction.isInteracting = true
-    this.game.interaction.entity = this
-    this.faceTowards(player)
-
-    if (this.createDialog) {
-      this.createDialog(player)
+  start(source) {
+    if (this.entity.move) {
+      this.entity.move.faceTowards(source)
     }
+    this.isInteracting = true
   }
 
   end() {
-    this.game.interaction.entity = null
-    this.game.interaction.isInteracting = false
-  }
-
-  faceTowards(player) {
-    if (player.position.x + player.position.offsetX < this.position.x) {
-      this.flipX = true
-    } else {
-      this.flipX = false
-    }
+    this.isInteracting = false
   }
 }
 

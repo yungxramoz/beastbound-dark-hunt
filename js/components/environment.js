@@ -1,6 +1,6 @@
 import { drawImage } from '../utils/ui.js'
 
-export class Environment {
+class Environment {
   constructor(
     game,
     {
@@ -106,3 +106,5 @@ export class Environment {
     this.drawProps()
   }
 }
+
+export default Environment

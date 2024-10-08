@@ -7,7 +7,7 @@ import PlayerStateMachine from '../../states/player-state-machine.js'
 import { getDistance, isFacingTowards } from '../../utils/collision.js'
 import { addBorder, drawRect, drawText } from '../../utils/ui.js'
 
-export class Player extends Character {
+class Player extends Character {
   constructor(game, x, y) {
     super(game, {
       x,
@@ -18,10 +18,11 @@ export class Player extends Character {
       offsetX: 55,
       offsetY: 0,
       spriteOffsetX: -65,
-      spriteOffsetY: -30,
+      spriteOffsetY: -25,
     })
 
     this.game = game
+    this.isInteracting = false
 
     this.attack = new Attackable(game, this, {
       attackDuration: 0.6,
@@ -44,45 +45,27 @@ export class Player extends Character {
 
   checkForInteraction() {
     const interactables = this.game.interactables || []
-    let closestEntity = null
-    let closestDistance = Infinity
+    for (const interactable of interactables) {
+      const distance = getDistance(
+        this.position.x,
+        this.position.y,
+        interactable.position.x,
+        interactable.position.y,
+      )
 
-    for (const entity of interactables) {
-      if (entity.isInteractable) {
-        const distance = this.getDistanceTo(entity)
-
-        const withinRadius = distance <= (entity.interactionRadius || 100)
-
-        const facingTowards = isFacingTowards(this, entity)
-
-        if (withinRadius && facingTowards && distance < closestDistance) {
-          closestDistance = distance
-          closestEntity = entity
+      if (
+        distance <= interactable.interaction.radius &&
+        isFacingTowards(this, interactable)
+      ) {
+        if (!interactable.interaction.isInteracting) {
+          interactable.interaction.start(this)
+          this.isInteracting = true
         }
+        return true
       }
     }
 
-    if (closestEntity) {
-      closestEntity.startInteraction(this)
-      return true
-    }
-
     return false
-  }
-
-  getDistanceTo(entity) {
-    const playerCenterX = this.position.x + this.offsetX + this.width / 2
-    const playerCenterY = this.position.y + this.offsetY + this.height / 2
-
-    const entityCenterX = entity.x + entity.offsetX + entity.width / 2
-    const entityCenterY = entity.y + entity.offsetY + entity.height / 2
-
-    return getDistance(
-      playerCenterX,
-      playerCenterY,
-      entityCenterX,
-      entityCenterY,
-    )
   }
 
   update(deltaTime) {
@@ -127,3 +110,5 @@ export class Player extends Character {
     })
   }
 }
+
+export default Player

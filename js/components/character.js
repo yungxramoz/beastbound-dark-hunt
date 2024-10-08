@@ -12,8 +12,11 @@ class Character {
       spriteScale,
       width,
       height,
-      offsetX,
-      offsetY,
+      offsetX = 0,
+      offsetY = 0,
+      moveSpeed = 5,
+      jumpSpeed = 15,
+      gravity = 0.98,
       spriteOffsetX = 0,
       spriteOffsetY = 0,
     },
@@ -30,7 +33,7 @@ class Character {
       y,
       height: this.height,
     })
-    this.move = new Movable(game, this, {})
+    this.move = new Movable(game, this, {moveSpeed, jumpSpeed, gravity})
     this.sprite = new Spriteable(game, this, {
       spriteScale,
       spriteOffsetX,

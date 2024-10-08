@@ -1,7 +1,7 @@
 import { getGroundY } from '../utils/bounderies.js'
 
 class Movable {
-  constructor(game, entity, { moveSpeed = 5, jumpSpeed = 15, gravity = 0.98 }) {
+  constructor(game, entity, { moveSpeed, jumpSpeed, gravity }) {
     if (!game) throw new Error('Game is required')
     if (!entity) throw new Error('Entity is required')
     if (!entity.position)
@@ -39,6 +39,20 @@ class Movable {
 
   dash() {
     this.speedX = this.maxSpeed * 2
+  }
+
+  faceTowards(target) {
+    if (!target.position)
+      throw new Error('Entity must have a Positionable component')
+
+    if (
+      target.position.x <
+      this.entity.position.x
+    ) {
+      this.entity.flipX = true
+    } else {
+      this.entity.flipX = false
+    }
   }
 
   isFalling() {

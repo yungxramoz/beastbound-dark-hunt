@@ -9,54 +9,99 @@ const CHARACTER_STATE = {
 }
 
 class NpcStateMachine extends StateMachine {
-  constructor(character) {
+  constructor(entity, { minX = 0, maxX = entity.game.canvas.width } = {}) {
     super(CHARACTER_STATE.IDLE)
 
-    this.character = character
+    this.entity = entity
+    this.stateTimer = 0
+
+    this.minX = minX
+    this.maxX = maxX
 
     this.setupStates()
   }
 
   setupStates() {
+    // IDLE
     this.addState(CHARACTER_STATE.IDLE, {
       enter: () => {
-        this.character.move.stop()
-        this.character.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
+        this.entity.move.stop()
+        this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
+        // Set idle duration between 2 and 10 seconds
+        this.stateTimer = 2 + Math.random() * 8
       },
-      update: () => {
-        if (this.isMoving) {
-          this.setState(CHARACTER_STATE.MOVING_LEFT)
+      update: (deltaTime) => {
+        this.stateTimer -= deltaTime
+        if (this.entity.interaction.isInteracting) {
+          this.setState(CHARACTER_STATE.TALKING)
+        } else if (this.stateTimer <= 0) {
+          const nextState =
+            Math.random() < 0.5
+              ? CHARACTER_STATE.MOVING_LEFT
+              : CHARACTER_STATE.MOVING_RIGHT
+          this.setState(nextState)
         }
       },
       exit: () => console.log('NPC: Exiting IDLE state'),
     })
 
+    // MOVING_LEFT
     this.addState(CHARACTER_STATE.MOVING_LEFT, {
       enter: () => {
-        this.character.flipX = true
-        this.character.move.left()
-        this.character.sprite.setSprite(CHIEF_NPC_SPRITE.MOVING)
+        this.entity.flipX = true
+        this.entity.move.left()
+        this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.MOVING)
+        // Set move duration between 1 and 3 seconds
+        this.stateTimer = 1 + Math.random() * 2
       },
-      update: () => {
-        if (!this.isMoving) {
+      update: (deltaTime) => {
+        this.stateTimer -= deltaTime
+        if (this.entity.interaction.isInteracting) {
+          this.setState(CHARACTER_STATE.TALKING)
+        } else if (this.entity.position.x <= this.minX) {
+          this.setState(CHARACTER_STATE.MOVING_RIGHT)
+        } else if (this.stateTimer <= 0) {
           this.setState(CHARACTER_STATE.IDLE)
         }
       },
-      exit: () => console.log('NPC: Exiting MOVING state'),
+      exit: () => console.log('NPC: Exiting MOVING LEFT state'),
     })
 
+    // MOVING_RIGHT
     this.addState(CHARACTER_STATE.MOVING_RIGHT, {
       enter: () => {
-        this.character.flipX = false
-        this.character.move.right()
-        this.character.sprite.setSprite(CHIEF_NPC_SPRITE.MOVING)
+        this.entity.flipX = false
+        this.entity.move.right()
+        this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.MOVING)
+        // Set move duration between 1 and 3 seconds
+        this.stateTimer = 1 + Math.random() * 2
       },
-      update: () => {
-        if (!this.isMoving) {
+      update: (deltaTime) => {
+        this.stateTimer -= deltaTime
+        if (this.entity.interaction.isInteracting) {
+          this.setState(CHARACTER_STATE.TALKING)
+        } else if (this.entity.position.x + this.entity.width >= this.maxX) {
+          this.setState(CHARACTER_STATE.MOVING_LEFT)
+        } else if (this.stateTimer <= 0) {
           this.setState(CHARACTER_STATE.IDLE)
         }
       },
-      exit: () => console.log('NPC: Exiting MOVING state'),
+      exit: () => console.log('NPC: Exiting MOVING RIGHT state'),
+    })
+
+    // TALKING
+    this.addState(CHARACTER_STATE.TALKING, {
+      enter: () => {
+        this.entity.move.stop()
+        this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
+        this.entity.createDialog()
+      },
+      update: (deltaTime) => {
+        if (!this.entity.interaction.isInteracting) {
+          this.setState(CHARACTER_STATE.IDLE)
+        }
+      },
+      exit: () => console.log('NPC: Exiting TALKING state'),
     })
   }
 }

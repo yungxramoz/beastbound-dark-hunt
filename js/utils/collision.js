@@ -43,20 +43,20 @@ export function isPointInCircle(pointX, pointY, circleX, circleY, radius) {
 }
 
 /**
- * Checks if the player is facing towards an entity.
- * @param {Object} player - The player object with properties x, offsetX, width, and flipX.
- * @param {Object} entity - The entity object with properties x, offsetX, width.
- * @returns {boolean} True if the player is facing the entity, false otherwise.
+ * Checks if the entity is facing towards an entity.
+ * @param {Object} entity - The source object with properties x, offsetX, width, and flipX.
+ * @param {Object} target - The target object with properties x, offsetX, width.
+ * @returns {boolean} True if the source is facing the target, false otherwise.
  */
-export function isFacingTowards(player, entity) {
-  const playerCenterX = player.x + player.offsetX + player.width / 2
-  const entityCenterX = entity.x + entity.offsetX + entity.width / 2
+export function isFacingTowards(entity, target) {
+  const playerCenterX = entity.position.x + entity.width / 2
+  const entityCenterX = target.position.x + target.width / 2
 
-  if (player.flipX) {
-    // Player is facing left
+  if (entity.flipX) {
+    // facing left
     return entityCenterX <= playerCenterX
   } else {
-    // Player is facing right
+    // facing right
     return entityCenterX >= playerCenterX
   }
 }
