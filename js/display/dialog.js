@@ -1,8 +1,8 @@
 import { STYLE } from '../constants/style.js'
 import { addBorder, drawRect } from '../utils/ui.js'
-import { Button } from './button.js'
+import Button from './button.js'
 
-export class Dialog {
+class Dialog {
   constructor(
     game,
     {
@@ -90,3 +90,5 @@ export class Dialog {
     }
   }
 }
+
+export default Dialog

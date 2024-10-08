@@ -1,4 +1,4 @@
-const GROUND_Y = 485
+const GROUND_Y = 510
 const GAME_WIDTH = 1200
 const GAME_HEIGHT = 600
 

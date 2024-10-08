@@ -1,42 +1,53 @@
-export const Interactable = (game) => ({
-  isInteractable: true,
-  interactionRadius: 100,
+class Interactable {
+  constructor(game, entity) {
+    if (!game) throw new Error('Game is required')
+    if (!entity) throw new Error('Entity is required')
+    if (!entity.position)
+      throw new Error('Entity must have a Positionable component')
+    if (!entity.flipX === undefined)
+      throw new Error('Entity must have a flipX property')
+    if (!entity.createDialog)
+      throw new Error('Entity must have a createDialog method')
+
+    this.game = game
+    this.entity = entity
+
+    this.isInteractable = true
+    this.interactionRadius = 100
+    this.setupInteractable()
+  }
 
   setupInteractable() {
-    if (!game.interactables) {
-      game.interactables = []
+    if (!this.game.interactables) {
+      this.game.interactables = []
     }
-    game.interactables.push(this)
-  },
+    this.game.interactables.push(this)
+  }
 
-  startInteraction(player) {
-    if (game.interaction.isInteracting) return
+  start(player) {
+    if (this.game.interaction.isInteracting) return
 
-    game.interaction.isInteracting = true
-    game.interaction.entity = this
+    this.game.interaction.isInteracting = true
+    this.game.interaction.entity = this
     this.faceTowards(player)
 
     if (this.createDialog) {
       this.createDialog(player)
-    } else {
-      console.warn('Interactable entity does not have a createDialog method')
     }
-  },
+  }
 
-  endInteraction() {
-    game.interaction.entity = null
-    game.interaction.isInteracting = false
-  },
+  end() {
+    this.game.interaction.entity = null
+    this.game.interaction.isInteracting = false
+  }
 
   faceTowards(player) {
-    if (this.flipX == undefined) {
-      console.warn('Interactable entity does not have a flipX property')
-      return
-    }
-    if (player.x + player.offsetX < this.x + this.offsetX) {
+    if (player.position.x + player.position.offsetX < this.position.x) {
       this.flipX = true
     } else {
       this.flipX = false
     }
-  },
-})
+  }
+}
+
+export default Interactable

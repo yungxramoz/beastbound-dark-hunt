@@ -1,151 +1,36 @@
-import { Character } from '../../components/character.js'
-import { Interactable } from '../../composables/interactable.js'
+import Character from '../../components/character.js'
+import Interactable from '../../composables/interactable.js'
 import { ASSETS } from '../../constants/assets.js'
-import CHARACTER_STATE from '../../constants/character-state.js'
 import { SETTINGS } from '../../constants/settings.js'
-import { SpeechDialog } from '../../ui/speech-dialog.js'
-import { Behavior, BehaviorManager } from '../../utils/behavior-manager.js'
-import StateMachine from '../../utils/state-machine.js'
+import SpeechDialog from '../../display/speech-dialog.js'
+import NpcStateMachine from '../../states/npc-state-machine.js'
 
 export class ChiefNpc extends Character {
-  constructor(game, x, name) {
-    const frameWidth = 39
-    const frameHeight = 52
-    const spriteScale = 1.8
-    const spriteOffsetX = 0
-    const spriteOffsetY = 25
-
-    const width = 75
-    const height = 95
-    const offsetX = 0
-    const offsetY = 30
-
-    const animations = {
-      [CHARACTER_STATE.IDLE]: {
-        spriteSheet: game.assets[ASSETS.CHIEF_IDLE_SPRITE],
-        frameWidth,
-        frameHeight,
-        numFrames: 4,
-        frameTime: 0.24,
-      },
-      [CHARACTER_STATE.MOVING]: {
-        spriteSheet: game.assets[ASSETS.CHIEF_MOVE_SPRITE],
-        frameWidth,
-        frameHeight,
-        numFrames: 6,
-        frameTime: 0.16,
-      },
-    }
-
-    super(
+  constructor(game, x, y, name) {
+    super(game, {
       x,
-      animations,
-      spriteScale,
-      CHARACTER_STATE.IDLE,
-      width,
-      height,
-      offsetX,
-      offsetY,
-      spriteOffsetX,
-      spriteOffsetY,
-    )
-
-    Object.assign(this, Interactable(game))
+      y,
+      spriteScale: 1.8,
+      width: 75,
+      height: 95,
+      offsetX: 0,
+      offsetY: 30,
+      spriteOffsetX: 0,
+      spriteOffsetY: 25,
+    })
 
     this.game = game
 
     this.flipX = true
-    this.maxSpeed = 1
     this.name = name
     this.avatar = game.assets[ASSETS.CHIEF_AVATAR]
 
-    this.setupStates()
-    this.setupBehaviors()
-    this.setupInteractable()
+    this.interaction = new Interactable(game, this)
+
+    this.stateMachine = new NpcStateMachine(this)
   }
 
-  setupStates() {
-    this.stateMachine = new StateMachine(CHARACTER_STATE.IDLE)
-    this.stateMachine.addState(CHARACTER_STATE.IDLE, {
-      enter: () => console.log('Entering IDLE state'),
-      update: () => {
-        if (this.isMoving) {
-          this.stateMachine.setState(CHARACTER_STATE.MOVING)
-        }
-      },
-      exit: () => console.log('Exiting IDLE state'),
-    })
-
-    this.stateMachine.addState(CHARACTER_STATE.MOVING, {
-      enter: () => console.log('Entering MOVING state'),
-      update: () => {
-        if (!this.isMoving) {
-          this.stateMachine.setState(CHARACTER_STATE.IDLE)
-        }
-      },
-      exit: () => console.log('Exiting MOVING state'),
-    })
-  }
-
-  setupBehaviors() {
-    this.behaviorManager = new BehaviorManager(this, [
-      new Behavior(
-        'idle',
-        (done) => {
-          this.stopMoving()
-          const duration = Math.random() * 2000 + 1000
-          this.behaviorManager.currentTimeout = setTimeout(done, duration)
-        },
-        4,
-      ), // Higher weight for idling
-
-      new Behavior(
-        'walkLeft',
-        (done) => {
-          if (
-            this.game.interaction.isInteracting &&
-            this === this.game.interaction.entity
-          ) {
-            done()
-            return
-          }
-          this.flipX = true
-          this.moveLeft()
-          const duration = Math.random() * 2000 + 1000
-          this.behaviorManager.currentTimeout = setTimeout(() => {
-            this.stopMoving()
-            done()
-          }, duration)
-        },
-        1,
-      ),
-
-      new Behavior(
-        'walkRight',
-        (done) => {
-          if (
-            this.game.interaction.isInteracting &&
-            this === this.game.interaction.entity
-          ) {
-            done()
-            return
-          }
-          this.flipX = false
-          this.moveRight()
-          const duration = Math.random() * 2000 + 1000
-          this.behaviorManager.currentTimeout = setTimeout(() => {
-            this.stopMoving()
-            done()
-          }, duration)
-        },
-        1,
-      ),
-    ])
-
-    this.behaviorManager.start()
-  }
-
-  createDialog(player) {
+  createDialog() {
     // Create the dialog specific to the ChiefNpc
     const dialog = new SpeechDialog(this.game, {
       npc: this,
@@ -169,7 +54,7 @@ export class ChiefNpc extends Character {
         },
       ],
       onClose: () => {
-        this.endInteraction()
+        this.interaction.endInteraction()
       },
     })
 
@@ -178,7 +63,6 @@ export class ChiefNpc extends Character {
 
   update(deltaTime) {
     this.stateMachine.update(deltaTime)
-    this.updateSpriteState(this.stateMachine.currentState)
     super.update(deltaTime)
   }
 

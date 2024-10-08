@@ -1,7 +1,7 @@
 import { STYLE } from '../constants/style.js'
 import { addBorder, drawRect, drawText } from '../utils/ui.js'
 
-export class Button {
+class Button {
   constructor(game, { x, y, width, height, text, onClick } = {}) {
     this.game = game
     this.x = x || 0
@@ -69,3 +69,5 @@ export class Button {
     )
   }
 }
+
+export default Button
