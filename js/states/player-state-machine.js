@@ -4,13 +4,16 @@ import StateMachine from './state-machine.js'
 const PLAYER_STATE = {
   IDLE: 'IDLE',
   MOVING: 'MOVING',
-  MOVING_LEFT: 'MOVING_LEFT',
-  MOVING_RIGHT: 'MOVING_RIGHT',
   JUMPING: 'JUMPING',
   FALLING: 'FALLING',
   ATTACKING: 'ATTACKING',
   HURTING: 'HURTING',
   INTERACTING: 'INTERACTING',
+}
+
+const DIRECTION = {
+  LEFT: 'left',
+  RIGHT: 'right',
 }
 
 class PlayerStateMachine extends StateMachine {
@@ -30,73 +33,63 @@ class PlayerStateMachine extends StateMachine {
         this.player.sprite.setSprite(PLAYER_SPRITE.IDLE)
       },
       update: () => {
-        if (
-          (this.player.a.isDown || this.player.leftArrow.isDown) &&
-          !this.player.position.isOutOfBoundsLeft()
-        ) {
-          this.setState(PLAYER_STATE.MOVING_LEFT)
-        } else if (
-          (this.player.d.isDown || this.player.rightArrow.isDown) &&
-          !this.player.position.isOutOfBoundsRight()
-        ) {
-          this.setState(PLAYER_STATE.MOVING_RIGHT)
-        } else if (this.player.j.isDown) {
+        if (this.player.j.isDown) {
           this.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
           this.setState(PLAYER_STATE.JUMPING)
         } else if (this.player.e.isDown) {
           this.setState(PLAYER_STATE.INTERACTING)
+        } else if (
+          (this.player.a.isDown || this.player.leftArrow.isDown) &&
+          !this.player.position.isOutOfBoundsLeft()
+        ) {
+          this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.LEFT })
+        } else if (
+          (this.player.d.isDown || this.player.rightArrow.isDown) &&
+          !this.player.position.isOutOfBoundsRight()
+        ) {
+          this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.RIGHT })
         }
       },
       exit: () => console.log('PLAYER: Exiting IDLE state'),
     })
 
-    // MOVING LEFT
-    this.addState(PLAYER_STATE.MOVING_LEFT, {
-      enter: () => {
-        this.player.flipX = true
-        this.player.move.left()
+    // MOVING
+    this.addState(PLAYER_STATE.MOVING, {
+      enter: ({ direction }) => {
+        this.player.flipX = direction === DIRECTION.LEFT
+        this.player.move[direction]()
         this.player.sprite.setSprite(PLAYER_SPRITE.MOVING)
       },
       update: () => {
-        if (
-          (this.player.a.isUp && this.player.leftArrow.isUp) ||
-          this.player.position.isOutOfBoundsLeft()
-        ) {
-          this.setState(PLAYER_STATE.IDLE)
-        } else if (this.player.j.isDown) {
-          this.setState(PLAYER_STATE.ATTACKING)
-        } else if (this.player.space.isDown) {
-          this.setState(PLAYER_STATE.JUMPING)
-        } else if (this.player.e.isDown) {
-          this.setState(PLAYER_STATE.INTERACTING)
-        }
-      },
-      exit: () => console.log('PLAYER: Exiting MOVING_LEFT state'),
-    })
+        const isMovingLeft =
+          this.player.a.isDown || this.player.leftArrow.isDown
+        const isMovingRight =
+          this.player.d.isDown || this.player.rightArrow.isDown
 
-    // MOVING RIGHT
-    this.addState(PLAYER_STATE.MOVING_RIGHT, {
-      enter: () => {
-        this.player.flipX = false
-        this.player.move.right()
-        this.player.sprite.setSprite(PLAYER_SPRITE.MOVING)
-      },
-      update: () => {
+        if (isMovingLeft && isMovingRight) return
+
         if (
-          (this.player.d.isUp && this.player.rightArrow.isUp) ||
-          this.player.position.isOutOfBoundsRight()
+          (!isMovingLeft && !isMovingRight) ||
+          this.player.j.isDown ||
+          this.player.e.isDown
         ) {
           this.setState(PLAYER_STATE.IDLE)
-        } else if (this.player.j.isDown) {
-          this.setState(PLAYER_STATE.ATTACKING)
         } else if (this.player.space.isDown) {
           this.setState(PLAYER_STATE.JUMPING)
-        } else if (this.player.e.isDown) {
-          this.setState(PLAYER_STATE.INTERACTING)
+        } else if (
+          isMovingLeft &&
+          this.player.currentDirection !== DIRECTION.LEFT
+        ) {
+          this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.LEFT })
+        } else if (
+          isMovingRight &&
+          this.player.currentDirection !== DIRECTION.RIGHT
+        ) {
+          this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.RIGHT })
         }
       },
-      exit: () => console.log('PLAYER: Exiting MOVING_RIGHT state'),
+      exit: () => console.log('PLAYER: Exiting MOVING state'),
     })
 
     // JUMPING

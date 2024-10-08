@@ -8,13 +8,13 @@ class StateMachine {
     this.states[name] = { enter, update, exit }
   }
 
-  setState(newState) {
+  setState(newState, args) {
     if (this.currentState && this.states[this.currentState]) {
       this.states[this.currentState].exit()
     }
     this.currentState = newState
     if (this.states[newState]) {
-      this.states[newState].enter()
+      this.states[newState].enter(args)
     }
   }
 
