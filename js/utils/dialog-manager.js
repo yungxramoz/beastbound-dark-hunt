@@ -1,4 +1,4 @@
-export class DialogManager {
+class DialogManager {
   constructor(game) {
     this.game = game
     this.activeDialogs = []
@@ -31,3 +31,5 @@ export class DialogManager {
     }
   }
 }
+
+export default DialogManager

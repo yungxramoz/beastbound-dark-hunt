@@ -43,7 +43,7 @@ const CURSOR = {
   POINTER: 'url(../../assets/images/cursor/point.png), auto',
 }
 
-export const STYLE = {
+const STYLE = {
   FONT,
   FONT_SIZE,
   FONT_SHADOW,
@@ -51,3 +51,5 @@ export const STYLE = {
   CURSOR,
   COLORS,
 }
+
+export { STYLE }

@@ -1,6 +1,6 @@
 import { drawImage } from '../utils/ui.js'
 
-export class Environment {
+class Environment {
   constructor(
     game,
     {
@@ -98,11 +98,15 @@ export class Environment {
   }
 
   draw() {
-    this.updateBackground()
-
     this.drawBackground()
     this.drawMiddleground()
     this.drawGround()
     this.drawProps()
   }
+
+  update() {
+    this.updateBackground()
+  }
 }
+
+export default Environment

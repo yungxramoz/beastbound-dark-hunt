@@ -1,11 +1,9 @@
-// game.js
-
 import { ASSETS_SRC } from './constants/assets.js'
-import GAME_STATE from './constants/game-state.js'
+import { GAME_STATE } from './constants/game-state.js'
 import { BOUNDERIES } from './constants/positions.js'
 import { assets } from './library/utilities.js'
-import { SettlementScene } from './scenes/settlement-scene.js'
-import { DialogManager } from './utils/dialog-manager.js'
+import SettlementScene from './entities/scenes/settlement-scene.js'
+import DialogManager from './utils/dialog-manager.js'
 import { drawText } from './utils/ui.js'
 
 class Game {
@@ -29,8 +27,6 @@ class Game {
       y: 0,
       isPressed: false,
     }
-
-    this.uiElements = [] // For UI elements like buttons
 
     // Initialize dialog manager
     this.dialogManager = new DialogManager(this)
@@ -100,11 +96,6 @@ class Game {
 
     // Update dialog manager
     this.dialogManager.update(deltaTime)
-
-    // Update UI elements
-    for (const uiElement of this.uiElements) {
-      uiElement.update(deltaTime)
-    }
   }
 
   render() {

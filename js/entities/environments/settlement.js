@@ -1,7 +1,7 @@
-import { Environment } from '../../components/environment.js'
+import Environment from '../../components/environment.js'
 import { ASSETS } from '../../constants/assets.js'
 
-export class Settlement extends Environment {
+class Settlement extends Environment {
   constructor(game) {
     const tiles = {
       groundTileA: {
@@ -76,3 +76,5 @@ export class Settlement extends Environment {
     super(game, options)
   }
 }
+
+export default Settlement

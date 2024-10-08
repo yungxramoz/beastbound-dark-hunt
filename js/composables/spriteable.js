@@ -1,40 +1,62 @@
-export const Spriteable = (
-  animations,
-  spriteScale,
-  spriteOffsetX,
-  spriteOffsetY,
-  initialState,
-) => ({
-  currentState: initialState || 'idle',
-  currentFrame: 0,
-  elapsedTime: 0,
-  flipX: false,
-  spriteScale: spriteScale || 1,
-  spriteOffsetX: spriteOffsetX || 0,
-  spriteOffsetY: spriteOffsetY || 0,
-  animations: animations || {},
+class Spriteable {
+  constructor(
+    game,
+    entity,
+    { spriteScale = 1, spriteOffsetX = 0, spriteOffsetY = 0 },
+  ) {
+    if (!game) throw new Error('Spriteable requires a game instance')
+    if (!entity) throw new Error('Spriteable requires an entity')
+    if (!entity.position)
+      throw new Error('Entity must have a Positionable component')
+    if (!entity.flipX === undefined)
+      throw new Error('Entity must have a flipX property')
 
-  drawSprite(ctx) {
-    const animation = this.animations[this.currentState]
+    this.game = game
+    this.entity = entity
+    this.currentFrame = 0
+    this.elapsedTime = 0
+    this.spriteScale = spriteScale
+    this.spriteOffsetX = spriteOffsetX
+    this.spriteOffsetY = spriteOffsetY
+    this.currentSprite = {
+      sheet: null,
+      src: null,
+      frameWidth: 0,
+      frameHeight: 0,
+      numFrames: 0,
+      frameTime: 0,
+    }
+  }
 
-    if (animation) {
-      const frameX = this.currentFrame * animation.frameWidth
+  setSprite(sprite) {
+    if (this.currentSprite.src === sprite.src) {
+      return
+    }
+    if (sprite) {
+      this.currentSprite = sprite
+      this.currentFrame = 0
+    }
+  }
+
+  draw(ctx) {
+    if (this.currentSprite) {
+      const frameX = this.currentFrame * this.currentSprite.frameWidth
       const frameY = 0
-      const scaledWidth = animation.frameWidth * this.spriteScale
-      const scaledHeight = animation.frameHeight * this.spriteScale
+      const scaledWidth = this.currentSprite.frameWidth * this.spriteScale
+      const scaledHeight = this.currentSprite.frameHeight * this.spriteScale
 
-      if (this.flipX) {
+      if (this.entity.flipX) {
         ctx.save()
 
         ctx.scale(-1, 1)
         ctx.drawImage(
-          animation.spriteSheet,
+          this.game.assets[this.currentSprite.src],
           frameX,
           frameY,
-          animation.frameWidth,
-          animation.frameHeight,
-          -this.x - scaledWidth - this.spriteOffsetX,
-          this.y + this.spriteOffsetY,
+          this.currentSprite.frameWidth,
+          this.currentSprite.frameHeight,
+          -this.entity.position.x - scaledWidth - this.spriteOffsetX,
+          this.entity.position.y + this.spriteOffsetY,
           scaledWidth,
           scaledHeight,
         )
@@ -42,40 +64,40 @@ export const Spriteable = (
         ctx.restore()
       } else {
         ctx.drawImage(
-          animation.spriteSheet,
+          this.game.assets[this.currentSprite.src],
           frameX,
           frameY,
-          animation.frameWidth,
-          animation.frameHeight,
-          this.x + this.spriteOffsetX,
-          this.y + this.spriteOffsetY,
+          this.currentSprite.frameWidth,
+          this.currentSprite.frameHeight,
+          this.entity.position.x + this.spriteOffsetX,
+          this.entity.position.y + this.spriteOffsetY,
           scaledWidth,
           scaledHeight,
         )
       }
     }
-  },
+  }
 
-  updateSprite(deltaTime) {
-    const animation = this.animations[this.currentState]
-
-    if (animation) {
+  update(deltaTime) {
+    if (this.currentSprite) {
       this.elapsedTime += deltaTime
-
-      while (this.elapsedTime >= animation.frameTime) {
-        this.elapsedTime -= animation.frameTime
-        this.currentFrame = (this.currentFrame + 1) % animation.numFrames
+  
+      // Protect against very large deltaTime values that might cause the while loop to run too long
+      const maxFrameAdvance = 10 // Limit frame advance to 10 frames per update call
+      let framesToAdvance = 0
+  
+      while (this.elapsedTime >= this.currentSprite.frameTime && framesToAdvance < maxFrameAdvance) {
+        this.elapsedTime -= this.currentSprite.frameTime
+        this.currentFrame = (this.currentFrame + 1) % this.currentSprite.numFrames
+        framesToAdvance += 1
+      }
+  
+      // Optional: If framesToAdvance hits maxFrameAdvance, it means deltaTime was very large, and some frames may have been skipped.
+      if (framesToAdvance >= maxFrameAdvance) {
+        console.warn("Skipped frames due to high deltaTime")
       }
     }
-  },
+  }
+}
 
-  updateSpriteState(newState) {
-    if (this.currentState === newState) {
-      return
-    }
-    if (this.animations[newState]) {
-      this.currentState = newState
-      this.currentFrame = 0
-    }
-  },
-})
+export default Spriteable

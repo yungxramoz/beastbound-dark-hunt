@@ -7,9 +7,9 @@ import {
   drawText,
   drawWrappedText,
 } from '../utils/ui.js'
-import { Dialog } from './dialog.js'
+import Dialog from './dialog.js'
 
-export class SpeechDialog extends Dialog {
+class SpeechDialog extends Dialog {
   constructor(
     game,
     {
@@ -124,3 +124,5 @@ export class SpeechDialog extends Dialog {
     )
   }
 }
+
+export default SpeechDialog

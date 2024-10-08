@@ -1,72 +1,79 @@
-import {
-  getGroundY,
-  isOutOfBoundsLeft,
-  isOutOfBoundsRight,
-} from '../utils/bounderies.js'
+import { getGroundY } from '../utils/bounderies.js'
 
-export const Movable = (width, height, offsetX) => ({
-  offsetX: offsetX || 0,
-  speedX: 0,
-  speedY: 0,
-  maxSpeed: 5,
-  jumpSpeed: 15,
-  gravity: 0.8,
-  groundY: getGroundY(height),
-  width: width || 0,
-  isGrounded: true,
-  isMoving: false,
-  isFalling: false,
+class Movable {
+  constructor(game, entity, { moveSpeed, jumpSpeed, gravity }) {
+    if (!game) throw new Error('Game is required')
+    if (!entity) throw new Error('Entity is required')
+    if (!entity.position)
+      throw new Error('Entity must have a Positionable component')
 
-  moveLeft() {
-    this.speedX = -this.maxSpeed
-    this.isMoving = true
-  },
+    this.game = game
+    this.entity = entity
 
-  moveRight() {
-    this.speedX = this.maxSpeed
-    this.isMoving = true
-  },
+    this.maxSpeed = moveSpeed
+    this.jumpSpeed = jumpSpeed
+    this.gravity = gravity
 
-  stopMoving() {
+    this.groundY = getGroundY(this.entity.height)
     this.speedX = 0
-    this.isMoving = false
-  },
+    this.speedY = 0
+  }
+
+  left() {
+    this.speedX = -this.maxSpeed
+  }
+
+  right() {
+    this.speedX = this.maxSpeed
+  }
+
+  stop() {
+    this.speedX = 0
+  }
 
   jump() {
-    if (this.isGrounded) {
+    if (this.entity.position.isGrounded()) {
       this.speedY = -this.jumpSpeed
-      this.isGrounded = false
-      this.isMoving = false
     }
-  },
+  }
 
-  updateMovement() {
-    if (!this.isGrounded) {
-      this.speedY += this.gravity
-      if (this.speedY >= 0) {
-        this.isFalling = true
-      }
-    }
+  dash() {
+    this.speedX = this.maxSpeed * 2
+  }
 
-    if (isOutOfBoundsLeft(this.x + offsetX) && this.speedX < 0) {
-      this.stopMoving()
-    } else if (
-      isOutOfBoundsRight(this.x + offsetX, this.width) &&
-      this.speedX > 0
-    ) {
-      this.stopMoving()
+  faceTowards(target) {
+    if (!target.position)
+      throw new Error('Entity must have a Positionable component')
+
+    if (target.position.x < this.entity.position.x) {
+      this.entity.flipX = true
     } else {
-      this.x += this.isGrounded ? this.speedX : this.speedX * 0.9
+      this.entity.flipX = false
+    }
+  }
+
+  isFalling() {
+    return this.speedY > 0
+  }
+
+  update() {
+    if (
+      (this.speedX > 0 && !this.entity.position.isOutOfBoundsRight()) ||
+      (this.speedX < 0 && !this.entity.position.isOutOfBoundsLeft())
+    ) {
+      this.entity.position.x += this.speedX
     }
 
-    this.y += this.speedY
+    if (!this.entity.position.isGrounded()) {
+      this.speedY += this.gravity
+    }
 
-    if (this.y >= this.groundY) {
-      this.y = this.groundY
+    this.entity.position.setPosition(null, this.entity.position.y + this.speedY)
+    if (this.entity.position.y >= this.groundY) {
+      this.entity.position.setPosition(null, this.groundY)
       this.speedY = 0
-      this.isFalling = false
-      this.isGrounded = true
-      this.isMoving = this.speedX !== 0
     }
-  },
-})
+  }
+}
+
+export default Movable

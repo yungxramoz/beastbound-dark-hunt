@@ -1,7 +1,0 @@
-const CHARACTER_STATE = {
-  IDLE: 'IDLE',
-  MOVING: 'MOVING',
-  TALKING: 'TALKING',
-}
-
-export default CHARACTER_STATE

@@ -1,4 +1,4 @@
-export const ASSETS = {
+const ASSETS = {
   // Font
   FONT: 'assets/fonts/PressStart2P-Regular.ttf',
 
@@ -29,7 +29,7 @@ export const ASSETS = {
     'assets/images/environments/settlement/middleground.png',
 }
 
-export const ASSETS_SRC = [
+const ASSETS_SRC = [
   ASSETS.PLAYER_IDLE_SPRITE,
   ASSETS.PLAYER_MOVE_SPRITE,
   ASSETS.PLAYER_JUMP_SPRITE,
@@ -48,3 +48,5 @@ export const ASSETS_SRC = [
   ASSETS.SETTLEMENT_BACKGROUND,
   ASSETS.SETTLEMENT_MIDDLEGROUND,
 ]
+
+export { ASSETS, ASSETS_SRC }

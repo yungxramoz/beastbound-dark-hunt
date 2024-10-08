@@ -1,9 +1,7 @@
-const GROUND_Y = 485
-const GAME_WIDTH = 1200
-const GAME_HEIGHT = 600
-
-export const BOUNDERIES = {
-  GROUND_Y,
-  GAME_WIDTH,
-  GAME_HEIGHT,
+const BOUNDERIES = {
+  GROUND_Y: 510,
+  GAME_WIDTH: 1200,
+  GAME_HEIGHT: 600,
 }
+
+export { BOUNDERIES }
