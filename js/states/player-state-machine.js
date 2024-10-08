@@ -150,7 +150,7 @@ class PlayerStateMachine extends StateMachine {
       enter: () => {
         this.player.move.stop()
         this.player.sprite.setSprite(PLAYER_SPRITE.IDLE)
-        this.player.checkForInteraction();
+        this.player.checkForInteraction()
       },
       update: () => {
         if (!this.player.isInteracting) {

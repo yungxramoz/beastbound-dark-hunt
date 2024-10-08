@@ -45,10 +45,7 @@ class Movable {
     if (!target.position)
       throw new Error('Entity must have a Positionable component')
 
-    if (
-      target.position.x <
-      this.entity.position.x
-    ) {
+    if (target.position.x < this.entity.position.x) {
       this.entity.flipX = true
     } else {
       this.entity.flipX = false

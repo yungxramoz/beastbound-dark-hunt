@@ -1,5 +1,5 @@
 body {
-  background-color: #1a1a1a;
+  background-color: black;
   color: #f0f0f0;
   font-family: Arial, sans-serif;
   margin: 0;
@@ -20,13 +20,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #333;
-  border: 2px solid #444;
+  background-color: black;
   margin-bottom: 20px;
 }
 
 #gameCanvas {
-  width: 95vw;
+  width: 100vw;
   height: auto;
   image-rendering: pixelated;
 }

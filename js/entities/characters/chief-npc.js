@@ -36,17 +36,17 @@ class ChiefNpc extends Character {
       text: `Hunter, dark times are upon us. A beast lurks beyond the village, spreading fear and chaos. We need your strength to end this threat.`,
       buttons: [
         {
-          width: 150,
+          width: 220,
           height: 40,
-          text: 'Accept',
+          text: 'I will help',
           onClick: () => {
             dialog.close()
           },
         },
         {
-          width: 150,
+          width: 220,
           height: 40,
-          text: 'Decline',
+          text: 'Not Now',
           onClick: () => {
             dialog.close()
           },
