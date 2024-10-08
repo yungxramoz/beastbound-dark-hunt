@@ -1,6 +1,6 @@
 import Character from '../../components/character.js'
 import Attackable from '../../composables/attackable.js'
-import PLAYER_SPRITE from '../../constants/player-sprite.js'
+import { PLAYER_SPRITE } from '../../constants/player-sprite.js'
 import { SETTINGS } from '../../constants/settings.js'
 import { keyboard } from '../../library/interactive.js'
 import PlayerStateMachine from '../../states/player-state-machine.js'

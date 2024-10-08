@@ -1,4 +1,4 @@
-import PLAYER_SPRITE from '../constants/player-sprite.js'
+import { PLAYER_SPRITE } from '../constants/player-sprite.js'
 import StateMachine from './state-machine.js'
 
 const PLAYER_STATE = {

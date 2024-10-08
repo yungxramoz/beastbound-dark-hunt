@@ -1,4 +1,4 @@
-import { STYLE } from '../constants/style.js'
+import STYLE from '../constants/style.js'
 import { addBorder, drawRect, drawText } from '../utils/ui.js'
 
 class Button {

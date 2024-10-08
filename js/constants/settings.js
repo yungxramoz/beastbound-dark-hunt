@@ -1,5 +1,5 @@
-const DEBUG = false
-
-export const SETTINGS = {
-  DEBUG,
+const SETTINGS = {
+  DEBUG: false,
 }
+
+export { SETTINGS }

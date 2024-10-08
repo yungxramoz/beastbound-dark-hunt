@@ -1,7 +1,7 @@
 import Character from '../../components/character.js'
 import Interactable from '../../composables/interactable.js'
 import { ASSETS } from '../../constants/assets.js'
-import CHIEF_NPC_SPRITE from '../../constants/chief-npc-sprite.js'
+import { CHIEF_NPC_SPRITE } from '../../constants/chief-npc-sprite.js'
 import { SETTINGS } from '../../constants/settings.js'
 import SpeechDialog from '../../display/speech-dialog.js'
 import NpcStateMachine from '../../states/npc-state-machine.js'

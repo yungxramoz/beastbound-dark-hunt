@@ -20,4 +20,4 @@ const CHIEF_NPC_SPRITE = {
   },
 }
 
-export default CHIEF_NPC_SPRITE
+export { CHIEF_NPC_SPRITE }

@@ -1,4 +1,4 @@
-import CHIEF_NPC_SPRITE from '../constants/chief-npc-sprite.js'
+import { CHIEF_NPC_SPRITE } from '../constants/chief-npc-sprite.js'
 import StateMachine from './state-machine.js'
 
 const CHARACTER_STATE = {
@@ -13,7 +13,7 @@ class NpcStateMachine extends StateMachine {
     super(CHARACTER_STATE.IDLE)
 
     this.entity = entity
-    this.stateTimer = 0
+    this.stateTimer = 5
 
     this.minX = minX
     this.maxX = maxX
@@ -27,8 +27,8 @@ class NpcStateMachine extends StateMachine {
       enter: () => {
         this.entity.move.stop()
         this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
-        // Set idle duration between 2 and 10 seconds
-        this.stateTimer = 2 + Math.random() * 8
+        // Set idle duration between 2 and 5 seconds
+        this.stateTimer = 2 + Math.random() * 3
       },
       update: (deltaTime) => {
         this.stateTimer -= deltaTime
@@ -96,7 +96,7 @@ class NpcStateMachine extends StateMachine {
         this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
         this.entity.createDialog()
       },
-      update: (deltaTime) => {
+      update: () => {
         if (!this.entity.interaction.isInteracting) {
           this.setState(CHARACTER_STATE.IDLE)
         }

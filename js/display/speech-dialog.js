@@ -1,4 +1,4 @@
-import { STYLE } from '../constants/style.js'
+import STYLE from '../constants/style.js'
 import { createTypingEffect } from '../utils/effects.js'
 import {
   addBorder,

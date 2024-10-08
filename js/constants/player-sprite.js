@@ -41,4 +41,4 @@ const PLAYER_SPRITE = {
   },
 }
 
-export default PLAYER_SPRITE
+export { PLAYER_SPRITE }
