@@ -1,9 +1,10 @@
 class Scene {
-  constructor(game, backgroundColor = 'black') {
+  constructor(game, { colorTop = 'black', colorBottom = 'black' } = {}) {
     this.game = game
     this.objects = []
 
-    document.body.style.backgroundColor = backgroundColor
+    document.getElementById('top-bar').style.backgroundColor = colorTop
+    document.getElementById('bottom-bar').style.backgroundColor = colorBottom
   }
   addObject(object) {
     this.objects.push(object)
@@ -11,6 +12,12 @@ class Scene {
   draw(deltaTime) {
     for (const object of this.objects) {
       object.draw(deltaTime)
+    }
+    const foregroundObject = this.objects.find(
+      (object) => object.drawForeground,
+    )
+    if (foregroundObject) {
+      foregroundObject.drawForeground(deltaTime)
     }
   }
   update(deltaTime) {

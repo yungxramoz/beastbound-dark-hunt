@@ -5,7 +5,7 @@ import Scene from '../../composables/scene.js'
 
 class SettlementScene extends Scene {
   constructor(game) {
-    super(game, '#170f20')
+    super(game, { colorTop: '#854a62', colorBottom: '#170f20' })
     this.game = game
 
     this.addObject(new Settlement(game))
