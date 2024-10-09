@@ -118,6 +118,7 @@ export const drawRect = (ctx, x, y, width, height, color) => {
 }
 
 export const drawImage = (ctx, image, x, y, width, height) => {
+  ctx.imageSmoothingEnabled = false
   ctx.drawImage(image, x, y, width, height)
   resetStyles(ctx)
 }

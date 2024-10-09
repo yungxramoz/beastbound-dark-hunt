@@ -22,9 +22,9 @@ Earn loot and Innovation Points for defeating beasts, which can be used to upgra
 
 ## Controls 🕹️
 - Movement: Arrow Keys or [A], [D]
-- Attack: [Enter]
+- Attack: [J]
 - Jump: [Space]
-- Interact: [Enter]
+- Interact: [E]
 
 ## Credits 🙏
 **Beastbound: Dark Hunts** is developed by Sandro Gerber (@yungxramoz) with inspiration from *Kingdom Death: Monster*. Special thanks to **Ansimuz** for the **GothicVania Asset Pack**. Icon assets were provided by **Game-Icons**.
