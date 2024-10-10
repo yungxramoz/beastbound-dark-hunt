@@ -19,6 +19,8 @@ class Character {
       gravity = 0.98,
       spriteOffsetX = 0,
       spriteOffsetY = 0,
+      baseShadowWidth = 50,
+      baseShadowHeight = 18,
     },
   ) {
     this.game = game
@@ -38,6 +40,9 @@ class Character {
       spriteScale,
       spriteOffsetX,
       spriteOffsetY,
+      hasShadow: true,
+      baseShadowWidth,
+      baseShadowHeight,
     })
 
     this.position.setPosition(x, getGroundY(this.height))

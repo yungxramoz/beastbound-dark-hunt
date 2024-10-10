@@ -19,6 +19,7 @@ class Player extends Character {
       offsetY: 0,
       spriteOffsetX: -65,
       spriteOffsetY: -25,
+      baseShadowWidth: 70,
     })
 
     this.game = game

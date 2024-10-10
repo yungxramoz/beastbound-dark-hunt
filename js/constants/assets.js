@@ -31,6 +31,7 @@ const ASSETS = {
   // Forest
   FOREST_GROUND_TILE_A: 'assets/images/environments/forest/ground-1.png',
   FOREST_GROUND_TILE_B: 'assets/images/environments/forest/ground-2.png',
+  FOREST_GROUND: 'assets/images/environments/forest/ground.png',
   FOREST_BACKGROUND: 'assets/images/environments/forest/background.png',
   FOREST_MIDDLEGROUND: 'assets/images/environments/forest/middleground.png',
   FOREST_FOREGROUND: 'assets/images/environments/forest/foreground.png',
@@ -56,6 +57,7 @@ const ASSETS_SRC = [
   ASSETS.SETTLEMENT_MIDDLEGROUND,
   // ASSETS.FOREST_GROUND_TILE_A,
   // ASSETS.FOREST_GROUND_TILE_B,
+  ASSETS.FOREST_GROUND,
   ASSETS.FOREST_BACKGROUND,
   ASSETS.FOREST_MIDDLEGROUND,
   ASSETS.FOREST_FOREGROUND,

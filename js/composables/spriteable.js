@@ -2,7 +2,14 @@ class Spriteable {
   constructor(
     game,
     entity,
-    { spriteScale = 1, spriteOffsetX = 0, spriteOffsetY = 0 },
+    {
+      spriteScale = 1,
+      spriteOffsetX = 0,
+      spriteOffsetY = 0,
+      hasShadow = true,
+      baseShadowWidth = 50,
+      baseShadowHeight = 18,
+    },
   ) {
     if (!game) throw new Error('Spriteable requires a game instance')
     if (!entity) throw new Error('Spriteable requires an entity')
@@ -27,7 +34,9 @@ class Spriteable {
       frameTime: 0,
     }
 
-    this.shadowColor = 'rgba(0, 0, 0, 0.4)'
+    this.hasShadow = hasShadow
+    this.baseShadowWidth = baseShadowWidth
+    this.baseShadowHeight = baseShadowHeight
   }
 
   setSprite(sprite) {
@@ -40,6 +49,43 @@ class Spriteable {
     }
   }
 
+  drawShadow(ctx, scaledWidth) {
+    let shadowWidth = this.baseShadowWidth
+    let shadowHeight = this.baseShadowHeight
+    const shadowX =
+      this.entity.position.x +
+      this.spriteOffsetX +
+      (scaledWidth - shadowWidth) / 2
+    const shadowY = this.entity.move.groundY + this.entity.height - 10
+
+    let alpha = 0.4
+
+    if (!this.entity.position.isGrounded() && this.entity.move) {
+      const position = this.entity.position.y - this.entity.move.groundY
+      alpha = 0.4 + position / 450
+      shadowWidth += position / 20
+      shadowHeight += position / 50
+    }
+
+    const shadowColor = `rgba(0, 0, 0, ${alpha})`
+
+    // Draw shadow
+    ctx.save()
+    ctx.fillStyle = shadowColor
+    ctx.beginPath()
+    ctx.ellipse(
+      shadowX + shadowWidth / 2,
+      shadowY + shadowHeight / 2,
+      shadowWidth / 2,
+      shadowHeight / 2,
+      0,
+      0,
+      Math.PI * 2,
+    )
+    ctx.fill()
+    ctx.restore()
+  }
+
   draw(ctx) {
     if (this.currentSprite) {
       const frameX = this.currentFrame * this.currentSprite.frameWidth
@@ -47,30 +93,9 @@ class Spriteable {
       const scaledWidth = this.currentSprite.frameWidth * this.spriteScale
       const scaledHeight = this.currentSprite.frameHeight * this.spriteScale
 
-      // Calculate shadow position
-      const shadowWidth = 50
-      const shadowHeight = 18
-      const shadowX =
-        this.entity.position.x +
-        this.spriteOffsetX +
-        (scaledWidth - shadowWidth) / 2
-      const shadowY = this.entity.move.groundY + this.entity.height - 10
-
-      // Draw shadow
-      ctx.save()
-      ctx.fillStyle = this.shadowColor
-      ctx.beginPath()
-      ctx.ellipse(
-        shadowX + shadowWidth / 2,
-        shadowY + shadowHeight / 2,
-        shadowWidth / 2,
-        shadowHeight / 2,
-        0,
-        0,
-        Math.PI * 2,
-      )
-      ctx.fill()
-      ctx.restore()
+      if (this.hasShadow) {
+        this.drawShadow(ctx, scaledWidth)
+      }
 
       if (this.entity.flipX) {
         ctx.save()

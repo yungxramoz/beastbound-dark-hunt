@@ -59,17 +59,15 @@ class Forest extends Environment {
       },
     }
 
-    const getGroundTiles = () => {
-      const groundTiles = []
-      for (let i = 0; i < 48; i++) {
-        groundTiles.push(i % 2 === 0 ? tiles.groundTileA : tiles.groundTileB)
-      }
-      return groundTiles
+    const ground = {
+      image: game.assets[ASSETS.FOREST_GROUND],
+      width: game.canvas.width,
+      height: 500,
     }
 
     const options = {
       layers: [backgroundLayer, middlegroundLayer, foregroundLayer],
-      groundTiles: [],
+      groundTiles: [ground],
       props: [],
     }
 
