@@ -25,7 +25,7 @@ class Layer {
     this.x -= this.speed * this.parallaxFactor
     if (this.repeat) {
       const totalWidth = this.images.reduce(
-        (sum, img) => sum + (this.width || img.width),
+        (sum, imgObj) => sum + (imgObj.width || imgObj.image.width),
         0,
       )
       if (this.x <= -totalWidth) {
@@ -35,15 +35,14 @@ class Layer {
   }
 
   draw() {
-    let x = this.x
+    let x = Math.round(this.x)
     const canvasWidth = this.game.canvas.width
-
     while (x < canvasWidth) {
       for (let imgObj of this.images) {
         const image = imgObj.image
         const imgWidth = imgObj.width || image.width
         const imgHeight = imgObj.height || image.height
-        this.game.ctx.drawImage(image, x, this.y, imgWidth, imgHeight)
+        this.game.ctx.drawImage(image, Math.round(x), this.y, imgWidth, imgHeight)
         x += imgWidth
       }
     }
@@ -51,3 +50,4 @@ class Layer {
 }
 
 export default Layer
+
