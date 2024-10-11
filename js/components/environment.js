@@ -1,4 +1,4 @@
-import { drawImage } from '../utils/ui.js'
+import { drawImage } from '../display/ui.js'
 
 class Environment {
   constructor(game, { layers = [], groundTiles = [], props = [] } = {}) {

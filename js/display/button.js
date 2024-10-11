@@ -1,5 +1,5 @@
 import { STYLE } from '../constants/style.js'
-import { addBorder, drawRect, drawText } from '../utils/ui.js'
+import { addBorder, drawRect, drawText } from './ui.js'
 
 class Button {
   constructor(game, { x, y, width, height, text, onClick } = {}) {

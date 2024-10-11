@@ -5,7 +5,7 @@ import { SETTINGS } from '../../constants/settings.js'
 import { keyboard } from '../../library/interactive.js'
 import PlayerStateMachine from '../../states/player-state-machine.js'
 import { getDistance, isFacingTowards } from '../../utils/collision.js'
-import { addBorder, drawRect, drawText } from '../../utils/ui.js'
+import { addBorder, drawRect, drawText } from '../../display/ui.js'
 
 class Player extends Character {
   constructor(game, x, y) {

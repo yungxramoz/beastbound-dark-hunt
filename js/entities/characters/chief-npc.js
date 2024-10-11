@@ -5,7 +5,7 @@ import { CHIEF_NPC_SPRITE } from '../../constants/chief-npc-sprite.js'
 import { SETTINGS } from '../../constants/settings.js'
 import SpeechDialog from '../../display/speech-dialog.js'
 import NpcStateMachine from '../../states/npc-state-machine.js'
-import { addBorder, drawRect, drawText } from '../../utils/ui.js'
+import { addBorder, drawRect, drawText } from '../../display/ui.js'
 
 class ChiefNpc extends Character {
   constructor(game, x, y, name) {

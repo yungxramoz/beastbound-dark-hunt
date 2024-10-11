@@ -6,7 +6,7 @@ import {
   drawRect,
   drawText,
   drawWrappedText,
-} from '../utils/ui.js'
+} from './ui.js'
 import Dialog from './dialog.js'
 
 class SpeechDialog extends Dialog {

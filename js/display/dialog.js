@@ -1,5 +1,5 @@
 import { STYLE } from '../constants/style.js'
-import { addBorder, drawRect } from '../utils/ui.js'
+import { addBorder, drawRect } from './ui.js'
 import Button from './button.js'
 
 class Dialog {

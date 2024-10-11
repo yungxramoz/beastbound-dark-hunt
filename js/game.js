@@ -5,7 +5,7 @@ import SettlementScene from './entities/scenes/settlement-scene.js'
 import { assets } from './library/utilities.js'
 import { GAME_STATE } from './states/game-state-machine.js'
 import DialogManager from './display/dialog-manager.js'
-import { drawText } from './utils/ui.js'
+import { drawText } from './display/ui.js'
 
 class Game {
   constructor(canvasId) {
@@ -37,12 +37,7 @@ class Game {
     }
 
     this.setupMouseListeners()
-
-    this.renderLoading()
-    this.assets.load(ASSETS_SRC).then(() => {
-      console.log('All assets loaded successfully')
-      this.startGame()
-    })
+    this.loadAssets()
   }
 
   setupMouseListeners() {
@@ -63,6 +58,14 @@ class Game {
 
     this.canvas.addEventListener('mouseup', () => {
       this.mouse.isPressed = false
+    })
+  }
+
+  loadAssets() {
+    this.renderLoading()
+    this.assets.load(ASSETS_SRC).then(() => {
+      console.log('All assets loaded successfully')
+      this.startGame()
     })
   }
 
