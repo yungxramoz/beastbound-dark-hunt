@@ -2,6 +2,17 @@ import { STYLE } from '../constants/style.js'
 import { addBorder, drawRect, drawText } from './ui.js'
 
 class Button {
+  /**
+   * A button component
+   * @param {Game} game - The game instance.
+   * @param {Object} options - The options for the Button component.
+   * @param {number} options.x - The x position of the button.
+   * @param {number} options.y - The y position of the button.
+   * @param {number} options.width - The width of the button.
+   * @param {number} options.height - The height of the button.
+   * @param {string} options.text - The text of the button.
+   * @param {function} options.onClick - The function to call when the button is clicked.
+   */
   constructor(game, { x, y, width, height, text, onClick } = {}) {
     this.game = game
     this.x = x || 0

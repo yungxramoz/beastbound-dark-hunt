@@ -1,5 +1,17 @@
 import { STYLE } from '../constants/style.js'
 
+/**
+ * Adds a border to a rectangle.
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2d context.
+ * @param {number} x - The x-coordinate of the rectangle.
+ * @param {number} y - The y-coordinate of the rectangle.
+ * @param {number} width - The width of the rectangle.
+ * @param {number} height - The height of the rectangle.
+ * @param {Object} options - The options for the border.
+ * @param {string} options.highlight - The color of the highlight.
+ * @param {string} options.shadow - The color of the shadow.
+ * @param {string} options.border - The color of the border.
+ */
 export const addBorder = (
   ctx,
   x,
@@ -55,6 +67,20 @@ export const addBorder = (
   resetStyles(ctx)
 }
 
+/**
+ * Draws text on the canvas.
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2d context.
+ * @param {string} text - The text to draw.
+ * @param {number} x - The x-coordinate of the text.
+ * @param {number} y - The y-coordinate of the text.
+ * @param {Object} options - The options for the text.
+ * @param {string} options.color - The color of the text.
+ * @param {number} options.size - The size of the text.
+ * @param {string} options.font - The font of the text.
+ * @param {string} options.align - The alignment of the text.
+ * @param {boolean} options.shadow - Add shadow to the text.
+ * @param {string} options.baseline - The baseline of the text.
+ */
 export const drawText = (
   ctx,
   text,
@@ -85,6 +111,22 @@ export const drawText = (
   resetStyles(ctx)
 }
 
+/**
+ * Draws wrapped text on the canvas with a maximum width.
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2d context.
+ * @param {string} text - The text to draw.
+ * @param {number} x - The x-coordinate of the text.
+ * @param {number} y - The y-coordinate of the text.
+ * @param {number} maxWidth - The maximum width of the text.
+ * @param {number} lineHeight - The line height of the text.
+ * @param {Object} options - The options for the text.
+ * @param {string} options.color - The color of the text.
+ * @param {number} options.size - The size of the text.
+ * @param {string} options.font - The font of the text.
+ * @param {string} options.align - The alignment of the text.
+ * @param {boolean} options.shadow - Add shadow to the text.
+ * @param {string} options.baseline - The baseline of the text.
+ */
 export const drawWrappedText = (
   ctx,
   text,
@@ -111,18 +153,39 @@ export const drawWrappedText = (
   drawText(ctx, line, x, y, { color, size, font, align, shadow, baseline })
 }
 
+/**
+ * Draws a rectangle on the canvas.
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2d context.
+ * @param {number} x - The x-coordinate of the rectangle.
+ * @param {number} y - The y-coordinate of the rectangle.
+ * @param {number} width - The width of the rectangle.
+ * @param {number} height - The height of the rectangle.
+ */
 export const drawRect = (ctx, x, y, width, height, color) => {
   ctx.fillStyle = color
   ctx.fillRect(x, y, width, height)
   resetStyles(ctx)
 }
 
+/**
+ * Draws an image on the canvas.
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2d context.
+ * @param {HTMLImageElement} image - The image to draw.
+ * @param {number} x - The x-coordinate of the image.
+ * @param {number} y - The y-coordinate of the image.
+ * @param {number} width - The width of the image.
+ * @param {number} height - The height of the image.
+ */
 export const drawImage = (ctx, image, x, y, width, height) => {
   ctx.imageSmoothingEnabled = false
   ctx.drawImage(image, x, y, width, height)
   resetStyles(ctx)
 }
 
+/**
+ * Draws a line on the canvas.
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2d context.
+ */
 export const resetStyles = (ctx) => {
   ctx.shadowColor = 'transparent'
   ctx.shadowOffsetX = 0

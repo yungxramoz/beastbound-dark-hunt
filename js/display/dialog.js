@@ -3,6 +3,19 @@ import { addBorder, drawRect } from './ui.js'
 import Button from './button.js'
 
 class Dialog {
+  /**
+   * The base class for all dialogs.
+   * @param {Game} game - The game instance.
+   * @param {Object} options - The options for the Dialog component.
+   * @param {function} [options.onClose] - The function to call when the dialog is closed.
+   * @param {number} [options.dialogHeight] - The height of the dialog.
+   * @param {number} [options.dialogWidth] - The width of the dialog.
+   * @param {number} [options.dialogX] - The x position of the dialog.
+   * @param {number} [options.dialogY] - The y position of the dialog.
+   * @param {Array} [options.buttons] - The buttons to display on the dialog.
+   * @param {boolean} [options.overlay] - Whether to display an overlay.
+   * @param {string} [options.overlayColor] - The color of the overlay.
+   */
   constructor(
     game,
     {
@@ -36,10 +49,30 @@ class Dialog {
     }
   }
 
+  /**
+   * Sets up the buttons for the dialog.
+   * @param {Array} buttonOptionsArray - The options for the buttons.
+   * @param {number} buttonOptionsArray.x - The x position of the button.
+   * @param {number} buttonOptionsArray.y - The y position of the button.
+   * @param {number} buttonOptionsArray.width - The width of the button.
+   * @param {number} buttonOptionsArray.height - The height of the button.
+   * @param {string} buttonOptionsArray.text - The text of the button.
+   * @param {function} buttonOptionsArray.onClick - The function to call when the button is clicked.
+   */
   setupButtons(buttonOptionsArray) {
     for (const buttonOptions of buttonOptionsArray) {
       const button = new Button(this.game, buttonOptions)
       this.buttons.push(button)
+    }
+  }
+
+  /**
+   * Closes the dialog.
+   */
+  close() {
+    this.game.dialogManager.closeDialog(this)
+    if (this.onClose) {
+      this.onClose()
     }
   }
 
@@ -80,13 +113,6 @@ class Dialog {
 
     for (const button of this.buttons) {
       button.draw(ctx)
-    }
-  }
-
-  close() {
-    this.game.dialogManager.closeDialog(this)
-    if (this.onClose) {
-      this.onClose()
     }
   }
 }

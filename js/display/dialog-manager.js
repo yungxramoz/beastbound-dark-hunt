@@ -1,13 +1,25 @@
 class DialogManager {
+  /**
+   * The DialogManager class manages the dialogs in the game
+   * @param {object} game - The game object
+   */
   constructor(game) {
     this.game = game
     this.activeDialogs = []
   }
 
+  /**
+   * Opens a dialog
+   * @param {Dialog} dialog - The dialog to open
+   */
   openDialog(dialog) {
     this.activeDialogs.push(dialog)
   }
 
+  /**
+   * Closes a dialog
+   * @param {Dialog} dialog - The dialog to close
+   */
   closeDialog(dialog) {
     const index = this.activeDialogs.indexOf(dialog)
     if (index !== -1) {
@@ -15,6 +27,9 @@ class DialogManager {
     }
   }
 
+  /**
+   * Closes all dialogs
+   */
   closeAllDialogs() {
     this.activeDialogs = []
   }
