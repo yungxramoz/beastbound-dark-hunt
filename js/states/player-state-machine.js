@@ -76,15 +76,9 @@ class PlayerStateMachine extends StateMachine {
           this.setState(PLAYER_STATE.IDLE)
         } else if (this.player.space.isDown) {
           this.setState(PLAYER_STATE.JUMPING)
-        } else if (
-          isMovingLeft &&
-          this.player.currentDirection !== DIRECTION.LEFT
-        ) {
+        } else if (isMovingLeft && !this.player.flipX) {
           this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.LEFT })
-        } else if (
-          isMovingRight &&
-          this.player.currentDirection !== DIRECTION.RIGHT
-        ) {
+        } else if (isMovingRight && this.player.flipX) {
           this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.RIGHT })
         }
       },

@@ -1,9 +1,9 @@
 import { ASSETS_SRC } from './constants/assets.js'
-import { GAME_STATE } from './constants/game-state.js'
 import { BOUNDERIES } from './constants/positions.js'
 import ForestScene from './entities/scenes/forest-scene.js'
 import SettlementScene from './entities/scenes/settlement-scene.js'
 import { assets } from './library/utilities.js'
+import { GAME_STATE } from './states/game-state-machine.js'
 import DialogManager from './utils/dialog-manager.js'
 import { drawText } from './utils/ui.js'
 

@@ -13,11 +13,22 @@ class Scene {
     for (const object of this.objects) {
       object.draw(deltaTime)
     }
-    const foregroundObject = this.objects.find(
+    const foregroundObjects = this.objects.filter(
       (object) => object.drawForeground,
     )
-    if (foregroundObject) {
+    for (const foregroundObject of foregroundObjects) {
       foregroundObject.drawForeground(deltaTime)
+    }
+
+    //check if dialog is open
+    if (this.game.dialogManager.activeDialogs.length > 0) {
+      document.querySelectorAll('.overlay').forEach((overlay) => {
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.5)'
+      })
+    } else {
+      document.querySelectorAll('.overlay').forEach((overlay) => {
+        overlay.style.backgroundColor = ''
+      })
     }
   }
   update(deltaTime) {
