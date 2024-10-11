@@ -1,7 +1,7 @@
 import Settlement from '../environments/settlement.js'
 import Player from '../characters/player.js'
 import ChiefNpc from '../characters/chief-npc.js'
-import Scene from '../../composables/scene.js'
+import Scene from '../../components/scene.js'
 
 class SettlementScene extends Scene {
   constructor(game) {

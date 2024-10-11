@@ -13,8 +13,12 @@ const DIRECTION = {
 }
 
 class NpcStateMachine extends StateMachine {
-  constructor(entity, { minX = 0, maxX = entity.game.canvas.width } = {}) {
-    super(CHARACTER_STATE.IDLE)
+  constructor(
+    entity,
+    initialState = CHARACTER_STATE.IDLE,
+    { minX = 0, maxX = entity.game.canvas.width } = {},
+  ) {
+    super()
 
     this.entity = entity
     this.stateTimer = 5
@@ -23,6 +27,7 @@ class NpcStateMachine extends StateMachine {
     this.maxX = maxX
 
     this.setupStates()
+    this.setState(initialState)
   }
 
   setupStates() {

@@ -4,6 +4,25 @@ import Spriteable from '../composables/spriteable.js'
 import { getGroundY } from '../utils/bounderies.js'
 
 class Character {
+  /**
+   * A character can move, jump, and has a sprite that can be drawn
+   * @param {Game} game - The game instance
+   * @param {Object} options - The options for the Character component
+   * @param {number} options.x - The x position of the character
+   * @param {number} options.y - The y position of the character
+   * @param {number} options.spriteScale - The scale of the sprite
+   * @param {number} options.width - The width of the character
+   * @param {number} options.height - The height of the character
+   * @param {number} [options.offsetX=0] - The x offset of the character
+   * @param {number} [options.offsetY=0] - The y offset of the character
+   * @param {number} [options.moveSpeed=5] - The speed at which the character moves
+   * @param {number} [options.jumpSpeed=15] - The speed at which the character jumps
+   * @param {number} [options.gravity=0.98] - The gravity that affects the character
+   * @param {number} [options.spriteOffsetX=0] - The x offset of the sprite
+   * @param {number} [options.spriteOffsetY=0] - The y offset of the sprite
+   * @param {number} [options.baseShadowWidth=50] - The base width of the shadow
+   * @param {number} [options.baseShadowHeight=18] - The base height of the shadow
+   */
   constructor(
     game,
     {
@@ -27,6 +46,8 @@ class Character {
 
     this.width = width
     this.height = height
+
+    this.flipX = false
 
     this.position = new Positionable(this, {
       offsetX,

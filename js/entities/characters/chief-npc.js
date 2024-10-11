@@ -1,7 +1,6 @@
 import Character from '../../components/character.js'
 import Interactable from '../../composables/interactable.js'
 import { ASSETS } from '../../constants/assets.js'
-import { CHIEF_NPC_SPRITE } from '../../constants/chief-npc-sprite.js'
 import { SETTINGS } from '../../constants/settings.js'
 import SpeechDialog from '../../display/speech-dialog.js'
 import NpcStateMachine from '../../states/npc-state-machine.js'
@@ -20,14 +19,11 @@ class ChiefNpc extends Character {
 
     this.game = game
 
-    this.flipX = true
     this.name = name
     this.avatar = game.assets[ASSETS.CHIEF_AVATAR]
 
     this.interaction = new Interactable(game, this)
-
     this.stateMachine = new NpcStateMachine(this)
-    this.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
   }
 
   createDialog() {

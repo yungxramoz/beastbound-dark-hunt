@@ -16,12 +16,13 @@ const DIRECTION = {
 }
 
 class PlayerStateMachine extends StateMachine {
-  constructor(player) {
-    super(PLAYER_STATE.IDLE)
+  constructor(player, initialState = PLAYER_STATE.IDLE) {
+    super()
 
     this.player = player
 
     this.setupStates()
+    this.setState(initialState)
   }
 
   setupStates() {

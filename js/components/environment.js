@@ -1,6 +1,14 @@
 import { drawImage } from '../display/ui.js'
 
 class Environment {
+  /**
+   * The Environment class is used to create a game environment with layers, ground tiles, and props.
+   * @param {object} game - The game object
+   * @param {object} options - The environment options
+   * @param {Layer[]} options.layers - The layers of the environment
+   * @param {object[]} options.groundTiles - The ground tiles of the environment
+   * @param {object[]} options.props - The props of the environment
+   */
   constructor(game, { layers = [], groundTiles = [], props = [] } = {}) {
     this.game = game
     this.layers = layers
@@ -29,6 +37,42 @@ class Environment {
         prop.update()
       }
     }
+  }
+
+  /**
+   * Draw the ground tiles
+   */
+  drawGround() {
+    for (let pos of this.groundTilePositions) {
+      const tile = pos.tile
+      const x = pos.startX
+      const y = this.game.canvas.height - tile.height
+      drawImage(this.game.ctx, tile.image, x, y, tile.width, tile.height)
+    }
+  }
+
+  /**
+   * Draw the foreground layers
+   */
+  drawForeground() {
+    for (let layer of this.layers.filter((l) => l.depth > 0)) {
+      layer.draw()
+    }
+  }
+
+  /**
+   * Get the ground Y position at a given X position
+   * @param {number} xPosition - The X position
+   * @returns {number} The ground Y position
+   */
+  getGroundY(xPosition) {
+    for (let pos of this.groundTilePositions) {
+      if (xPosition >= pos.startX && xPosition < pos.endX) {
+        return this.game.canvas.height - pos.tile.height
+      }
+    }
+    // Default ground level if xPosition is not on any tile
+    return this.game.canvas.height
   }
 
   draw() {
@@ -63,31 +107,6 @@ class Environment {
         prop.height,
       )
     }
-  }
-
-  drawGround() {
-    for (let pos of this.groundTilePositions) {
-      const tile = pos.tile
-      const x = pos.startX
-      const y = this.game.canvas.height - tile.height
-      drawImage(this.game.ctx, tile.image, x, y, tile.width, tile.height)
-    }
-  }
-
-  drawForeground() {
-    for (let layer of this.layers.filter((l) => l.depth > 0)) {
-      layer.draw()
-    }
-  }
-
-  getGroundY(xPosition) {
-    for (let pos of this.groundTilePositions) {
-      if (xPosition >= pos.startX && xPosition < pos.endX) {
-        return this.game.canvas.height - pos.tile.height
-      }
-    }
-    // Default ground level if xPosition is not on any tile
-    return this.game.canvas.height
   }
 }
 

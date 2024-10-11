@@ -1,4 +1,4 @@
-import Scene from '../../composables/scene.js'
+import Scene from '../../components/scene.js'
 import ChiefNpc from '../characters/chief-npc.js'
 import Player from '../characters/player.js'
 import Forest from '../environments/forest.js'

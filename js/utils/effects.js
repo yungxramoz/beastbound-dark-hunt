@@ -1,3 +1,9 @@
+/**
+ * Creates a typing effect object that can be used to simulate text being typed
+ *
+ * @param {string} text - The text to be typed
+ * @param {number} typingSpeed - Characters per second
+ */
 export function createTypingEffect(text, typingSpeed) {
   return {
     text,

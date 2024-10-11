@@ -1,6 +1,19 @@
 import { getGroundY } from '../utils/bounderies.js'
 
 class Movable {
+  /**
+   * Gives an entity the ability to move and jump
+   * @param {Game} game - The game instance
+   * @param {Entity} entity - The entity to attach the Movable component to
+   * @param {Object} options - The options for the Movable component
+   * @param {number} options.moveSpeed - The speed at which the entity moves
+   * @param {number} options.jumpSpeed - The speed at which the entity jumps
+   * @param {number} options.gravity - The gravity that affects the entity
+   *
+   * @throws {Error} - Game is required
+   * @throws {Error} - Entity is required
+   * @throws {Error} - Entity must have a Positionable component   *
+   */
   constructor(game, entity, { moveSpeed, jumpSpeed, gravity }) {
     if (!game) throw new Error('Game is required')
     if (!entity) throw new Error('Entity is required')
@@ -19,28 +32,48 @@ class Movable {
     this.speedY = 0
   }
 
+  /**
+   * Moves the entity left
+   */
   left() {
     this.speedX = -this.maxSpeed
   }
 
+  /**
+   * Moves the entity right
+   */
   right() {
     this.speedX = this.maxSpeed
   }
 
+  /**
+   * Stops the entity from moving
+   */
   stop() {
     this.speedX = 0
   }
 
+  /**
+   * Makes the entity jump
+   */
   jump() {
     if (this.entity.position.isGrounded()) {
       this.speedY = -this.jumpSpeed
     }
   }
 
-  dash() {
-    this.speedX = this.maxSpeed * 2
+  /**
+   * Checks if the entity is falling
+   */
+  isFalling() {
+    return this.speedY > 0
   }
 
+  /**
+   * Makes the entity face towards a target entity
+   * @param {Entity} target - The entity to face towards
+   * @throws {Error} - Entity must have a Positionable component
+   */
   faceTowards(target) {
     if (!target.position)
       throw new Error('Entity must have a Positionable component')
@@ -50,10 +83,6 @@ class Movable {
     } else {
       this.entity.flipX = false
     }
-  }
-
-  isFalling() {
-    return this.speedY > 0
   }
 
   update() {

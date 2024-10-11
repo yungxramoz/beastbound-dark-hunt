@@ -1,4 +1,21 @@
 class Spriteable {
+  /**
+   * Gives an entity the ability to be drawn on the screen using sprite sheets
+   * @param {Game} game - The game instance
+   * @param {Entity} entity - The entity to attach the Spriteable component to
+   * @param {Object} options - The options for the Spriteable component
+   * @param {number} [options.spriteScale=1] - The scale of the sprite
+   * @param {number} [options.spriteOffsetX=0] - The x offset of the sprite
+   * @param {number} [options.spriteOffsetY=0] - The y offset of the sprite
+   * @param {boolean} [options.hasShadow=true] - Whether the entity has a shadow
+   * @param {number} [options.baseShadowWidth=50] - The base width of the shadow
+   * @param {number} [options.baseShadowHeight=18] - The base height of the shadow
+   *
+   * @throws {Error} - Game instance is required
+   * @throws {Error} - Entity is required
+   * @throws {Error} - Entity must have a Positionable component
+   * @throws {Error} - Entity must have a flipX property
+   */
   constructor(
     game,
     entity,
@@ -39,6 +56,15 @@ class Spriteable {
     this.baseShadowHeight = baseShadowHeight
   }
 
+  /**
+   * Sets the sprite for the entity
+   * @param {Object} sprite - The sprite object
+   * @param {string} sprite.src - The source of the sprite sheet
+   * @param {number} sprite.frameWidth - The width of each frame in the sprite sheet
+   * @param {number} sprite.frameHeight - The height of each frame in the sprite sheet
+   * @param {number} sprite.numFrames - The number of frames in the sprite sheet
+   * @param {number} sprite.frameTime - The time to display each frame
+   */
   setSprite(sprite) {
     if (this.currentSprite.src === sprite.src) {
       return
@@ -49,6 +75,11 @@ class Spriteable {
     }
   }
 
+  /**
+   * Draws the shadow for the entity
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context
+   * @param {number} scaledWidth - The scaled width of the entity
+   */
   drawShadow(ctx, scaledWidth) {
     let shadowWidth = this.baseShadowWidth
     let shadowHeight = this.baseShadowHeight

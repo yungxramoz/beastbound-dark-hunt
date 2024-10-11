@@ -1,5 +1,3 @@
-// src/utils/collision-utils.js
-
 /**
  * Checks if two rectangles are overlapping.
  * @param {Object} rect1 - First rectangle with properties x, y, width, height.

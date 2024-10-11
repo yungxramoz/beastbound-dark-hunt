@@ -1,4 +1,19 @@
 class Attackable {
+  /**
+   * Gives an entity the ability to attack
+   * @param {Game} game - The game instance
+   * @param {Entity} entity - The entity to attach the Attackable component to
+   * @param {Object} options - The options for the Attackable component
+   * @param {number} [options.attackDuration=1] - The duration of the attack in seconds
+   * @param {number} [options.attackDamage=10] - The damage of the attack
+   * @param {number} [options.hitRangeWidth=70] - The width of the hit range
+   * @param {number} [options.hitRangeHeight=50] - The height of the hit range
+   *
+   * @throws {Error} - Game instance is required
+   * @throws {Error} - Entity is required
+   * @throws {Error} - Entity must have a Positionable component
+   * @throws {Error} - Entity must have a flipX property
+   */
   constructor(
     game,
     entity,
@@ -27,6 +42,15 @@ class Attackable {
     this.hitBox = null
   }
 
+  /**
+   * Gets the hit box for the attack
+   * @returns {Object} - The hit box for the attack
+   * @returns {number} x - The x-coordinate of the hit box
+   * @returns {number} y - The y-coordinate of the hit box
+   * @returns {number} width - The width of the hit box
+   * @returns {number} height - The height of the hit box
+   *
+   */
   getHitBox() {
     const { x, y } = this.entity.position
     const { width, height } = this.entity
@@ -42,6 +66,9 @@ class Attackable {
     }
   }
 
+  /**
+   * Triggers the attack
+   */
   hit() {
     if (!this.isAttacking) {
       this.isAttacking = true
@@ -58,6 +85,11 @@ class Attackable {
     }
   }
 
+  /**
+   * Draws the hit box for debugging purposes
+   *
+   * @param {CanvasRenderingContext2D} ctx - The 2D rendering context
+   */
   drawDebugHitBox(ctx) {
     if (!this.hitBox) return
     ctx.strokeStyle = 'blue'

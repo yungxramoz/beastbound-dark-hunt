@@ -1,4 +1,16 @@
 class Interactable {
+  /**
+   * Gives the entity the ability to be interacted with
+   * @param {Game} game - The game instance
+   * @param {Entity} entity - The entity to attach the Interactable component to
+   *
+   * @throws {Error} - Game is required
+   * @throws {Error} - Entity is required
+   * @throws {Error} - Entity must have a Positionable composable
+   * @throws {Error} - Entity must have a flipX property
+   * @throws {Error} - Entity must have a createDialog method
+   *
+   */
   constructor(game, entity) {
     if (!game) throw new Error('Game is required')
     if (!entity) throw new Error('Entity is required')
@@ -24,6 +36,10 @@ class Interactable {
     this.game.interactables.push(entity)
   }
 
+  /**
+   * Starts the interaction with the source entity
+   * @param {Entity} source - The entity that is starting the interaction
+   */
   start(source) {
     if (this.entity.move) {
       this.entity.move.faceTowards(source)
@@ -33,6 +49,9 @@ class Interactable {
     this.interactingEntity = source
   }
 
+  /**
+   * Ends the current interaction
+   */
   end() {
     this.isInteracting = false
 
