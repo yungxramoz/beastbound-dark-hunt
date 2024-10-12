@@ -51,13 +51,21 @@ class Button {
       }
     } else {
       this.isHovered = false
+      if (pointer.isUp) {
+        this.isDown = false
+      }
     }
   }
 
   draw(ctx) {
     let fillStyle = STYLE.COLORS.SECONDARY
+    let highlight = STYLE.COLORS.SECONDARY_LIGHTER_1
+    let shadow = STYLE.COLORS.SECONDARY_DARKER_3
+
     if (this.isDown) {
       fillStyle = STYLE.COLORS.SECONDARY_DARKER_2
+      highlight = STYLE.COLORS.SECONDARY_DARKER_3
+      shadow = STYLE.COLORS.SECONDARY_DARKER_1
     } else if (this.isHovered) {
       fillStyle = STYLE.COLORS.SECONDARY_LIGHTER_2
     }
@@ -65,8 +73,8 @@ class Button {
     drawRect(ctx, this.x, this.y, this.width, this.height, fillStyle)
 
     addBorder(ctx, this.x, this.y, this.width, this.height, {
-      highlight: STYLE.COLORS.SECONDARY_LIGHTER_1,
-      shadow: STYLE.COLORS.SECONDARY_DARKER_3,
+      highlight,
+      shadow,
     })
 
     drawText(

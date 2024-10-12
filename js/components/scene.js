@@ -34,7 +34,10 @@ class Scene {
     }
 
     //check if dialog is open
-    if (this.game.dialogManager.activeDialogs.length > 0) {
+    if (
+      this.game.dialogManager.activeDialogs.length > 0 &&
+      this.game.dialogManager.activeDialogs[0].overlay.enabled
+    ) {
       document.querySelectorAll('.overlay').forEach((overlay) => {
         overlay.style.backgroundColor = 'rgba(0,0,0,0.5)'
       })
