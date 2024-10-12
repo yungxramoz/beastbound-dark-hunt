@@ -1,7 +1,7 @@
-const BOUNDERIES = {
+const BOUNDARIES = {
   GROUND_Y: 510,
   GAME_WIDTH: 1200,
   GAME_HEIGHT: 600,
 }
 
-export { BOUNDERIES }
+export { BOUNDARIES }

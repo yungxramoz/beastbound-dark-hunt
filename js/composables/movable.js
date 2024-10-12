@@ -1,4 +1,4 @@
-import { getGroundY } from '../utils/bounderies.js'
+import { getGroundY } from '../utils/boundaries.js'
 
 class Movable {
   /**

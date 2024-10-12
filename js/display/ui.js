@@ -193,4 +193,5 @@ export const resetStyles = (ctx) => {
   ctx.shadowBlur = 0
   ctx.lineWidth = 1
   ctx.textBaseline = 'top'
+  ctx.textAlign = 'left'
 }

@@ -1,5 +1,5 @@
 import { STYLE } from '../constants/style.js'
-import { addBorder, drawRect } from './ui.js'
+import { addBorder, drawRect, drawWrappedText } from './ui.js'
 import Button from './button.js'
 
 class Dialog {
@@ -19,6 +19,7 @@ class Dialog {
   constructor(
     game,
     {
+      title,
       onClose,
       dialogHeight,
       dialogWidth,
@@ -37,6 +38,10 @@ class Dialog {
     this.dialogHeight = dialogHeight || this.game.canvas.height / 2
     this.dialogX = dialogX || (this.game.canvas.width - this.dialogWidth) / 2
     this.dialogY = dialogY || (this.game.canvas.height - this.dialogHeight) / 2
+
+    if (title) {
+      this.title = title
+    }
 
     this.buttons = []
     if (buttons) {
@@ -60,9 +65,25 @@ class Dialog {
    * @param {function} buttonOptionsArray.onClick - The function to call when the button is clicked.
    */
   setupButtons(buttonOptionsArray) {
+    let buttonOffsetY = 0
+    if (this.title) {
+      buttonOffsetY = 20
+    }
+
     for (const buttonOptions of buttonOptionsArray) {
-      const button = new Button(this.game, buttonOptions)
+      const x =
+        buttonOptions.x ||
+        this.dialogWidth / 2 + this.dialogX - buttonOptions.width / 2
+      const y =
+        buttonOptions.y ||
+        this.dialogY +
+          this.dialogHeight / 2 -
+          buttonOptions.height / 2 +
+          buttonOffsetY
+
+      const button = new Button(this.game, { x, y, ...buttonOptions })
       this.buttons.push(button)
+      buttonOffsetY += buttonOptions.height + 20
     }
   }
 
@@ -110,6 +131,21 @@ class Dialog {
       this.dialogWidth,
       this.dialogHeight,
     )
+
+    if (this.title) {
+      drawWrappedText(
+        ctx,
+        this.title,
+        this.dialogWidth / 2 + this.dialogX,
+        this.dialogY + 40,
+        this.dialogWidth - 40,
+        20,
+        {
+          align: 'center',
+          size: STYLE.FONT_SIZE.LARGE,
+        },
+      )
+    }
 
     for (const button of this.buttons) {
       button.draw(ctx)

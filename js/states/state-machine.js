@@ -1,9 +1,7 @@
-/**
- * Finite state machine class
- */
 class StateMachine {
   /**
    * Creates an instance of StateMachine.
+   * Call `setState` in the constructor to trigger the enter function of the inital state.
    */
   constructor() {
     this.currentState = null

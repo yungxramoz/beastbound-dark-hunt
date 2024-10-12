@@ -1,4 +1,4 @@
-import { BOUNDERIES } from '../constants/positions.js'
+import { BOUNDARIES } from '../constants/positions.js'
 
 /**
  * Checks if the given position exceeds the top boundary of the game area.
@@ -7,7 +7,7 @@ import { BOUNDERIES } from '../constants/positions.js'
  * @returns {boolean} - Returns true if the object is out of bounds on the top side
  */
 export const getGroundY = (height) => {
-  return BOUNDERIES.GROUND_Y - height
+  return BOUNDARIES.GROUND_Y - height
 }
 
 /**
@@ -28,5 +28,5 @@ export const isOutOfBoundsLeft = (x) => {
  * @returns {boolean} - Returns true if the object is out of bounds on the right side, otherwise false.
  */
 export const isOutOfBoundsRight = (x, width) => {
-  return x + width >= BOUNDERIES.GAME_WIDTH
+  return x + width >= BOUNDARIES.GAME_WIDTH
 }

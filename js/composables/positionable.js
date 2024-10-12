@@ -2,7 +2,7 @@ import {
   getGroundY,
   isOutOfBoundsLeft,
   isOutOfBoundsRight,
-} from '../utils/bounderies.js'
+} from '../utils/boundaries.js'
 
 class Positionable {
   /**

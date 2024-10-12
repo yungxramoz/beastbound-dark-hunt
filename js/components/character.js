@@ -1,7 +1,7 @@
 import Movable from '../composables/movable.js'
 import Positionable from '../composables/positionable.js'
 import Spriteable from '../composables/spriteable.js'
-import { getGroundY } from '../utils/bounderies.js'
+import { getGroundY } from '../utils/boundaries.js'
 
 class Character {
   /**

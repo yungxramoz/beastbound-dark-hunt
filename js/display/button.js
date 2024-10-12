@@ -26,7 +26,7 @@ class Button {
   }
 
   update(deltaTime) {
-    const pointer = this.game.mouse
+    const pointer = this.game.pointer
 
     // Check if the pointer is over the button
     const overButton =
@@ -38,13 +38,14 @@ class Button {
     if (overButton) {
       this.isHovered = true
 
-      if (pointer.isPressed) {
-        if (!this.isPressed) {
-          this.isPressed = true
+      if (pointer.isDown) {
+        if (!this.isDown) {
+          this.isDown = true
         }
       } else {
-        if (this.isPressed) {
-          this.isPressed = false
+        //only trigger click if the pointer was pressed and released over the button
+        if (this.isDown) {
+          this.isDown = false
           this.onClick()
         }
       }
@@ -55,7 +56,7 @@ class Button {
 
   draw(ctx) {
     let fillStyle = STYLE.COLORS.SECONDARY
-    if (this.isPressed) {
+    if (this.isDown) {
       fillStyle = STYLE.COLORS.SECONDARY_DARKER_2
     } else if (this.isHovered) {
       fillStyle = STYLE.COLORS.SECONDARY_LIGHTER_2
