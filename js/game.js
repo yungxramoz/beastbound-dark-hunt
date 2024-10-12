@@ -36,6 +36,10 @@ class Game {
     this.stateMachine = new GameStateMachine(this)
   }
 
+  start() {
+    requestAnimationFrame(this.gameLoop.bind(this))
+  }
+
   gameLoop(currentTime) {
     const deltaTime = currentTime - this.lastTime
     this.lastTime = currentTime
@@ -46,6 +50,7 @@ class Game {
       this.accumulatedTime -= this.frameDuration
     }
 
+    this.stateMachine.render()
     requestAnimationFrame(this.gameLoop.bind(this))
   }
 
@@ -72,20 +77,22 @@ class Game {
     this.dialogManager.openDialog(dialog)
   }
 
-  renderPlaying() {
+  render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.scene.draw(this.ctx)
+    this.dialogManager.draw(this.ctx)
   }
 
   renderLoading() {
     drawText(
       this.ctx,
       'Loading...',
-      this.canvas.width / 2 - 75,
+      this.canvas.width / 2,
       this.canvas.height / 2,
       {
         size: 30,
         font: 'Arial',
+        align: 'center',
       },
     )
   }
