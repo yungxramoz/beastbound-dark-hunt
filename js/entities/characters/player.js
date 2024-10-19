@@ -1,10 +1,12 @@
 import Character from '../../components/character.js'
 import Attackable from '../../composables/attackable.js'
+import Damageable from '../../composables/damageable.js'
 import { SETTINGS } from '../../constants/settings.js'
+import { addBorder, drawRect, drawText } from '../../display/ui.js'
 import { keyboard } from '../../library/interactive.js'
 import PlayerStateMachine from '../../states/player-state-machine.js'
+import { getInteractablesData } from '../../store/interactables-data.js'
 import { getDistance, isFacingTowards } from '../../utils/collision.js'
-import { addBorder, drawRect, drawText } from '../../display/ui.js'
 
 class Player extends Character {
   constructor(game, x, y) {
@@ -32,6 +34,8 @@ class Player extends Character {
       hitRangeHeight: 50,
     })
 
+    this.damage = new Damageable({ health: 100 })
+
     this.leftArrow = keyboard('ArrowLeft')
     this.a = keyboard('a')
     this.rightArrow = keyboard('ArrowRight')
@@ -44,7 +48,7 @@ class Player extends Character {
   }
 
   checkForInteraction() {
-    const interactables = this.game.interactables || []
+    const interactables = getInteractablesData() || []
     let nearestInteractable = null
     let minDistance = Infinity
 

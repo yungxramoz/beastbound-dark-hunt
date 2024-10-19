@@ -35,6 +35,10 @@ const ASSETS = {
   FOREST_BACKGROUND: 'assets/images/environments/forest/background.png',
   FOREST_MIDDLEGROUND: 'assets/images/environments/forest/middleground.png',
   FOREST_FOREGROUND: 'assets/images/environments/forest/foreground.png',
+
+  // Audio
+  SETTLEMENT_BACKGROUND_MUSIC: 'assets/audio/background/tiny-rpg-town.ogg',
+  FOOTSTEP_SOUND: 'assets/audio/effects/footsteps.mp3',
 }
 
 const ASSETS_SRC = [
@@ -61,6 +65,8 @@ const ASSETS_SRC = [
   ASSETS.FOREST_BACKGROUND,
   ASSETS.FOREST_MIDDLEGROUND,
   ASSETS.FOREST_FOREGROUND,
+  ASSETS.SETTLEMENT_BACKGROUND_MUSIC,
+  ASSETS.FOOTSTEP_SOUND,
 ]
 
 export { ASSETS, ASSETS_SRC }

@@ -1,9 +1,10 @@
 import { CHIEF_NPC_SPRITE } from '../constants/chief-npc-sprite.js'
+import { playFootstep } from '../utils/sound-handler.js'
 import StateMachine from './state-machine.js'
 
 const CHARACTER_STATE = {
   IDLE: 'IDLE',
-  MOVING: 'MOVKING',
+  MOVING: 'MOVING',
   INTERACTING: 'INTERACTING',
 }
 
@@ -28,6 +29,10 @@ class NpcStateMachine extends StateMachine {
 
     this.setupStates()
     this.setState(initialState)
+
+    this.sound = {
+      footstep: playFootstep(0.9),
+    }
   }
 
   setupStates() {
@@ -60,6 +65,7 @@ class NpcStateMachine extends StateMachine {
         this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.MOVING)
         // Set move duration between 1 and 5 seconds
         this.stateTimer = 1 + Math.random() * 4
+        this.sound.footstep.restart()
       },
       update: (deltaTime) => {
         this.stateTimer -= deltaTime
@@ -73,7 +79,10 @@ class NpcStateMachine extends StateMachine {
           this.setState(CHARACTER_STATE.MOVING, { direction: DIRECTION.LEFT })
         }
       },
-      exit: () => console.log('NPC: Exiting MOVING state'),
+      exit: () => {
+        console.log('NPC: Exiting MOVING state')
+        this.sound.footstep.pause()
+      },
     })
 
     // TALKING

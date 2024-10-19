@@ -51,6 +51,9 @@ class Movable {
    */
   stop() {
     this.speedX = 0
+    if (this.sound) {
+      this.sound.pause()
+    }
   }
 
   /**

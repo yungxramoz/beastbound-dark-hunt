@@ -1,10 +1,11 @@
-import { BOUNDARIES as BOUNDARIES } from './constants/positions.js'
+import { BOUNDARIES } from './constants/positions.js'
 import DialogManager from './display/dialog-manager.js'
 import Dialog from './display/dialog.js'
 import { drawText } from './display/ui.js'
 import { keyboard } from './library/interactive.js'
 import { assets } from './library/utilities.js'
 import GameStateMachine, { GAME_STATE } from './states/game-state-machine.js'
+import { getScene } from './store/scene-data.js'
 import { makePointer } from './utils/mouse-handler.js'
 
 class Game {
@@ -21,10 +22,6 @@ class Game {
 
     // Initialize dialog manager
     this.dialogManager = new DialogManager(this)
-    this.interaction = {
-      isInteracting: false,
-      entity: null,
-    }
 
     // Initialize pointer and global key
     this.pointer = makePointer(this.canvas)
@@ -79,7 +76,7 @@ class Game {
 
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.scene.draw(this.ctx)
+    getScene().draw(this.ctx)
     this.dialogManager.draw(this.ctx)
   }
 

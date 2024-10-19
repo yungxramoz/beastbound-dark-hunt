@@ -1,9 +1,13 @@
 import { ASSETS_SRC } from '../constants/assets.js'
+import MenuScene from '../entities/scenes/menu-scene.js'
 import SettlementScene from '../entities/scenes/settlement-scene.js'
+import dataStore from '../store/data-store.js'
+import { getScene, setScene } from '../store/scene-data.js'
 import StateMachine from './state-machine.js'
 
 const GAME_STATE = {
   LOADING: 'LOADING',
+  MENU: 'MENU',
   PLAYING: 'PLAYING',
   PAUSED: 'PAUSED',
 }
@@ -28,36 +32,52 @@ class GameStateMachine extends StateMachine {
   }
 
   setupStates() {
+    // Menu
+    this.addState(GAME_STATE.MENU, {
+      enter: () => {
+        setScene(new MenuScene(this.game))
+        this.game.gameLoop(0)
+      },
+      update: (deltaTime) => {
+        getScene().update(deltaTime)
+        this.game.dialogManager.update(deltaTime)
+      },
+      render: () => {
+        this.game.render()
+      },
+      exit: () => {
+        setScene(new SettlementScene(this.game))
+      },
+    })
+
     // Loading
     this.addState(GAME_STATE.LOADING, {
       enter: () => {
-        this.game.renderLoading()
         this.game.assets
           .load(ASSETS_SRC)
           .then(() => {
-            this.setState(GAME_STATE.PLAYING)
+            this.setState(GAME_STATE.MENU)
           })
           .catch((error) => {
             console.error('Error loading assets:', error)
           })
       },
       update: () => {},
-      exit: () => {
-        this.game.scene = new SettlementScene(this.game)
+      render: () => {
+        this.game.render()
       },
+      exit: () => {},
     })
 
     // Playing
     this.addState(GAME_STATE.PLAYING, {
-      enter: () => {
-        this.game.gameLoop(0)
-      },
+      enter: () => {},
       update: (deltaTime) => {
         if (this.game.esc.isDown) {
           this.setState(GAME_STATE.PAUSED)
           return
         }
-        this.game.scene.update(deltaTime)
+        getScene().update(deltaTime)
         this.game.dialogManager.update(deltaTime)
       },
       render: () => {

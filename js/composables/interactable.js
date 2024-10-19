@@ -1,18 +1,15 @@
 class Interactable {
   /**
    * Gives the entity the ability to be interacted with
-   * @param {Game} game - The game instance
    * @param {Entity} entity - The entity to attach the Interactable component to
    *
-   * @throws {Error} - Game is required
    * @throws {Error} - Entity is required
    * @throws {Error} - Entity must have a Positionable composable
    * @throws {Error} - Entity must have a flipX property
    * @throws {Error} - Entity must have a createDialog method
    *
    */
-  constructor(game, entity) {
-    if (!game) throw new Error('Game is required')
+  constructor(entity) {
     if (!entity) throw new Error('Entity is required')
     if (!entity.position)
       throw new Error('Entity must have a Positionable component')
@@ -21,19 +18,12 @@ class Interactable {
     if (!entity.createDialog)
       throw new Error('Entity must have a createDialog method')
 
-    this.game = game
     this.entity = entity
 
     this.isInteractable = true
     this.radius = 100
     this.isInteracting = false
     this.interactingEntity = null
-
-    if (!this.game.interactables) {
-      this.game.interactables = []
-    }
-
-    this.game.interactables.push(entity)
   }
 
   /**
@@ -45,7 +35,6 @@ class Interactable {
       this.entity.move.faceTowards(source)
     }
     this.isInteracting = true
-
     this.interactingEntity = source
   }
 

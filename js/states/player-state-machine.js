@@ -1,4 +1,5 @@
 import { PLAYER_SPRITE } from '../constants/player-sprite.js'
+import { playFootstep } from '../utils/sound-handler.js'
 import StateMachine from './state-machine.js'
 
 const PLAYER_STATE = {
@@ -23,6 +24,10 @@ class PlayerStateMachine extends StateMachine {
 
     this.setupStates()
     this.setState(initialState)
+
+    this.sound = {
+      footstep: playFootstep(1.2),
+    }
   }
 
   setupStates() {
@@ -60,6 +65,7 @@ class PlayerStateMachine extends StateMachine {
         this.player.flipX = direction === DIRECTION.LEFT
         this.player.move[direction]()
         this.player.sprite.setSprite(PLAYER_SPRITE.MOVING)
+        this.sound.footstep.restart()
       },
       update: () => {
         const isMovingLeft =
@@ -83,7 +89,10 @@ class PlayerStateMachine extends StateMachine {
           this.setState(PLAYER_STATE.MOVING, { direction: DIRECTION.RIGHT })
         }
       },
-      exit: () => console.log('PLAYER: Exiting MOVING state'),
+      exit: () => {
+        console.log('PLAYER: Exiting MOVING state')
+        this.sound.footstep.pause()
+      },
     })
 
     // JUMPING

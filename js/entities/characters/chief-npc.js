@@ -5,6 +5,9 @@ import { SETTINGS } from '../../constants/settings.js'
 import SpeechDialog from '../../display/speech-dialog.js'
 import NpcStateMachine from '../../states/npc-state-machine.js'
 import { addBorder, drawRect, drawText } from '../../display/ui.js'
+import { setInteractablesData } from '../../store/interactables-data.js'
+import { setScene } from '../../store/scene-data.js'
+import ForestScene from '../scenes/forest-scene.js'
 
 class ChiefNpc extends Character {
   constructor(game, x, y, name) {
@@ -21,9 +24,12 @@ class ChiefNpc extends Character {
 
     this.name = name
     this.avatar = game.assets[ASSETS.CHIEF_AVATAR]
+    this.flipX = true
 
-    this.interaction = new Interactable(game, this)
+    this.interaction = new Interactable(this)
     this.stateMachine = new NpcStateMachine(this)
+
+    setInteractablesData(typeof this, this)
   }
 
   createDialog() {
@@ -36,6 +42,7 @@ class ChiefNpc extends Character {
           height: 40,
           text: 'I will help',
           onClick: () => {
+            setScene(new ForestScene(this.game))
             dialog.close()
           },
         },
@@ -59,6 +66,7 @@ class ChiefNpc extends Character {
   update(deltaTime) {
     super.update(deltaTime)
     this.stateMachine.update(deltaTime)
+    setInteractablesData(typeof this, this)
   }
 
   draw(ctx) {

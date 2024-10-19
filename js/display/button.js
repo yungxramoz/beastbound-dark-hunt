@@ -13,7 +13,10 @@ class Button {
    * @param {string} options.text - The text of the button.
    * @param {function} options.onClick - The function to call when the button is clicked.
    */
-  constructor(game, { x, y, width, height, text, onClick } = {}) {
+  constructor(
+    game,
+    { x, y, width, height, text, onClick, disabled = false } = {},
+  ) {
     this.game = game
     this.x = x || 0
     this.y = y || 0
@@ -23,6 +26,7 @@ class Button {
     this.onClick = onClick || function () {}
     this.isHovered = false
     this.isPressed = false
+    this.disabled = disabled
   }
 
   update(deltaTime) {
@@ -35,7 +39,7 @@ class Button {
       pointer.y >= this.y &&
       pointer.y <= this.y + this.height
 
-    if (overButton) {
+    if (overButton && !this.disabled) {
       this.isHovered = true
 
       if (pointer.isDown) {
@@ -68,6 +72,12 @@ class Button {
       shadow = STYLE.COLORS.SECONDARY_DARKER_1
     } else if (this.isHovered) {
       fillStyle = STYLE.COLORS.SECONDARY_LIGHTER_2
+    }
+
+    if (this.disabled) {
+      fillStyle = STYLE.COLORS.DISABLED
+      highlight = STYLE.COLORS.DISABLED_DARKER_2
+      shadow = STYLE.COLORS.DISABLED_LIGHTER_2
     }
 
     drawRect(ctx, this.x, this.y, this.width, this.height, fillStyle)
