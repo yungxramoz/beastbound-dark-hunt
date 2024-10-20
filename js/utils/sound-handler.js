@@ -1,6 +1,6 @@
 import { ASSETS } from '../constants/assets.js'
 import { SETTINGS } from '../constants/settings.js'
-import { makeSound, soundEffect } from '../library/sound.js'
+import { makeSound } from '../library/sound.js'
 
 const playBackgroundMusic = (musicFile) => {
   const backgroundMusic = makeSound(musicFile, () => {
@@ -26,4 +26,43 @@ const playFootstep = (playbackRate) => {
   return sound
 }
 
-export { playBackgroundMusic, playFootstep }
+const playNpcMaleSpeech = () => {
+  const sound = makeSound(ASSETS.NPC_SPEECH, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT
+    sound.pan = 0
+    sound.playbackRate = 1
+    sound.loop = false
+  })
+
+  return sound
+}
+
+const playMaleYells = () => {
+  const sound = makeSound(ASSETS.PLAYER_SOUND, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT
+    sound.pan = 0
+    sound.playbackRate = 1
+    sound.loop = false
+  })
+
+  return sound
+}
+
+const playSlash = () => {
+  const sound = makeSound(ASSETS.SLASH_SOUND, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT - 1 // asset is too loud
+    sound.pan = 0
+    sound.playbackRate = 1
+    sound.loop = false
+  })
+
+  return sound
+}
+
+export {
+  playBackgroundMusic,
+  playFootstep,
+  playNpcMaleSpeech,
+  playMaleYells,
+  playSlash,
+}

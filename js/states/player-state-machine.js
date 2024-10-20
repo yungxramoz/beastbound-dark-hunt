@@ -1,5 +1,9 @@
 import { PLAYER_SPRITE } from '../constants/player-sprite.js'
-import { playFootstep } from '../utils/sound-handler.js'
+import {
+  playFootstep,
+  playMaleYells,
+  playSlash,
+} from '../utils/sound-handler.js'
 import StateMachine from './state-machine.js'
 
 const PLAYER_STATE = {
@@ -27,6 +31,9 @@ class PlayerStateMachine extends StateMachine {
 
     this.sound = {
       footstep: playFootstep(1.2),
+      graspJump: playMaleYells(),
+      graspAttack: playMaleYells(),
+      slash: playSlash(),
     }
   }
 
@@ -100,6 +107,7 @@ class PlayerStateMachine extends StateMachine {
       enter: () => {
         this.player.move.jump()
         this.player.sprite.setSprite(PLAYER_SPRITE.JUMPING)
+        this.sound.graspJump.playSection(13.45, 13.7)
       },
       update: () => {
         if (this.player.move.isFalling()) {
@@ -128,6 +136,8 @@ class PlayerStateMachine extends StateMachine {
         this.player.move.stop()
         this.player.attack.hit()
         this.player.sprite.setSprite(PLAYER_SPRITE.ATTACKING)
+        this.sound.graspAttack.playSection(11.4, 11.8)
+        this.sound.slash.playSection(16.9, 17.9)
       },
       update: () => {
         if (!this.player.attack.isAttacking) {

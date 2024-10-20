@@ -39,6 +39,9 @@ const ASSETS = {
   // Audio
   SETTLEMENT_BACKGROUND_MUSIC: 'assets/audio/background/tiny-rpg-town.ogg',
   FOOTSTEP_SOUND: 'assets/audio/effects/footsteps.mp3',
+  PLAYER_SOUND: 'assets/audio/effects/male-grunts-and-yells.mp3',
+  SLASH_SOUND: 'assets/audio/effects/slashes.mp3',
+  NPC_SPEECH: 'assets/audio/speeches/npc-male.mp3',
 }
 
 const ASSETS_SRC = [
@@ -59,14 +62,14 @@ const ASSETS_SRC = [
   ASSETS.SETTLEMENT_CRATE_STACK_TILE,
   ASSETS.SETTLEMENT_BACKGROUND,
   ASSETS.SETTLEMENT_MIDDLEGROUND,
-  // ASSETS.FOREST_GROUND_TILE_A,
-  // ASSETS.FOREST_GROUND_TILE_B,
   ASSETS.FOREST_GROUND,
   ASSETS.FOREST_BACKGROUND,
   ASSETS.FOREST_MIDDLEGROUND,
   ASSETS.FOREST_FOREGROUND,
   ASSETS.SETTLEMENT_BACKGROUND_MUSIC,
   ASSETS.FOOTSTEP_SOUND,
+  ASSETS.PLAYER_SOUND,
+  ASSETS.NPC_SPEECH,
 ]
 
 export { ASSETS, ASSETS_SRC }

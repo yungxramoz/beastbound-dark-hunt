@@ -1,5 +1,5 @@
 import { CHIEF_NPC_SPRITE } from '../constants/chief-npc-sprite.js'
-import { playFootstep } from '../utils/sound-handler.js'
+import { playFootstep, playNpcMaleSpeech } from '../utils/sound-handler.js'
 import StateMachine from './state-machine.js'
 
 const CHARACTER_STATE = {
@@ -32,6 +32,7 @@ class NpcStateMachine extends StateMachine {
 
     this.sound = {
       footstep: playFootstep(0.9),
+      speech: playNpcMaleSpeech(),
     }
   }
 
@@ -91,6 +92,7 @@ class NpcStateMachine extends StateMachine {
         this.entity.move.stop()
         this.entity.sprite.setSprite(CHIEF_NPC_SPRITE.IDLE)
         this.entity.createDialog()
+        this.sound.speech.playSection(2, 3)
       },
       update: () => {
         if (!this.entity.interaction.isInteracting) {
