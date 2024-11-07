@@ -17,12 +17,7 @@ class Attackable {
   constructor(
     game,
     entity,
-    {
-      attackDuration = 1,
-      attackDamage = 10,
-      hitRangeWidth = 70,
-      hitRangeHeight = 50,
-    },
+    { attackDuration = 1, hitRangeWidth = 70, hitRangeHeight = 50 },
   ) {
     if (!game) throw new Error('Game instance is required')
     if (!entity) throw new Error('Entity is required')
@@ -30,12 +25,13 @@ class Attackable {
       throw new Error('Entity must have a Positionable component')
     if (!entity.flipX === undefined)
       throw new Error('Entity must have a flipX property')
+    if (!entity.stats === undefined)
+      throw new Error('Entity must have a stats property')
 
     this.game = game
     this.entity = entity
 
     this.attackDuration = attackDuration
-    this.attackDamage = attackDamage
     this.hitRangeWidth = hitRangeWidth
     this.hitRangeHeight = hitRangeHeight
     this.isAttacking = false

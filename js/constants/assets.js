@@ -13,6 +13,10 @@ const ASSETS = {
   CHIEF_MOVE_SPRITE: 'assets/images/characters/chief.move.png',
   CHIEF_AVATAR: 'assets/images/characters/chief.avatar.png',
 
+  // Enemies
+  GHOST_WOLF_SPRITE_1: 'assets/images/beasts/wolf.all1.png',
+  GHOST_WOLF_SPRITE_2: 'assets/images/beasts/wolf.all2.png',
+
   // Settlements
   SETTLEMENT_GROUND_TILE_A:
     'assets/images/environments/settlement/ground-1.png',
@@ -53,6 +57,8 @@ const ASSETS_SRC = [
   ASSETS.CHIEF_IDLE_SPRITE,
   ASSETS.CHIEF_MOVE_SPRITE,
   ASSETS.CHIEF_AVATAR,
+  ASSETS.GHOST_WOLF_SPRITE_1,
+  ASSETS.GHOST_WOLF_SPRITE_2,
   ASSETS.SETTLEMENT_GROUND_TILE_A,
   ASSETS.SETTLEMENT_GROUND_TILE_B,
   ASSETS.SETTLEMENT_HOUSE_TILE_A,

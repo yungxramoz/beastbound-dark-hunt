@@ -68,6 +68,16 @@ class Positionable {
   isGrounded() {
     return this.y === getGroundY(this.entity.height)
   }
+
+  distanceTo(target) {
+    const isTargetLeft = target.position.x < this.x
+
+    if (isTargetLeft) {
+      return this.x - (target.width + target.position.x)
+    } else {
+      return target.position.x - this.entity.width - this.x
+    }
+  }
 }
 
 export default Positionable

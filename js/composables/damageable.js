@@ -3,7 +3,7 @@ class Damageable {
     this.health = health
   }
 
-  damage(amount) {
+  dealDamage(amount) {
     this.health -= amount
   }
 }

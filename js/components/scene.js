@@ -1,3 +1,5 @@
+import { SETTINGS } from '../constants/settings.js'
+
 class Scene {
   /**
    * A scene can have objects that are drawn and updated
@@ -24,13 +26,20 @@ class Scene {
 
   draw(deltaTime) {
     for (const object of this.objects) {
-      object.draw(deltaTime)
+      if (object.draw) object.draw(deltaTime)
     }
     const foregroundObjects = this.objects.filter(
       (object) => object.drawForeground,
     )
     for (const foregroundObject of foregroundObjects) {
       foregroundObject.drawForeground(deltaTime)
+    }
+
+    // draw debug info
+    if (SETTINGS.DEBUG) {
+      for (const object of this.objects) {
+        if (object.drawDebugInfo) object.drawDebugInfo(this.game.ctx)
+      }
     }
 
     //check if dialog is open

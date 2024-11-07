@@ -14,3 +14,11 @@ export function setInteractablesData(key, data) {
   }
   dataStore.set('interactables', interactables)
 }
+
+export function setCurrentInteractable(data) {
+  dataStore.set('currentInteractable', data)
+}
+
+export function getCurrentInteractable() {
+  return dataStore.get('currentInteractable')
+}

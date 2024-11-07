@@ -1,4 +1,5 @@
 import { ASSETS_SRC } from '../constants/assets.js'
+import ForestScene from '../entities/scenes/forest-scene.js'
 import MenuScene from '../entities/scenes/menu-scene.js'
 import SettlementScene from '../entities/scenes/settlement-scene.js'
 import dataStore from '../store/data-store.js'
@@ -46,7 +47,8 @@ class GameStateMachine extends StateMachine {
         this.game.render()
       },
       exit: () => {
-        setScene(new SettlementScene(this.game))
+        // setScene(new SettlementScene(this.game))
+        setScene(new ForestScene(this.game))
       },
     })
 

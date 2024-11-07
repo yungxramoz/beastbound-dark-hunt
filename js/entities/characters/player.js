@@ -1,11 +1,15 @@
 import Character from '../../components/character.js'
 import Attackable from '../../composables/attackable.js'
 import Damageable from '../../composables/damageable.js'
+import Statable from '../../composables/statable.js'
 import { SETTINGS } from '../../constants/settings.js'
 import { addBorder, drawRect, drawText } from '../../display/ui.js'
 import { keyboard } from '../../library/interactive.js'
 import PlayerStateMachine from '../../states/player-state-machine.js'
-import { getInteractablesData } from '../../store/interactables-data.js'
+import {
+  getInteractablesData,
+  setCurrentInteractable,
+} from '../../store/interactables-data.js'
 import { getDistance, isFacingTowards } from '../../utils/collision.js'
 
 class Player extends Character {
@@ -14,27 +18,25 @@ class Player extends Character {
       x,
       y,
       spriteScale: 1.7,
-      width: 85,
-      height: 95,
+      width: 70,
+      height: 80,
       offsetX: 55,
       offsetY: 0,
       spriteOffsetX: -65,
-      spriteOffsetY: -25,
+      spriteOffsetY: -42,
       baseShadowWidth: 70,
     })
 
     this.game = game
     this.isInteracting = false
-    this.currentInteractable = null
 
+    this.stats = new Statable(game, this)
     this.attack = new Attackable(game, this, {
       attackDuration: 0.6,
-      attackDamage: 10,
       hitRangeWidth: 70,
       hitRangeHeight: 50,
     })
-
-    this.damage = new Damageable({ health: 100 })
+    this.damage = new Damageable(game, this)
 
     this.leftArrow = keyboard('ArrowLeft')
     this.a = keyboard('a')
@@ -76,14 +78,14 @@ class Player extends Character {
       if (!interactable.isInteracting) {
         interactable.start(this)
         this.isInteracting = true
-        this.currentInteractable = interactable
+        setCurrentInteractable(interactable)
       }
     }
   }
 
   onInteractionEnd() {
     this.isInteracting = false
-    this.currentInteractable = null
+    setCurrentInteractable(null)
   }
 
   update(deltaTime) {
@@ -93,10 +95,6 @@ class Player extends Character {
 
   draw(ctx) {
     super.draw(ctx)
-    if (SETTINGS.DEBUG) {
-      this.drawDebugInfo(ctx)
-      this.attack.drawDebugHitBox(ctx)
-    }
   }
 
   drawDebugInfo(ctx) {
@@ -126,6 +124,8 @@ class Player extends Character {
     drawText(ctx, text, textX, this.position.y - 20, {
       size: 8,
     })
+
+    this.attack.drawDebugHitBox(ctx)
   }
 }
 

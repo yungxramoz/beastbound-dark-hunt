@@ -26,6 +26,7 @@ class Spriteable {
       hasShadow = true,
       baseShadowWidth = 50,
       baseShadowHeight = 18,
+      spriteFlipped = false,
     },
   ) {
     if (!game) throw new Error('Spriteable requires a game instance')
@@ -54,6 +55,7 @@ class Spriteable {
     this.hasShadow = hasShadow
     this.baseShadowWidth = baseShadowWidth
     this.baseShadowHeight = baseShadowHeight
+    this.spriteFlipped = spriteFlipped
   }
 
   /**
@@ -66,9 +68,6 @@ class Spriteable {
    * @param {number} sprite.frameTime - The time to display each frame
    */
   setSprite(sprite) {
-    if (this.currentSprite.src === sprite.src) {
-      return
-    }
     if (sprite) {
       this.currentSprite = sprite
       this.currentFrame = 0
@@ -119,16 +118,29 @@ class Spriteable {
 
   draw(ctx) {
     if (this.currentSprite) {
-      const frameX = this.currentFrame * this.currentSprite.frameWidth
-      const frameY = 0
+      let frameX = this.currentFrame * this.currentSprite.frameWidth
+      let frameY = this.currentSprite.row
+        ? this.currentSprite.row * this.currentSprite.frameHeight
+        : 0
       const scaledWidth = this.currentSprite.frameWidth * this.spriteScale
       const scaledHeight = this.currentSprite.frameHeight * this.spriteScale
+
+      if (
+        this.currentSprite.noLoop &&
+        this.currentFrame === this.currentSprite.numFrames - 1
+      ) {
+        frameX =
+          (this.currentSprite.numFrames - 1) * this.currentSprite.frameWidth
+      }
 
       if (this.hasShadow) {
         this.drawShadow(ctx, scaledWidth)
       }
 
-      if (this.entity.flipX) {
+      if (
+        (this.entity.flipX && !this.spriteFlipped) ||
+        (!this.entity.flipX && this.spriteFlipped)
+      ) {
         ctx.save()
 
         ctx.scale(-1, 1)

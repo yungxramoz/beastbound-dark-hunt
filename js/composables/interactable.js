@@ -32,7 +32,7 @@ class Interactable {
    */
   start(source) {
     if (this.entity.move) {
-      this.entity.move.faceTowards(source)
+      this.entity.move.faceTowards(source.position)
     }
     this.isInteracting = true
     this.interactingEntity = source

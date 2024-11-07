@@ -1,0 +1,11 @@
+const STAT_MODIFIER = {
+  STR: 0.7,
+  AGI: 0.02,
+  DEF: 1,
+  CON: 10,
+}
+
+const HEALTH_BASE = 90
+const MAX_EVADE_CHANCE = 0.6
+
+export { STAT_MODIFIER, HEALTH_BASE, MAX_EVADE_CHANCE }

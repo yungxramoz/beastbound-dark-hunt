@@ -77,14 +77,24 @@ class Movable {
    * @param {Entity} target - The entity to face towards
    * @throws {Error} - Entity must have a Positionable component
    */
-  faceTowards(target) {
-    if (!target.position)
-      throw new Error('Entity must have a Positionable component')
+  faceTowards({ x }) {
+    if (x === undefined) throw new Error('FaceTowards requires an x position')
 
-    if (target.position.x < this.entity.position.x) {
+    if (x < this.entity.position.x) {
       this.entity.flipX = true
     } else {
       this.entity.flipX = false
+    }
+  }
+
+  moveTo({ x, y }) {
+    if (x === undefined || y === undefined)
+      throw new Error('MoveTo requires an x and y position')
+
+    if (x < this.entity.position.x) {
+      this.left()
+    } else {
+      this.right()
     }
   }
 
