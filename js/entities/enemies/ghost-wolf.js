@@ -1,4 +1,4 @@
-import Character from '../../components/character.js'
+import { addAuraParticles } from '../../components/particles.js'
 import Attackable from '../../composables/attackable.js'
 import Collidable from '../../composables/collidable.js'
 import Damageable from '../../composables/damageable.js'
@@ -8,7 +8,7 @@ import Positionable from '../../composables/positionable.js'
 import Spriteable from '../../composables/spriteable.js'
 import Statable from '../../composables/statable.js'
 import { GHOST_WOLF_SPRITE } from '../../constants/ghost-wolf-sprite.js'
-import { BOUNDARIES } from '../../constants/positions.js'
+import { STYLE } from '../../constants/style.js'
 import { addBorder, drawRect, drawText } from '../../display/ui.js'
 import BeastStateMachine from '../../states/beast-state-machine.js'
 import { getGroundY } from '../../utils/boundaries.js'
@@ -52,16 +52,18 @@ class GhostWolf {
 
     this.attack = new Attackable(game, this, {
       attackDuration: frameTime * numFrames,
-      hitRangeWidth: 15,
+      hitRangeWidth: 30,
       hitRangeHeight: 30,
+      damage: 10 + this.stats.strength(),
     })
     this.damage = new Damageable(this, {
-      health: this.stats.maxHealth,
+      health: this.stats.maxHealth(),
       bloodColor: 'rgba(251,106,255,0.8)',
     })
     this.destruct = new Destructable(this)
     this.collide = new Collidable(this)
     this.stateMachine = new BeastStateMachine(this, this.player)
+    this.buff = {}
   }
 
   modifyStatsByLevel(lvl) {
@@ -69,6 +71,32 @@ class GhostWolf {
     this.stats.addStr(lvl)
     this.stats.addDef(lvl)
     this.stats.addCon(lvl)
+  }
+
+  addBuff(name, { agi, str, def, con, duration }) {
+    this.buff[name] = { agi, str, def, con }
+
+    if (agi) this.stats.addAgi(agi)
+    if (str) this.stats.addStr(str)
+    if (def) this.stats.addDef(def)
+    if (con) this.stats.addCon(con)
+
+    setTimeout(() => {
+      this.removeBuff(name)
+    }, duration * 1000)
+  }
+
+  removeBuff(name) {
+    if (!this.buff[name]) return
+
+    const { agi, str, def, con } = this.buff[name]
+
+    if (agi) this.stats.addAgi(-agi)
+    if (str) this.stats.addStr(-str)
+    if (def) this.stats.addDef(-def)
+    if (con) this.stats.addCon(-con)
+
+    delete this.buff[name]
   }
 
   update(deltaTime) {
@@ -81,6 +109,62 @@ class GhostWolf {
   draw(ctx) {
     this.sprite.draw(ctx)
     this.sprite.drawShadow(ctx)
+    if (Object.keys(this.buff).length > 0) {
+      addAuraParticles(this, 'rgba(246, 240, 128, 0.5)')
+    }
+  }
+
+  drawForeground(ctx) {
+    this.drawHud(ctx)
+  }
+
+  drawHud(ctx) {
+    const { health } = this.damage
+    const maxHealth = this.stats.maxHealth()
+    const healthBarWidth = 600
+    const healthBarHeight = 20
+
+    //bottom center of screen
+    const healthBarX = this.game.canvas.width / 2 - healthBarWidth / 2
+    const healthBarY = this.game.canvas.height - healthBarHeight - 15
+
+    const healthBarPadding = 2
+    const healthBarInnerWidth = (health / maxHealth) * healthBarWidth
+
+    //draw ghost wolf text
+    drawText(ctx, 'Ghost Wolf', healthBarX, healthBarY - 20)
+
+    drawRect(
+      ctx,
+      healthBarX,
+      healthBarY,
+      healthBarWidth,
+      healthBarHeight,
+      STYLE.COLORS.PRIMARY_LIGHTER_1,
+    )
+
+    addBorder(ctx, healthBarX, healthBarY, healthBarWidth, healthBarHeight)
+
+    if (health > 0) {
+      drawRect(
+        ctx,
+        healthBarX + healthBarPadding,
+        healthBarY + healthBarPadding,
+        healthBarInnerWidth - healthBarPadding * 2,
+        healthBarHeight - healthBarPadding * 2,
+        STYLE.COLORS.RED,
+      )
+    }
+
+    drawText(
+      ctx,
+      `${health.toFixed(0)}/${maxHealth}`,
+      healthBarX + 5,
+      healthBarY + healthBarHeight + 5,
+      {
+        size: 8,
+      },
+    )
   }
 
   drawDebugInfo(ctx) {

@@ -1,4 +1,4 @@
-import { updateParticles } from '../components/particle.js'
+import { updateParticles } from '../components/particles.js'
 import { ASSETS_SRC } from '../constants/assets.js'
 import ForestScene from '../entities/scenes/forest-scene.js'
 import MenuScene from '../entities/scenes/menu-scene.js'

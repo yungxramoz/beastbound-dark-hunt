@@ -1,4 +1,4 @@
-import { drawParticles } from './components/particle.js'
+import { drawParticles } from './components/particles.js'
 import { BOUNDARIES } from './constants/positions.js'
 import DialogManager from './display/dialog-manager.js'
 import Dialog from './display/dialog.js'

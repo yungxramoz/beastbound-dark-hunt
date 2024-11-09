@@ -27,6 +27,7 @@ class Attackable {
       hitRangeHeight = 50,
       hitTime = 0.5,
       hitDuration = 0.5,
+      damage = 1,
     },
   ) {
     if (!game) throw new Error('Game instance is required')
@@ -48,6 +49,7 @@ class Attackable {
     this.hitLocation = null
     this.hitTime = hitTime
     this.hitDuration = hitDuration
+    this.damage = damage
   }
 
   /**
@@ -98,7 +100,7 @@ class Attackable {
           y >= targetY &&
           y <= targetY + height
         ) {
-          target.damage.dealDamage(this.entity.stats.strength)
+          target.damage.dealDamage(this.damage)
         }
       })
 

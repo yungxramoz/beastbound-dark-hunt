@@ -3,7 +3,7 @@ import Attackable from '../../composables/attackable.js'
 import Collidable from '../../composables/collidable.js'
 import Damageable from '../../composables/damageable.js'
 import Statable from '../../composables/statable.js'
-import { SETTINGS } from '../../constants/settings.js'
+import { STYLE } from '../../constants/style.js'
 import { addBorder, drawRect, drawText } from '../../display/ui.js'
 import { keyboard } from '../../library/interactive.js'
 import PlayerStateMachine from '../../states/player-state-machine.js'
@@ -38,8 +38,9 @@ class Player extends Character {
       hitDuration: 0.3,
       hitRangeWidth: 120,
       hitRangeHeight: 60,
+      damage: 2 + this.stats.strength(),
     })
-    this.damage = new Damageable(this)
+    this.damage = new Damageable(this, { health: this.stats.maxHealth() })
     this.collide = new Collidable(this)
 
     this.leftArrow = keyboard('ArrowLeft')
@@ -92,6 +93,56 @@ class Player extends Character {
     setCurrentInteractable(null)
   }
 
+  drawHud(ctx) {
+    const { width } = this.game.canvas
+    const { health } = this.damage
+    const maxHealth = this.stats.maxHealth()
+
+    const healthBarWidth = 250
+    const healthBarHeight = 10
+    const healthBarX = width - healthBarWidth - 10
+    const healthBarY = 30
+    const healthBarPadding = 2
+    const healthBarInnerWidth = (health / maxHealth) * healthBarWidth
+
+    drawText(ctx, 'Hunter', healthBarX, healthBarY - 15, {
+      size: 10,
+    })
+
+    drawRect(
+      ctx,
+      healthBarX,
+      healthBarY,
+      healthBarWidth,
+      healthBarHeight,
+      STYLE.COLORS.PRIMARY_LIGHTER_1,
+    )
+
+    addBorder(ctx, healthBarX, healthBarY, healthBarWidth, healthBarHeight)
+
+    if (health > 0) {
+      drawRect(
+        ctx,
+        healthBarX + healthBarPadding,
+        healthBarY + healthBarPadding,
+        healthBarInnerWidth - healthBarPadding * 2,
+        healthBarHeight - healthBarPadding * 2,
+        STYLE.COLORS.RED,
+      )
+    }
+
+    // draw health text
+    drawText(
+      ctx,
+      `${health.toFixed(0)}/${maxHealth}`,
+      healthBarX + 5,
+      healthBarY + healthBarHeight + 5,
+      {
+        size: 6,
+      },
+    )
+  }
+
   update(deltaTime) {
     this.stateMachine.update(deltaTime)
     this.collide.update()
@@ -100,6 +151,10 @@ class Player extends Character {
 
   draw(ctx) {
     super.draw(ctx)
+  }
+
+  drawForeground(ctx) {
+    this.drawHud(ctx)
   }
 
   drawDebugInfo(ctx) {

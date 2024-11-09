@@ -40,6 +40,8 @@ const COLORS = {
   DISABLED_LIGHTER_1: '#585858',
   DISABLED_LIGHTER_2: '#626262',
   DISABLED_LIGHTER_3: '#6c6c6c',
+
+  RED: '#8b0000',
 }
 
 const BORDER = {

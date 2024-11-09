@@ -40,7 +40,7 @@ class BeastStateMachine extends StateMachine {
         this.idleTimer -= deltaTime
         if (this.idleTimer <= 0) {
           if (this.actionQueue.length) {
-            this.setNextStateByStack()
+            this.setNextStateByQueue()
           } else {
             this.setNextMoveQueue()
           }
@@ -55,11 +55,12 @@ class BeastStateMachine extends StateMachine {
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.HOWL)
         this.enemy.move.stop()
         this.howlTimer = 1.75
+        this.enemy.addBuff('howl', { str: 5, duration: 5 + this.howlTimer })
       },
       update: (deltaTime) => {
         this.howlTimer -= deltaTime
         if (this.howlTimer <= 0) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         }
       },
       exit: () => {},
@@ -72,7 +73,7 @@ class BeastStateMachine extends StateMachine {
       },
       update: () => {
         if (this.isInAttackRange()) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         } else {
           this.chasePlayer()
         }
@@ -89,7 +90,7 @@ class BeastStateMachine extends StateMachine {
       },
       update: () => {
         if (!this.enemy.attack.isAttacking) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         }
       },
     })
@@ -105,7 +106,7 @@ class BeastStateMachine extends StateMachine {
       update: (deltaTime) => {
         this.turnTimer -= deltaTime
         if (this.turnTimer <= 0) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         }
       },
       exit: () => {
@@ -129,7 +130,7 @@ class BeastStateMachine extends StateMachine {
           this.enemy.position.isOutOfBoundsRight() ||
           this.enemy.position.isOutOfBoundsLeft()
         ) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         }
       },
       exit: () => {
@@ -142,18 +143,22 @@ class BeastStateMachine extends StateMachine {
       enter: () => {
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.LURING)
         this.enemy.move.stop()
+        this.enemy.damage.isImmune = true
         this.lureTimer = 2 + Math.random() * 3
+        this.enemy.addBuff('lure', { str: 10, duration: this.lureTimer })
       },
       update: (deltaTime) => {
         this.lureTimer -= deltaTime
         if (this.isInAttackRange()) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         } else if (this.lureTimer <= 0) {
           this.clearMoveStack()
           this.setState(BEAST_STATE.IDLE)
         }
       },
-      exit: () => {},
+      exit: () => {
+        this.enemy.damage.isImmune = false
+      },
     })
 
     // JUMP_OVER State
@@ -176,7 +181,7 @@ class BeastStateMachine extends StateMachine {
           this.hasJumped = true
         }
         if (this.jumpOverTimer <= 0) {
-          this.setNextStateByStack()
+          this.setNextStateByQueue()
         }
       },
       exit: () => {
@@ -191,18 +196,20 @@ class BeastStateMachine extends StateMachine {
 
   setNextMoveQueue() {
     const distance = this.enemy.position.distanceTo(this.player)
+    const enemyHasBuff = !!this.enemy.buff['howl']
     const random = Math.random()
     if (
       this.enemy.position.isOutOfBoundsRight() ||
-      this.enemy.position.isOutOfBoundsLeft()
+      (this.enemy.position.isOutOfBoundsLeft() && distance < 100) ||
+      random < 0.2
     ) {
       this.addJumpAttack()
-    } else if (random < 0.5) {
-      this.addChaseAttack()
-    } else if (distance > 200 && random < 0.3) {
+    } else if (random < 0.4) {
       this.addLureAttack()
-    } else {
+    } else if (random < 0.5 && !enemyHasBuff) {
       this.addHowlAttack()
+    } else {
+      this.addChaseAttack()
     }
   }
 
@@ -230,9 +237,6 @@ class BeastStateMachine extends StateMachine {
   addLureAttack() {
     this.actionQueue.push(BEAST_STATE.LURE)
     this.actionQueue.push(BEAST_STATE.ATTACK)
-    this.actionQueue.push(BEAST_STATE.TURN)
-    this.actionQueue.push(BEAST_STATE.RETREAT)
-    this.actionQueue.push(BEAST_STATE.TURN)
     this.actionQueue.push(BEAST_STATE.IDLE)
   }
 
@@ -241,7 +245,7 @@ class BeastStateMachine extends StateMachine {
     this.actionQueue.push(BEAST_STATE.IDLE)
   }
 
-  setNextStateByStack() {
+  setNextStateByQueue() {
     if (this.actionQueue.length) {
       this.setState(this.actionQueue.shift())
     } else {
@@ -251,7 +255,7 @@ class BeastStateMachine extends StateMachine {
 
   isInAttackRange() {
     const distance = this.enemy.position.distanceTo(this.player)
-    const attackRange = this.enemy.attack.hitRangeWidth - 10
+    const attackRange = this.enemy.attack.hitRangeWidth - 15
     return distance <= attackRange
   }
 

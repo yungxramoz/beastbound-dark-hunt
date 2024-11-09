@@ -1,4 +1,4 @@
-import { addBloodParticles } from '../components/particle.js'
+import { addBloodParticles } from '../components/particles.js'
 import { setDamageableData } from '../store/damageables-data.js'
 
 class Damageable {
@@ -11,14 +11,18 @@ class Damageable {
     this.entity = entity
     this.health = health
     this.bloodColor = bloodColor
+    this.isImmune = false
 
     setDamageableData(this.entity.id, this)
   }
 
   dealDamage(amount) {
+    if (this.isImmune) return
     addBloodParticles(this.entity, this.bloodColor)
     this.health -= amount
-    console.log(`${this.entity.id} health: ${this.health}`)
+    if (this.health <= 0) {
+      this.health = 0
+    }
   }
 }
 
