@@ -22,3 +22,11 @@ export function setCurrentInteractable(data) {
 export function getCurrentInteractable() {
   return dataStore.get('currentInteractable')
 }
+
+export function removeInteractableData(key) {
+  const interactables = dataStore.get('interactables')
+  if (interactables[key]) {
+    delete interactables[key]
+    dataStore.set('interactables', interactables)
+  }
+}

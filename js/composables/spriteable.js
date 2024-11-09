@@ -177,8 +177,8 @@ class Spriteable {
     if (this.currentSprite) {
       this.elapsedTime += deltaTime
 
-      // Protect against very large deltaTime values that might cause the while loop to run too long
-      const maxFrameAdvance = 10 // Limit frame advance to 10 frames per update call
+      // Limit frame advancement to prevent large deltaTime issues
+      const maxFrameAdvance = 10
       let framesToAdvance = 0
 
       while (
@@ -186,12 +186,22 @@ class Spriteable {
         framesToAdvance < maxFrameAdvance
       ) {
         this.elapsedTime -= this.currentSprite.frameTime
-        this.currentFrame =
-          (this.currentFrame + 1) % this.currentSprite.numFrames
+
+        if (this.currentSprite.noLoop) {
+          // If not at the last frame, increment frame
+          if (this.currentFrame < this.currentSprite.numFrames - 1) {
+            this.currentFrame += 1
+          }
+          // Else, keep the current frame (hold on the last frame)
+        } else {
+          // Loop the animation
+          this.currentFrame =
+            (this.currentFrame + 1) % this.currentSprite.numFrames
+        }
+
         framesToAdvance += 1
       }
 
-      // Optional: If framesToAdvance hits maxFrameAdvance, it means deltaTime was very large, and some frames may have been skipped.
       if (framesToAdvance >= maxFrameAdvance) {
         console.warn('Skipped frames due to high deltaTime')
       }

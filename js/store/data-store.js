@@ -3,6 +3,8 @@ class DataStore {
     initialData = {
       player: null,
       interactables: [],
+      collidables: [],
+      damageables: [],
       scene: null,
     },
   ) {

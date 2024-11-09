@@ -14,15 +14,14 @@ const BEAST_STATE = {
 }
 
 class BeastStateMachine extends StateMachine {
-  constructor(enemy, player, navigationGraph) {
+  constructor(enemy, player) {
     super()
     this.enemy = enemy
     this.player = player
-    this.navigationGraph = navigationGraph
     this.path = []
     this.currentWaypointIndex = 0
 
-    this.actionStack = [BEAST_STATE.HOWL]
+    this.actionQueue = [BEAST_STATE.HOWL]
 
     this.setupStates()
     this.setState(BEAST_STATE.IDLE)
@@ -40,10 +39,10 @@ class BeastStateMachine extends StateMachine {
       update: (deltaTime) => {
         this.idleTimer -= deltaTime
         if (this.idleTimer <= 0) {
-          if (this.actionStack.length) {
+          if (this.actionQueue.length) {
             this.setNextStateByStack()
           } else {
-            this.setNextMoveStack()
+            this.setNextMoveQueue()
           }
         }
       },
@@ -55,7 +54,7 @@ class BeastStateMachine extends StateMachine {
         this.nextMove = null
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.HOWL)
         this.enemy.move.stop()
-        this.howlTimer = 1.25
+        this.howlTimer = 1.75
       },
       update: (deltaTime) => {
         this.howlTimer -= deltaTime
@@ -125,7 +124,11 @@ class BeastStateMachine extends StateMachine {
       },
       update: (deltaTime) => {
         this.retreatingTimer -= deltaTime
-        if (this.retreatingTimer <= 0) {
+        if (
+          this.retreatingTimer <= 0 ||
+          this.enemy.position.isOutOfBoundsRight() ||
+          this.enemy.position.isOutOfBoundsLeft()
+        ) {
           this.setNextStateByStack()
         }
       },
@@ -137,9 +140,9 @@ class BeastStateMachine extends StateMachine {
     // LURE State
     this.addState(BEAST_STATE.LURE, {
       enter: () => {
-        this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.IDLE)
+        this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.LURING)
         this.enemy.move.stop()
-        this.lureTimer = 2 + Math.random() * 1
+        this.lureTimer = 2 + Math.random() * 3
       },
       update: (deltaTime) => {
         this.lureTimer -= deltaTime
@@ -147,6 +150,7 @@ class BeastStateMachine extends StateMachine {
           this.setNextStateByStack()
         } else if (this.lureTimer <= 0) {
           this.clearMoveStack()
+          this.setState(BEAST_STATE.IDLE)
         }
       },
       exit: () => {},
@@ -167,8 +171,8 @@ class BeastStateMachine extends StateMachine {
         this.jumpOverTimer -= deltaTime
         this.jumpDelay -= deltaTime
         if (this.jumpDelay <= 0 && !this.hasJumped) {
-          this.enemy.move.speedX = this.preMoveSpeed * 2
           this.enemy.move.jump()
+          this.enemy.move.speedX = this.preMoveSpeed * 2
           this.hasJumped = true
         }
         if (this.jumpOverTimer <= 0) {
@@ -182,53 +186,72 @@ class BeastStateMachine extends StateMachine {
   }
 
   clearMoveStack() {
-    this.actionStack = []
+    this.actionQueue = []
   }
 
-  setNextMoveStack() {
+  setNextMoveQueue() {
     const distance = this.enemy.position.distanceTo(this.player)
     const random = Math.random()
-    console.log('Distance:', distance, 'Random:', random)
-    if (distance < 500 && random < 0.7) {
-      this.actionStack.push(BEAST_STATE.CHASE)
-      this.actionStack.push(BEAST_STATE.ATTACK)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.RETREAT)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.IDLE)
-    } else if (distance > 200 && random < 0.2) {
-      this.actionStack.push(BEAST_STATE.LURE)
-      this.actionStack.push(BEAST_STATE.ATTACK)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.RETREAT)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.IDLE)
-    } else if (random < 0.1) {
-      this.actionStack.push(BEAST_STATE.HOWL)
-      this.actionStack.push(BEAST_STATE.IDLE)
+    if (
+      this.enemy.position.isOutOfBoundsRight() ||
+      this.enemy.position.isOutOfBoundsLeft()
+    ) {
+      this.addJumpAttack()
+    } else if (random < 0.5) {
+      this.addChaseAttack()
+    } else if (distance > 200 && random < 0.3) {
+      this.addLureAttack()
     } else {
-      this.actionStack.push(BEAST_STATE.CHASE)
-      this.actionStack.push(BEAST_STATE.JUMP_OVER)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.ATTACK)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.RETREAT)
-      this.actionStack.push(BEAST_STATE.TURN)
-      this.actionStack.push(BEAST_STATE.IDLE)
+      this.addHowlAttack()
     }
   }
 
+  addJumpAttack() {
+    this.actionQueue.push(BEAST_STATE.CHASE)
+    this.actionQueue.push(BEAST_STATE.JUMP_OVER)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.CHASE)
+    this.actionQueue.push(BEAST_STATE.ATTACK)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.RETREAT)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.IDLE)
+  }
+
+  addChaseAttack() {
+    this.actionQueue.push(BEAST_STATE.CHASE)
+    this.actionQueue.push(BEAST_STATE.ATTACK)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.RETREAT)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.IDLE)
+  }
+
+  addLureAttack() {
+    this.actionQueue.push(BEAST_STATE.LURE)
+    this.actionQueue.push(BEAST_STATE.ATTACK)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.RETREAT)
+    this.actionQueue.push(BEAST_STATE.TURN)
+    this.actionQueue.push(BEAST_STATE.IDLE)
+  }
+
+  addHowlAttack() {
+    this.actionQueue.push(BEAST_STATE.HOWL)
+    this.actionQueue.push(BEAST_STATE.IDLE)
+  }
+
   setNextStateByStack() {
-    if (this.actionStack.length) {
-      this.setState(this.actionStack.shift())
+    if (this.actionQueue.length) {
+      this.setState(this.actionQueue.shift())
     } else {
-      this.setNextMoveStack()
+      this.setNextMoveQueue()
     }
   }
 
   isInAttackRange() {
     const distance = this.enemy.position.distanceTo(this.player)
-    const attackRange = this.enemy.attack.hitRangeWidth
+    const attackRange = this.enemy.attack.hitRangeWidth - 10
     return distance <= attackRange
   }
 

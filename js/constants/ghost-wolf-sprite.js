@@ -32,8 +32,8 @@ const GHOST_WOLF_SPRITE = {
     src: ASSETS.GHOST_WOLF_SPRITE_1,
     frameWidth,
     frameHeight,
-    numFrames: 5,
-    frameTime: 0.25,
+    numFrames: 6,
+    frameTime: 0.12,
     row: 9,
     noLoop: true,
   },
@@ -61,6 +61,14 @@ const GHOST_WOLF_SPRITE = {
     frameTime: 0.2,
     row: 0,
     noLoop: true,
+  },
+  LURING: {
+    src: ASSETS.GHOST_WOLF_SPRITE_1,
+    frameWidth,
+    frameHeight,
+    numFrames: 3,
+    frameTime: 0.6,
+    row: 5,
   },
 }
 

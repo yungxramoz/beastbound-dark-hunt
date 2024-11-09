@@ -1,5 +1,6 @@
 import Character from '../../components/character.js'
 import Attackable from '../../composables/attackable.js'
+import Collidable from '../../composables/collidable.js'
 import Damageable from '../../composables/damageable.js'
 import Statable from '../../composables/statable.js'
 import { SETTINGS } from '../../constants/settings.js'
@@ -18,11 +19,11 @@ class Player extends Character {
       x,
       y,
       spriteScale: 1.7,
-      width: 70,
+      width: 40,
       height: 80,
       offsetX: 55,
       offsetY: 0,
-      spriteOffsetX: -65,
+      spriteOffsetX: -85,
       spriteOffsetY: -42,
       baseShadowWidth: 70,
     })
@@ -33,10 +34,13 @@ class Player extends Character {
     this.stats = new Statable(game, this)
     this.attack = new Attackable(game, this, {
       attackDuration: 0.6,
-      hitRangeWidth: 70,
-      hitRangeHeight: 50,
+      hitTime: 0,
+      hitDuration: 0.3,
+      hitRangeWidth: 120,
+      hitRangeHeight: 60,
     })
-    this.damage = new Damageable(game, this)
+    this.damage = new Damageable(this)
+    this.collide = new Collidable(this)
 
     this.leftArrow = keyboard('ArrowLeft')
     this.a = keyboard('a')
@@ -90,6 +94,7 @@ class Player extends Character {
 
   update(deltaTime) {
     this.stateMachine.update(deltaTime)
+    this.collide.update()
     super.update(deltaTime)
   }
 
@@ -125,7 +130,7 @@ class Player extends Character {
       size: 8,
     })
 
-    this.attack.drawDebugHitBox(ctx)
+    this.attack.drawDebugHitLocation(ctx)
   }
 }
 

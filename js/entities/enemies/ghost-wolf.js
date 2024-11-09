@@ -1,6 +1,8 @@
 import Character from '../../components/character.js'
 import Attackable from '../../composables/attackable.js'
+import Collidable from '../../composables/collidable.js'
 import Damageable from '../../composables/damageable.js'
+import Destructable from '../../composables/desctructable.js'
 import Movable from '../../composables/movable.js'
 import Positionable from '../../composables/positionable.js'
 import Spriteable from '../../composables/spriteable.js'
@@ -10,13 +12,15 @@ import { BOUNDARIES } from '../../constants/positions.js'
 import { addBorder, drawRect, drawText } from '../../display/ui.js'
 import BeastStateMachine from '../../states/beast-state-machine.js'
 import { getGroundY } from '../../utils/boundaries.js'
+import { getId } from '../../utils/id.js'
 
 class GhostWolf {
   constructor(game, player, x, y, lvl = 1) {
+    this.id = getId()
     this.game = game
     this.player = player
 
-    this.width = 170
+    this.width = 140
     this.height = 90
 
     this.flipX = true
@@ -34,7 +38,7 @@ class GhostWolf {
     })
     this.sprite = new Spriteable(game, this, {
       spriteScale: 2.5,
-      spriteOffsetX: -35,
+      spriteOffsetX: -40,
       spriteOffsetY: -60,
       hasShadow: true,
       baseShadowWidth: 180,
@@ -51,14 +55,13 @@ class GhostWolf {
       hitRangeWidth: 15,
       hitRangeHeight: 30,
     })
-    this.damageable = new Damageable(this.stats.maxHealth())
-
-    const patrolPoints = [
-      { x: 100, y },
-      { x: BOUNDARIES.GAME_WIDTH - 100, y },
-    ]
-
-    this.stateMachine = new BeastStateMachine(this, this.player, patrolPoints)
+    this.damage = new Damageable(this, {
+      health: this.stats.maxHealth,
+      bloodColor: 'rgba(251,106,255,0.8)',
+    })
+    this.destruct = new Destructable(this)
+    this.collide = new Collidable(this)
+    this.stateMachine = new BeastStateMachine(this, this.player)
   }
 
   modifyStatsByLevel(lvl) {
@@ -70,6 +73,7 @@ class GhostWolf {
 
   update(deltaTime) {
     this.stateMachine.update(deltaTime)
+    this.collide.update()
     this.move.update()
     this.sprite.update(deltaTime)
   }
@@ -110,7 +114,7 @@ class GhostWolf {
       size: 8,
     })
 
-    this.attack.drawDebugHitBox(ctx)
+    this.attack.drawDebugHitLocation(ctx)
   }
 }
 

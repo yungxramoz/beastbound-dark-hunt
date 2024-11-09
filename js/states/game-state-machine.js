@@ -1,3 +1,4 @@
+import { updateParticles } from '../components/particle.js'
 import { ASSETS_SRC } from '../constants/assets.js'
 import ForestScene from '../entities/scenes/forest-scene.js'
 import MenuScene from '../entities/scenes/menu-scene.js'
@@ -47,7 +48,8 @@ class GameStateMachine extends StateMachine {
         this.game.render()
       },
       exit: () => {
-        setScene(new SettlementScene(this.game))
+        // setScene(new SettlementScene(this.game))
+        setScene(new ForestScene(this.game))
       },
     })
 
@@ -80,6 +82,7 @@ class GameStateMachine extends StateMachine {
         }
         getScene().update(deltaTime)
         this.game.dialogManager.update(deltaTime)
+        updateParticles()
       },
       render: () => {
         this.game.render()

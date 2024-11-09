@@ -29,7 +29,7 @@ class ChiefNpc extends Character {
     this.interaction = new Interactable(this)
     this.stateMachine = new NpcStateMachine(this)
 
-    setInteractablesData(typeof this, this)
+    setInteractablesData(this.id, this)
   }
 
   createDialog() {
@@ -66,7 +66,7 @@ class ChiefNpc extends Character {
   update(deltaTime) {
     super.update(deltaTime)
     this.stateMachine.update(deltaTime)
-    setInteractablesData(typeof this, this)
+    setInteractablesData(this.id, this)
   }
 
   draw(ctx) {

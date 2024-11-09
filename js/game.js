@@ -1,3 +1,4 @@
+import { drawParticles } from './components/particle.js'
 import { BOUNDARIES } from './constants/positions.js'
 import DialogManager from './display/dialog-manager.js'
 import Dialog from './display/dialog.js'
@@ -78,6 +79,7 @@ class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     getScene().draw(this.ctx)
     this.dialogManager.draw(this.ctx)
+    drawParticles(this.ctx)
   }
 
   renderLoading() {

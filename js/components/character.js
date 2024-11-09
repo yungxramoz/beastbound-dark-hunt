@@ -2,6 +2,7 @@ import Movable from '../composables/movable.js'
 import Positionable from '../composables/positionable.js'
 import Spriteable from '../composables/spriteable.js'
 import { getGroundY } from '../utils/boundaries.js'
+import { getId } from '../utils/id.js'
 
 class Character {
   /**
@@ -42,6 +43,7 @@ class Character {
       baseShadowHeight = 18,
     },
   ) {
+    this.id = getId()
     this.game = game
 
     this.width = width
