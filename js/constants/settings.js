@@ -1,5 +1,5 @@
 const SETTINGS = {
-  DEBUG: true,
+  DEBUG: false,
   VOLUME_BACKGROUND: 0.3,
   VOLUME_EFFECT: 0.6,
 }

@@ -1,11 +1,11 @@
 import { GHOST_WOLF_SPRITE } from '../constants/ghost-wolf-sprite.js'
+import { isFacingTowards } from '../utils/collision.js'
 import StateMachine from './state-machine.js'
 
 const BEAST_STATE = {
   IDLE: 'IDLE',
   CHASE: 'CHASE',
   ATTACK: 'ATTACK',
-  QUICK_ATTACK: 'QUICK_ATTACK',
   RETREAT: 'RETREAT',
   TURN: 'TURN',
   LURE: 'LURE',
@@ -32,6 +32,10 @@ class BeastStateMachine extends StateMachine {
     this.addState(BEAST_STATE.IDLE, {
       enter: () => {
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.IDLE)
+        if (!isFacingTowards(this.enemy, this.player)) {
+          this.setState(BEAST_STATE.TURN)
+          return
+        }
         this.enemy.move.stop()
         // Idle for 0.5-2 seconds
         this.idleTimer = 0.5 + Math.random() * 1.5
@@ -42,7 +46,7 @@ class BeastStateMachine extends StateMachine {
           if (this.actionQueue.length) {
             this.setNextStateByQueue()
           } else {
-            this.setNextMoveQueue()
+            this.setNextActions()
           }
         }
       },
@@ -152,7 +156,7 @@ class BeastStateMachine extends StateMachine {
         if (this.isInAttackRange()) {
           this.setNextStateByQueue()
         } else if (this.lureTimer <= 0) {
-          this.clearMoveStack()
+          this.clearActionQueue()
           this.setState(BEAST_STATE.IDLE)
         }
       },
@@ -190,11 +194,11 @@ class BeastStateMachine extends StateMachine {
     })
   }
 
-  clearMoveStack() {
+  clearActionQueue() {
     this.actionQueue = []
   }
 
-  setNextMoveQueue() {
+  setNextActions() {
     const distance = this.enemy.position.distanceTo(this.player)
     const enemyHasBuff = !!this.enemy.buff['howl']
     const random = Math.random()
@@ -249,7 +253,7 @@ class BeastStateMachine extends StateMachine {
     if (this.actionQueue.length) {
       this.setState(this.actionQueue.shift())
     } else {
-      this.setNextMoveQueue()
+      this.setNextActions()
     }
   }
 
@@ -268,4 +272,4 @@ class BeastStateMachine extends StateMachine {
 }
 
 export default BeastStateMachine
-export { BEAST_STATE as BEAST_STATE }
+export { BEAST_STATE }
