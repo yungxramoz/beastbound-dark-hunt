@@ -6,9 +6,14 @@ export function getCollidableData() {
 }
 
 export function setCollidableData(key, data) {
-  const collidables = dataStore.get('collidables', data)
-  if (collidables[key]) {
-    collidables[key] = data
+  let collidables = dataStore.get('collidables', data)
+  const exists = collidables.find((collidable) => collidable.id === key)
+  if (exists) {
+    collidables.forEach((collidable) => {
+      if (collidable.id === key) {
+        collidable = data
+      }
+    })
   } else {
     collidables.push(data)
   }
@@ -16,9 +21,10 @@ export function setCollidableData(key, data) {
 }
 
 export function removeCollidableData(key) {
-  const collidables = dataStore.get('collidables')
-  if (collidables[key]) {
-    delete collidables[key]
+  let collidables = dataStore.get('collidables')
+  const exists = collidables.find((collidable) => collidable.id === key)
+  if (exists) {
+    collidables = collidables.filter((collidable) => collidable.id !== key)
     dataStore.set('collidables', collidables)
   }
 }

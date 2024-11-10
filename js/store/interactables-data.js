@@ -6,9 +6,14 @@ export function getInteractablesData() {
 }
 
 export function setInteractablesData(key, data) {
-  const interactables = dataStore.get('interactables', data)
-  if (interactables[key]) {
-    interactables[key] = data
+  let interactables = dataStore.get('interactables', data)
+  const exists = interactables.find((interactable) => interactable.id === key)
+  if (exists) {
+    interactables.forEach((interactable) => {
+      if (interactable.id === key) {
+        interactable = data
+      }
+    })
   } else {
     interactables.push(data)
   }
@@ -24,9 +29,12 @@ export function getCurrentInteractable() {
 }
 
 export function removeInteractableData(key) {
-  const interactables = dataStore.get('interactables')
-  if (interactables[key]) {
-    delete interactables[key]
+  let interactables = dataStore.get('interactables')
+  const exists = interactables.find((interactable) => interactable.id === key)
+  if (exists) {
+    interactables = interactables.filter(
+      (interactable) => interactable.id !== key,
+    )
     dataStore.set('interactables', interactables)
   }
 }

@@ -1,3 +1,4 @@
+import Destructable from '../composables/desctructable.js'
 import Movable from '../composables/movable.js'
 import Positionable from '../composables/positionable.js'
 import Spriteable from '../composables/spriteable.js'
@@ -67,6 +68,7 @@ class Character {
       baseShadowWidth,
       baseShadowHeight,
     })
+    this.destruct = new Destructable(this)
 
     this.position.setPosition(x, getGroundY(this.height))
   }

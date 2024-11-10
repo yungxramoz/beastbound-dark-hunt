@@ -62,6 +62,12 @@ class Scene {
       object.update(deltaTime)
     }
   }
+
+  destroy() {
+    for (const object of this.objects) {
+      if (object.destruct) object.destruct.destroy()
+    }
+  }
 }
 
 export default Scene

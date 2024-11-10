@@ -1,5 +1,4 @@
 import Scene from '../../components/scene.js'
-import ChiefNpc from '../characters/chief-npc.js'
 import Player from '../characters/player.js'
 import GhostWolf from '../enemies/ghost-wolf.js'
 import Forest from '../environments/forest.js'

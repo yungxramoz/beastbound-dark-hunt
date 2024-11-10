@@ -87,7 +87,7 @@ class Attackable {
     setTimeout(() => {
       this.hitLocation = this.getHitLocation()
 
-      damageables.forEach(({ entity: target }) => {
+      damageables.forEach((target) => {
         if (target.id === this.entity.id) return
 
         const { x, y } = this.hitLocation

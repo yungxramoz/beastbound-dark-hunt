@@ -14,7 +14,7 @@ class Destructable {
       removeInteractableData(this.entity.id)
     }
 
-    if (this.entity.collision) {
+    if (this.entity.collide) {
       removeCollidableData(this.entity.id)
     }
   }

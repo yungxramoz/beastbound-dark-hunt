@@ -94,18 +94,17 @@ class Player extends Character {
   }
 
   drawHud(ctx) {
-    const { width } = this.game.canvas
     const { health } = this.damage
     const maxHealth = this.stats.maxHealth()
 
     const healthBarWidth = 250
     const healthBarHeight = 10
-    const healthBarX = width - healthBarWidth - 10
+    const healthBarX = 30
     const healthBarY = 30
-    const healthBarPadding = 2
+    const healthBarPadding = 1
     const healthBarInnerWidth = (health / maxHealth) * healthBarWidth
 
-    drawText(ctx, 'Hunter', healthBarX, healthBarY - 15, {
+    drawText(ctx, 'Hunter', healthBarX, healthBarY - 18, {
       size: 10,
     })
 
@@ -136,7 +135,7 @@ class Player extends Character {
       ctx,
       `${health.toFixed(0)}/${maxHealth}`,
       healthBarX + 5,
-      healthBarY + healthBarHeight + 5,
+      healthBarY + healthBarHeight + 8,
       {
         size: 6,
       },

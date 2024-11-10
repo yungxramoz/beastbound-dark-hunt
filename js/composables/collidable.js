@@ -2,6 +2,7 @@ import {
   getCollidableData,
   setCollidableData,
 } from '../store/collidable-data.js'
+import { areRectanglesOverlapping } from '../utils/collision.js'
 
 class Collidable {
   /**
@@ -19,7 +20,7 @@ class Collidable {
     this.isStatic = isStatic
 
     // Add this collidable entity to the collidable data store
-    setCollidableData(this.entity.id, this)
+    setCollidableData(this.entity.id, this.entity)
   }
 
   /**
@@ -36,18 +37,13 @@ class Collidable {
     }
 
     const rect2 = {
-      x: other.entity.position.x,
-      y: other.entity.position.y,
-      width: other.entity.width,
-      height: other.entity.height,
+      x: other.position.x,
+      y: other.position.y,
+      width: other.width,
+      height: other.height,
     }
 
-    return (
-      rect1.x < rect2.x + rect2.width &&
-      rect1.x + rect1.width > rect2.x &&
-      rect1.y < rect2.y + rect2.height &&
-      rect1.y + rect1.height > rect2.y
-    )
+    return areRectanglesOverlapping(rect1, rect2)
   }
 
   /**
@@ -57,10 +53,7 @@ class Collidable {
   handleCollision(other) {
     if (this.isStatic) return
 
-    if (
-      !this.entity.position.isGrounded() ||
-      !other.entity.position.isGrounded()
-    ) {
+    if (!this.entity.position.isGrounded() || !other.position.isGrounded()) {
       return
     }
 
@@ -68,10 +61,10 @@ class Collidable {
     if (
       this.entity.move &&
       this.entity.position.isGrounded() &&
-      other.entity.position.isGrounded()
+      other.position.isGrounded()
     ) {
       this.entity.move.stop()
-      other.entity.move.stop()
+      other.move.stop()
     }
 
     // Adjust position to prevent overlap
@@ -79,13 +72,13 @@ class Collidable {
       const dx =
         this.entity.position.x +
         this.entity.width / 2 -
-        (other.entity.position.x + other.entity.width / 2)
+        (other.position.x + other.width / 2)
       const dy =
         this.entity.position.y +
         this.entity.height / 2 -
-        (other.entity.position.y + other.entity.height / 2)
-      const combinedHalfWidths = (this.entity.width + other.entity.width) / 2
-      const combinedHalfHeights = (this.entity.height + other.entity.height) / 2
+        (other.position.y + other.height / 2)
+      const combinedHalfWidths = (this.entity.width + other.width) / 2
+      const combinedHalfHeights = (this.entity.height + other.height) / 2
 
       if (
         Math.abs(dx) < combinedHalfWidths &&
@@ -118,7 +111,7 @@ class Collidable {
     const collidables = getCollidableData()
     for (const other of collidables) {
       if (!other) continue
-      if (other.entity.id === this.entity.id) continue
+      if (other.id === this.entity.id) continue
       if (this.checkCollision(other)) {
         this.handleCollision(other)
       }

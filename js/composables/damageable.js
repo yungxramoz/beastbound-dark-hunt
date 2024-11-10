@@ -13,7 +13,7 @@ class Damageable {
     this.bloodColor = bloodColor
     this.isImmune = false
 
-    setDamageableData(this.entity.id, this)
+    setDamageableData(this.entity.id, this.entity)
   }
 
   dealDamage(amount) {

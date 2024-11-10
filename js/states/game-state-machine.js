@@ -48,8 +48,7 @@ class GameStateMachine extends StateMachine {
         this.game.render()
       },
       exit: () => {
-        // setScene(new SettlementScene(this.game))
-        setScene(new ForestScene(this.game))
+        setScene(new SettlementScene(this.game))
       },
     })
 

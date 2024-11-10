@@ -16,6 +16,11 @@ class SettlementScene extends Scene {
 
     this.bgMusic = playBackgroundMusic(ASSETS.SETTLEMENT_BACKGROUND_MUSIC)
   }
+
+  destroy() {
+    super.destroy()
+    this.bgMusic.pause()
+  }
 }
 
 export default SettlementScene

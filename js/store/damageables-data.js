@@ -6,9 +6,14 @@ export function getDamageableData() {
 }
 
 export function setDamageableData(key, data) {
-  const damageables = dataStore.get('damageables', data)
-  if (damageables[key]) {
-    damageables[key] = data
+  let damageables = dataStore.get('damageables', data)
+  const exists = damageables.find((damageable) => damageable.id === key)
+  if (exists) {
+    damageables.forEach((damageable) => {
+      if (damageable.id === key) {
+        damageable = data
+      }
+    })
   } else {
     damageables.push(data)
   }
@@ -16,9 +21,10 @@ export function setDamageableData(key, data) {
 }
 
 export function removeDamageableData(key) {
-  const damageables = dataStore.get('damageables')
-  if (damageables[key]) {
-    delete damageables[key]
+  let damageables = dataStore.get('damageables')
+  const exists = damageables.find((damageable) => damageable.id === key)
+  if (exists) {
+    damageables = damageables.filter((damageable) => damageable.id !== key)
     dataStore.set('damageables', damageables)
   }
 }
