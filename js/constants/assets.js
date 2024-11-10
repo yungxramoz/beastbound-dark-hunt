@@ -42,9 +42,14 @@ const ASSETS = {
 
   // Audio
   SETTLEMENT_BACKGROUND_MUSIC: 'assets/audio/background/tiny-rpg-town.ogg',
+  FOREST_BACKGROUND_MUSIC: 'assets/audio/background/dark-ambient-3.ogg',
   FOOTSTEP_SOUND: 'assets/audio/effects/footsteps.mp3',
   PLAYER_SOUND: 'assets/audio/effects/male-grunts-and-yells.mp3',
   SLASH_SOUND: 'assets/audio/effects/slashes.mp3',
+  WOLF_HOWL_SOUND: 'assets/audio/effects/wolf-howl.mp3',
+  WOLF_BITE_SOUND: 'assets/audio/effects/wolf-bite.wav',
+  GROWL_SOUND: 'assets/audio/effects/snarls-and-growls.mp3',
+  DEEP_GROWL_SOUND: 'assets/audio/effects/deep-growl.mp3',
   NPC_SPEECH: 'assets/audio/speeches/npc-male.mp3',
 }
 
@@ -73,8 +78,14 @@ const ASSETS_SRC = [
   ASSETS.FOREST_MIDDLEGROUND,
   ASSETS.FOREST_FOREGROUND,
   ASSETS.SETTLEMENT_BACKGROUND_MUSIC,
+  ASSETS.FOREST_BACKGROUND_MUSIC,
   ASSETS.FOOTSTEP_SOUND,
   ASSETS.PLAYER_SOUND,
+  ASSETS.SLASH_SOUND,
+  ASSETS.WOLF_HOWL_SOUND,
+  ASSETS.WOLF_BITE_SOUND,
+  ASSETS.GROWL_SOUND,
+  ASSETS.DEEP_GROWL_SOUND,
   ASSETS.NPC_SPEECH,
 ]
 

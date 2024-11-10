@@ -1,4 +1,6 @@
 import Scene from '../../components/scene.js'
+import { ASSETS } from '../../constants/assets.js'
+import { playBackgroundMusic } from '../../utils/sound-handler.js'
 import Player from '../characters/player.js'
 import GhostWolf from '../enemies/ghost-wolf.js'
 import Forest from '../environments/forest.js'
@@ -12,6 +14,13 @@ class ForestScene extends Scene {
     this.addObject(new Forest(game))
     this.addObject(player)
     this.addObject(new GhostWolf(game, player, 800, 0))
+
+    this.bgMusic = playBackgroundMusic(ASSETS.FOREST_BACKGROUND_MUSIC)
+  }
+
+  destroy() {
+    super.destroy()
+    this.bgMusic.stop()
   }
 }
 

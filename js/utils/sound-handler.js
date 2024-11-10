@@ -59,10 +59,59 @@ const playSlash = () => {
   return sound
 }
 
+const playWolfHowl = () => {
+  const sound = makeSound(ASSETS.WOLF_HOWL_SOUND, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT
+    sound.echo = true
+    sound.playbackRate = 1
+    sound.loop = false
+  })
+
+  return sound
+}
+
+const playGrowl = () => {
+  const sound = makeSound(ASSETS.GROWL_SOUND, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT
+    sound.pan = 0
+    sound.playbackRate = 1
+    sound.loop = true
+    sound.echo = true
+  })
+
+  return sound
+}
+
+const playDeepGrowl = () => {
+  const sound = makeSound(ASSETS.DEEP_GROWL_SOUND, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT + 1 // asset is too quiet
+    sound.pan = 0
+    sound.playbackRate = 1
+    sound.loop = true
+  })
+
+  return sound
+}
+
+const playBite = () => {
+  const sound = makeSound(ASSETS.WOLF_BITE_SOUND, () => {
+    sound.volume = SETTINGS.VOLUME_EFFECT
+    sound.pan = 0
+    sound.playbackRate = 1
+    sound.loop = false
+  })
+
+  return sound
+}
+
 export {
   playBackgroundMusic,
   playFootstep,
   playNpcMaleSpeech,
   playMaleYells,
   playSlash,
+  playWolfHowl,
+  playGrowl,
+  playDeepGrowl,
+  playBite,
 }

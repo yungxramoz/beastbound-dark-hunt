@@ -1,5 +1,11 @@
 import { GHOST_WOLF_SPRITE } from '../constants/ghost-wolf-sprite.js'
 import { isFacingTowards } from '../utils/collision.js'
+import {
+  playBite,
+  playDeepGrowl,
+  playGrowl,
+  playWolfHowl,
+} from '../utils/sound-handler.js'
 import StateMachine from './state-machine.js'
 
 const BEAST_STATE = {
@@ -25,6 +31,13 @@ class BeastStateMachine extends StateMachine {
 
     this.setupStates()
     this.setState(BEAST_STATE.IDLE)
+
+    this.sound = {
+      howl: playWolfHowl(),
+      growl: playGrowl(),
+      deepGrowl: playDeepGrowl(),
+      bite: playBite(),
+    }
   }
 
   setupStates() {
@@ -58,8 +71,10 @@ class BeastStateMachine extends StateMachine {
         this.nextMove = null
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.HOWL)
         this.enemy.move.stop()
-        this.howlTimer = 1.75
-        this.enemy.addBuff('howl', { str: 5, duration: 5 + this.howlTimer })
+        this.howlTimer = 4
+        this.enemy.addBuff('howl', { str: 5, duration: 10 + this.howlTimer })
+        this.sound.howl.restart()
+        this.enemy.damage.isImmune = true
       },
       update: (deltaTime) => {
         this.howlTimer -= deltaTime
@@ -67,13 +82,16 @@ class BeastStateMachine extends StateMachine {
           this.setNextStateByQueue()
         }
       },
-      exit: () => {},
+      exit: () => {
+        this.enemy.damage.isImmune = false
+      },
     })
 
     // CHASE State
     this.addState(BEAST_STATE.CHASE, {
       enter: () => {
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.MOVING)
+        this.sound.deepGrowl.restart()
       },
       update: () => {
         if (this.isInAttackRange()) {
@@ -82,7 +100,6 @@ class BeastStateMachine extends StateMachine {
           this.chasePlayer()
         }
       },
-      exit: () => {},
     })
 
     // ATTACK State
@@ -91,6 +108,7 @@ class BeastStateMachine extends StateMachine {
         this.enemy.move.stop()
         this.enemy.attack.hit()
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.ATTACKING)
+        this.sound.growl.playSection(0.2, 2)
       },
       update: () => {
         if (!this.enemy.attack.isAttacking) {
@@ -145,6 +163,7 @@ class BeastStateMachine extends StateMachine {
     // LURE State
     this.addState(BEAST_STATE.LURE, {
       enter: () => {
+        this.sound.growl.playSection(14.5, 20)
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.LURING)
         this.enemy.move.stop()
         this.enemy.damage.isImmune = true
@@ -162,12 +181,14 @@ class BeastStateMachine extends StateMachine {
       },
       exit: () => {
         this.enemy.damage.isImmune = false
+        this.sound.growl.pause()
       },
     })
 
     // JUMP_OVER State
     this.addState(BEAST_STATE.JUMP_OVER, {
       enter: () => {
+        this.sound.growl.playSection(2.5, 3.5)
         this.enemy.sprite.setSprite(GHOST_WOLF_SPRITE.JUMPING)
         this.preMoveSpeed = this.enemy.move.speedX
         this.jumpDelay = 0.2
